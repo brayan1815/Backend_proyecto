@@ -45,6 +45,11 @@ create table usuarios(
 
 insert into usuarios (documento,nombre,telefono,correo,contrasenia,id_rol) values (1526352846,'Manuel Villabona',3856312824,'edwin@gmail.com','Edwin1.',1);
 
+create table imagenes(
+	id int auto_increment primary key,
+    ruta text
+);
+
 create table tipos(
 	id int auto_increment not null primary key,
     tipo varchar(30),
@@ -60,8 +65,10 @@ create table consolas(
 	id int auto_increment primary key,
     id_tipo int,
     id_estado int,
+    id_imagen int,
     foreign key (id_tipo) references tipos(id) on delete set null,
-    foreign key (id_estado)references estados_consolas(id)on delete set null
+    foreign key (id_estado)references estados_consolas(id)on delete set null,
+    foreign key (id_imagen)references imaganes(id)on delete set null
 );
 
 create table estados_productos(
@@ -76,6 +83,8 @@ descripcion text,
 precio decimal(7,2),
 cantidades_disponibles int,
 id_estado_producto int,
+id_imagen int,
+foreign key(id_imagen)references imaganes(id)on delete set null,
 foreign key (id_estado_producto)references estados_productos(id) on delete set null
 );
 
@@ -133,5 +142,6 @@ create table historial(
     foreign key (id_reserva) references reservas(id) on delete set null
 );    
 show tables;
-select * from usuarios;
+select * from imagenes;
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
+
