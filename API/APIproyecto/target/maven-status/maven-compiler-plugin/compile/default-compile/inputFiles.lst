@@ -1,12 +1,13 @@
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONFIG\OptionsResource.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\RolesDAO.java
-E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ImagenesDAO.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\RolesController.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Imagen.java
-E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ImagenesController.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosDAO.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\UsuariosController.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConexionBD.java
+E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario.java
+E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ImagenesController.java
+E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONFIG\RestConfig.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\FILTROS\CORSFilter.java
 E:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Rol.java
