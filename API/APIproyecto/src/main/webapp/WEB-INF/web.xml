@@ -21,5 +21,15 @@
     <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+  
+ <servlet>
+    <servlet-name>ImagenesServlet</servlet-name>
+    <servlet-class>CONTROLADOR.ImagenesServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>ImagenesServlet</servlet-name>
+    <url-pattern>/imagenes/*</url-pattern>
+</servlet-mapping>
 
 </web-app>

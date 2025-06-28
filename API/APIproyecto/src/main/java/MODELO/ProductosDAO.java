@@ -60,4 +60,71 @@ public class ProductosDAO {
 
         return lista;
     }
+     
+    public Producto getById(int id) {
+    Producto producto = null;
+
+    try (Connection conn = ConexionBD.getConnection()) {
+        String sql = "SELECT * FROM productos WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            producto = new Producto();
+            producto.setId(rs.getInt("id"));
+            producto.setNombre(rs.getString("nombre"));
+            producto.setDescripcion(rs.getString("descripcion"));
+            producto.setPrecio(rs.getDouble("precio"));
+            producto.setCantidades_disponibles(rs.getInt("cantidades_disponibles"));
+            producto.setId_estado_producto(rs.getInt("id_estado_producto"));
+            producto.setId_imagen(rs.getInt("id_imagen"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return producto;
+}
+    
+    public boolean put(Producto producto) {
+        boolean actualizado = false;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, cantidades_disponibles = ?, id_estado_producto = ?, id_imagen = ? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, producto.getNombre());
+            stmt.setString(2, producto.getDescripcion());
+            stmt.setDouble(3, producto.getPrecio());
+            stmt.setInt(4, producto.getCantidades_disponibles());
+            stmt.setInt(5, producto.getId_estado_producto());
+            stmt.setInt(6, producto.getId_imagen());
+            stmt.setInt(7, producto.getId());
+
+            actualizado = stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return actualizado;
+    }
+    
+    public boolean Delete(int id) {
+        boolean eliminado = false;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "DELETE FROM productos WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            int filas = stmt.executeUpdate();
+            eliminado = filas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return eliminado;
+    }
+
 }

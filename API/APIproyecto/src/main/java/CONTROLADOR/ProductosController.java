@@ -8,9 +8,12 @@ import MODELO.Producto;
 import MODELO.ProductosDAO;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,6 +34,7 @@ public class ProductosController {
         }
     }
     
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerProductos() {
@@ -38,4 +42,56 @@ public class ProductosController {
         List<Producto> productos = dao.getAll();
         return Response.ok(productos).build();
     }
+    
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerProductoPorId(@PathParam("id") int id) {
+        ProductosDAO dao = new ProductosDAO();
+        Producto producto = dao.getById(id);
+
+        if (producto != null) {
+            return Response.ok(producto).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{\"error\":\"Producto no encontrado\"}")
+                       .build();
+        }
+    }
+    
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response actualizarProducto(@PathParam("id") int id, Producto producto) {
+        producto.setId(id); // Asegura que se use el ID de la URL
+        ProductosDAO dao = new ProductosDAO();
+    
+        boolean actualizado = dao.put(producto);
+
+        if (actualizado) {
+            return Response.ok("{\"mensaje\": \"Producto actualizado correctamente\"}").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{\"error\": \"No se pudo actualizar el producto\"}")
+                       .build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response eliminarProducto(@PathParam("id") int id) {
+        ProductosDAO dao = new ProductosDAO();
+        boolean eliminado = dao.Delete(id);
+
+        if (eliminado) {
+            return Response.ok("{\"mensaje\":\"Producto eliminado correctamente\"}").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Producto no encontrado o no se pudo eliminar\"}").build();
+        }
+}
+
+
 }

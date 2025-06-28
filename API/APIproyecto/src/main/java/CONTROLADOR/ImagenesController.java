@@ -23,18 +23,27 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/imagenes")
 public class ImagenesController {
+
     
+    private final String carpeta;
+
+    public ImagenesController() {
+        carpeta = "C:/imagenes-api/";
+        File dir = new File(carpeta);
+        if (!dir.exists()) {
+            dir.mkdirs(); // 🔧 Crea carpeta si no existe
+        }
+    }
+    
+
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearImagen(
         @FormDataParam("archivo") InputStream inputStream,
         @FormDataParam("archivo") FormDataContentDisposition fileDetail
-    ){
+    ) {
         try {
-            // Carpeta relativa al proyecto
-            String carpeta = System.getProperty("user.dir") + "/imagenes/";
-
             // Crear carpeta si no existe
             File dir = new File(carpeta);
             if (!dir.exists()) dir.mkdirs();
@@ -43,26 +52,27 @@ public class ImagenesController {
             String nombreArchivo = UUID.randomUUID().toString() + "_" + fileDetail.getFileName();
             String rutaCompleta = carpeta + nombreArchivo;
             String rutaRelativa = "imagenes/" + nombreArchivo;
+            
+            System.out.println("RUTA COMPLETAAAAAAAAAAAA: "+rutaCompleta);
 
-            // Guardar archivo físicamente
+            // Guardar físicamente
             Files.copy(inputStream, Paths.get(rutaCompleta), StandardCopyOption.REPLACE_EXISTING);
 
-            // Registrar ruta en la base de datos
+            // Guardar solo la ruta relativa en la BD
             ImagenesDAO dao = new ImagenesDAO();
-            int idImagen = dao.post(rutaRelativa);
+            int id = dao.post(rutaRelativa);
 
-            // Responder con ID y ruta
             return Response.status(Response.Status.CREATED)
-                .entity("{\"id_imagen\":" + idImagen + ", \"ruta\":\"" + rutaRelativa + "\"}")
+                .entity("{\"id_imagen\":" + id + ", \"ruta\":\"" + rutaRelativa + "\"}")
                 .build();
-
         } catch (IOException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al guardar imagen").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al guardar imagen").build();
         }
     }
-    
-   @GET
+
+    @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerImagenPorId(@PathParam("id") int id) {
@@ -70,15 +80,12 @@ public class ImagenesController {
         Imagen imagen = dao.getById(id);
 
         if (imagen != null) {
-             // 🔥 Escapar los backslashes para que el JSON sea válido
-             String rutaEscapada = imagen.getRuta().replace("\\", "\\\\");
-
-            // 🔁 Construir el JSON manualmente con la ruta escapada
-            String json = String.format("{\"id\":%d,\"ruta\":\"%s\"}", imagen.getId(), rutaEscapada);
-
+            String ruta = imagen.getRuta(); // ya es relativa: "imagenes/nombre.png"
+            String json = String.format("{\"id\":%d,\"ruta\":\"%s\"}", imagen.getId(), ruta);
             return Response.ok(json).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).entity("Imagen no encontrada").build();
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity("Imagen no encontrada").build();
         }
     }
 }

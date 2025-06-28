@@ -6,6 +6,7 @@ MODELO\ConexionBD.class
 MODELO\ProductosDAO.class
 CONTROLADOR\ProductosController.class
 CONTROLADOR\ImagenesController.class
+CONTROLADOR\ImagenesServlet.class
 MODELO\RolesDAO.class
 MODELO\Usuario.class
 MODELO\UsuariosDAO.class
