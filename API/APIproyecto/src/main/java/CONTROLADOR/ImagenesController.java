@@ -1,6 +1,7 @@
 
 package CONTROLADOR;
 
+import MODELO.Imagen;
 import MODELO.ImagenesDAO;
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +11,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,6 +59,26 @@ public class ImagenesController {
         } catch (IOException e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al guardar imagen").build();
+        }
+    }
+    
+   @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerImagenPorId(@PathParam("id") int id) {
+        ImagenesDAO dao = new ImagenesDAO();
+        Imagen imagen = dao.getById(id);
+
+        if (imagen != null) {
+             // 🔥 Escapar los backslashes para que el JSON sea válido
+             String rutaEscapada = imagen.getRuta().replace("\\", "\\\\");
+
+            // 🔁 Construir el JSON manualmente con la ruta escapada
+            String json = String.format("{\"id\":%d,\"ruta\":\"%s\"}", imagen.getId(), rutaEscapada);
+
+            return Response.ok(json).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Imagen no encontrada").build();
         }
     }
 }

@@ -76,6 +76,9 @@ create table estados_productos(
     estado varchar(30)
 );
 
+insert into estados_productos(estado)values ('disponible');
+insert into estados_productos(estado)values ('agotado');
+
 create table productos(
 id int auto_increment primary key,
 nombre varchar(30),
@@ -141,7 +144,8 @@ create table historial(
     id_reserva int,
     foreign key (id_reserva) references reservas(id) on delete set null
 );    
+
 show tables;
-select * from imagenes;
+select * from productos;
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
 

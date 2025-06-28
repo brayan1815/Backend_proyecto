@@ -4,6 +4,7 @@
  */
 package MODELO;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,4 +36,27 @@ public class ImagenesDAO {
         // Retornamos el ID generado (o -1 si hubo un error)
         return idGenerado;
     }
+    
+    public Imagen getById(int id) {
+    Imagen imagen = null;
+    
+    try (Connection conn = ConexionBD.getConnection()) {
+        String sql = "SELECT ruta FROM imagenes WHERE id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+        
+        if (rs.next()) {
+            String rutaRelativa = rs.getString("ruta");
+            // Aquí generamos la ruta absoluta, como la usaste al guardar
+            String rutaCompleta = System.getProperty("user.dir") + File.separator + rutaRelativa.replace("/", File.separator);
+            imagen = new Imagen(id, rutaCompleta);
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return imagen;
+}
 }

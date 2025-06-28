@@ -3,6 +3,8 @@ MODELO\ImagenesDAO.class
 CONFIG\RestConfig.class
 CONTROLADOR\RolesController.class
 MODELO\ConexionBD.class
+MODELO\ProductosDAO.class
+CONTROLADOR\ProductosController.class
 CONTROLADOR\ImagenesController.class
 MODELO\RolesDAO.class
 MODELO\Usuario.class
@@ -10,4 +12,5 @@ MODELO\UsuariosDAO.class
 CONFIG\OptionsResource.class
 MODELO\Rol.class
 CONTROLADOR\UsuariosController.class
+MODELO\Producto.class
 MODELO\Imagen.class
