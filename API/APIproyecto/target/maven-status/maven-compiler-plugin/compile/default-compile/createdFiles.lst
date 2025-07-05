@@ -1,10 +1,13 @@
 FILTROS\CORSFilter.class
 MODELO\ImagenesDAO.class
 CONFIG\RestConfig.class
+MODELO\ConsolasDAO.class
 CONTROLADOR\RolesController.class
 MODELO\ConexionBD.class
+MODELO\Consola.class
 MODELO\ProductosDAO.class
 CONTROLADOR\ProductosController.class
+CONTROLADOR\ConsolasController.class
 MODELO\Tipo.class
 CONTROLADOR\ImagenesController.class
 CONTROLADOR\ImagenesServlet.class

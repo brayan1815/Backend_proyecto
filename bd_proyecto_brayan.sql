@@ -61,14 +61,18 @@ create table estados_consolas(
     estado varchar(30)
 );
 
+insert into estados_consolas(estado)values('disponible');
+
 create table consolas(
 	id int auto_increment primary key,
+    nombre varchar(30),
+    descripcion text,
     id_tipo int,
     id_estado int,
     id_imagen int,
     foreign key (id_tipo) references tipos(id) on delete set null,
     foreign key (id_estado)references estados_consolas(id)on delete set null,
-    foreign key (id_imagen)references imaganes(id)on delete set null
+    foreign key (id_imagen)references imagenes(id)on delete set null
 );
 
 create table estados_productos(
@@ -76,8 +80,7 @@ create table estados_productos(
     estado varchar(30)
 );
 
-insert into estados_productos(estado)values ('disponible');
-insert into estados_productos(estado)values ('agotado');
+insert into estados_productos(estado) values ('disponible');
 
 create table productos(
 id int auto_increment primary key,
@@ -87,7 +90,7 @@ precio decimal(7,2),
 cantidades_disponibles int,
 id_estado_producto int,
 id_imagen int,
-foreign key(id_imagen)references imaganes(id)on delete set null,
+foreign key(id_imagen)references imagenes(id)on delete set null,
 foreign key (id_estado_producto)references estados_productos(id) on delete set null
 );
 
@@ -145,7 +148,8 @@ create table historial(
     foreign key (id_reserva) references reservas(id) on delete set null
 );    
 
+use bd_proyecto_brayan;
 show tables;
-select * from productos;
+select * from consolas;
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
 
