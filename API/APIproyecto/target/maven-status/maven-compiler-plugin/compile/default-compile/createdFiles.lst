@@ -3,8 +3,8 @@ MODELO\ImagenesDAO.class
 CONFIG\RestConfig.class
 MODELO\ConsolasDAO.class
 CONTROLADOR\RolesController.class
-MODELO\ConexionBD.class
 MODELO\Consola.class
+MODELO\ConexionBD.class
 MODELO\ProductosDAO.class
 CONTROLADOR\ProductosController.class
 CONTROLADOR\ConsolasController.class
