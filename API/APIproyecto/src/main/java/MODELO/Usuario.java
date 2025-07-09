@@ -10,7 +10,7 @@ package MODELO;
  */
 public class Usuario {
     private int id;    
-    private int documento;
+    private long documento;
     private String nombre;
     private long telefono;
     private String correo;
@@ -21,7 +21,7 @@ public class Usuario {
     public Usuario(){      
     }
     
-    public Usuario( int id, int documento,String nombre,long telefono, String correo,String contrasenia, int id_rol) {
+    public Usuario( int id, long documento,String nombre,long telefono, String correo,String contrasenia, int id_rol) {
         this.id = id;
         this.documento = documento;
         this.nombre = nombre;
@@ -34,8 +34,8 @@ public class Usuario {
     public int getId(){return id;}
     public void setId(int id){this.id=id;}
     
-    public int getDocumento(){return documento;}
-    public void setDocumento(int documento){this.documento=documento;}
+    public long getDocumento(){return documento;}
+    public void setDocumento(long documento){this.documento=documento;}
     
     public String getNombre(){return nombre;}
     public void setNombre(String nombre){this.nombre=nombre;}

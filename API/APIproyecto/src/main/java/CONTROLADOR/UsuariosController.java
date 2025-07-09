@@ -42,6 +42,23 @@ public class UsuariosController {
         }   
     }
     
+    @GET
+    @Path("/documento/{documento}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerUsuarioPorDocumento(@PathParam("documento") long documento) {
+        UsuariosDAO dao = new UsuariosDAO();
+        Usuario usuario = dao.getByDocumento(documento);
+
+        if (usuario != null) {
+            return Response.ok(usuario).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Usuario no encontrado\"}")
+                    .build();
+        }
+    }
+
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response crearUsuario(Usuario usuario){

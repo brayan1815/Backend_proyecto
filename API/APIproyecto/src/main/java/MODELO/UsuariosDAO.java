@@ -24,7 +24,7 @@ public class UsuariosDAO {
             while(rs.next()){
                 Usuario u = new Usuario(
                     rs.getInt("id"),
-                    rs.getInt("documento"),
+                    rs.getLong("documento"),
                     rs.getString("nombre"),
                     rs.getLong("telefono"),
                     rs.getString("correo"),
@@ -65,11 +65,39 @@ public class UsuariosDAO {
         return usuario;
     }
     
+    public Usuario getByDocumento(long documento) {
+        Usuario usuario = null;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "SELECT * FROM usuarios WHERE documento = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, documento);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setDocumento(rs.getLong("documento"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setTelefono(rs.getLong("telefono"));
+                usuario.setCorreo(rs.getString("correo"));
+                usuario.setContrasenia(rs.getString("contrasenia"));
+                usuario.setId_rol(rs.getInt("id_rol"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return usuario;
+    }
+
+    
     public boolean post(Usuario usuario) {
         try (Connection conn = ConexionBD.getConnection()) {
             String sql = "INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, usuario.getDocumento());
+            stmt.setLong(1, usuario.getDocumento());
             stmt.setString(2, usuario.getNombre());
             stmt.setLong(3, usuario.getTelefono());
             stmt.setString(4, usuario.getCorreo());
@@ -90,7 +118,7 @@ public class UsuariosDAO {
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, usuario.getDocumento());
+            stmt.setLong(1, usuario.getDocumento());
             stmt.setString(2, usuario.getNombre());
             stmt.setLong(3, usuario.getTelefono());
             stmt.setString(4, usuario.getCorreo());
