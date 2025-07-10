@@ -31,6 +31,7 @@ create table permisos_roles(
 
 insert into permisos_roles (id_rol,id_Permiso) values (2,1);
 
+describe usuarios;
 create table usuarios(
 	id int auto_increment primary key,
 	documento bigint unique,
@@ -44,6 +45,7 @@ create table usuarios(
 );
 
 insert into usuarios (documento,nombre,telefono,correo,contrasenia,id_rol) values (1526352846,'Manuel Villabona',3856312824,'edwin@gmail.com','Edwin1.',1);
+insert into usuarios (documento,nombre,telefono,correo,contrasenia,id_rol) values (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','Brayan123.',1);
 
 create table imagenes(
 	id int auto_increment primary key,
@@ -99,6 +101,12 @@ create table estados_reservas(
     estado varchar (30)
 );
 
+insert into estados_reservas (estado)values('pendiente');
+insert into estados_reservas (estado)values('en proceso');
+insert into estados_reservas (estado)values('terminada');
+
+select * from estados_reservas;
+
 create table reservas(
 	id int auto_increment primary key,
     id_usuario int,
@@ -150,6 +158,8 @@ create table historial(
 
 use bd_proyecto_brayan;
 show tables;
-select * from consolas;
+select * from usuarios;
+
+insert into tipos(tipo,precio_hora)values('xbox 360',2000);
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
 
