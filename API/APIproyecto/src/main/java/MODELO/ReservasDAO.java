@@ -92,6 +92,34 @@ public class ReservasDAO {
         return lista;
     }
       
+      public Reserva getById(int id) {
+        Reserva reserva = null;
+        String sql = "SELECT * FROM reservas WHERE id = ?";
+
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                reserva = new Reserva(
+                    rs.getInt("id"),
+                    rs.getInt("id_usuario"),
+                    rs.getInt("id_consola"),
+                    rs.getInt("id_estado_reserva"),
+                    rs.getTimestamp("hora_inicio").toLocalDateTime(),
+                    rs.getTimestamp("hora_finalizacion").toLocalDateTime()
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reserva;
+    }
+
+      
     public boolean put(Reserva reserva) {
         boolean exito = false;
 

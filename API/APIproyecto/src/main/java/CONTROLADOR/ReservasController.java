@@ -25,6 +25,22 @@ public class ReservasController {
         List<Reserva> reservas = dao.getAll();
         return Response.ok(reservas).build();
     }
+    
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerReservaPorId(@PathParam("id") int id) {
+        ReservasDAO dao = new ReservasDAO();
+        Reserva reserva = dao.getById(id);
+
+        if (reserva != null) {
+            return Response.ok(reserva).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\": \"Reserva no encontrada\"}")
+                    .build();
+        }
+    }
 
     
     @POST

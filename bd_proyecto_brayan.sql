@@ -158,7 +158,7 @@ create table historial(
 
 use bd_proyecto_brayan;
 show tables;
-select * from usuarios;
+select * from reservas;
 
 insert into tipos(tipo,precio_hora)values('xbox 360',2000);
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
