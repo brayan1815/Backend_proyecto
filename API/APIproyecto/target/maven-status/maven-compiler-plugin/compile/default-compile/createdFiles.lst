@@ -13,6 +13,7 @@ MODELO\Usuario.class
 CONFIG\JacksonConfig.class
 MODELO\Rol.class
 CONTROLADOR\UsuariosController.class
+MODELO\UsuariosServices.class
 CONTROLADOR\TiposController.class
 MODELO\Producto.class
 MODELO\ImagenesDAO.class

@@ -12,6 +12,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Product
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Reserva.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Rol.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\RolesDAO.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\UsuariosController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\FILTROS\CORSFilter.java
