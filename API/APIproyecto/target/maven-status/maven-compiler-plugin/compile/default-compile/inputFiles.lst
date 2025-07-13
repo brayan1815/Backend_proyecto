@@ -7,9 +7,12 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\Ro
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsolasDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\TiposDAO.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsumosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Consola.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ProductosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Reserva.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Consumo.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ConsumosController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Rol.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\RolesDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosServices.java
