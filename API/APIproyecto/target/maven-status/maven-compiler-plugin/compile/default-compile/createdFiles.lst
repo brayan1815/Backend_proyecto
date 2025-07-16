@@ -1,13 +1,16 @@
 MODELO\Reserva.class
 FILTROS\CORSFilter.class
+MODELO\ReservasServices.class
 CONTROLADOR\RolesController.class
 MODELO\ConsolasDAO.class
 MODELO\ConexionBD.class
 CONTROLADOR\ConsumosController.class
+MODELO\ConsolaDTO.class
 CONTROLADOR\ConsolasController.class
 MODELO\ReservasDAO.class
 CONTROLADOR\ImagenesController.class
 MODELO\Consumo.class
+MODELO\ConsolasServices.class
 CONTROLADOR\ImagenesServlet.class
 CONTROLADOR\ReservasController.class
 MODELO\RolesDAO.class
@@ -23,6 +26,8 @@ CONFIG\RestConfig.class
 MODELO\Consola.class
 MODELO\ProductosDAO.class
 CONTROLADOR\ProductosController.class
+MODELO\UsuarioDTO.class
+MODELO\ReservaDTO.class
 MODELO\Tipo.class
 MODELO\ConsumosDAO.class
 MODELO\TiposDAO.class

@@ -5,6 +5,7 @@
 package CONTROLADOR;
 
 import MODELO.Usuario;
+import MODELO.UsuarioDTO;
 import MODELO.UsuariosDAO;
 import MODELO.UsuariosServices;
 import java.util.List;
@@ -22,12 +23,21 @@ import javax.ws.rs.core.Response;
 @Path("/usuarios")
 public class UsuariosController {
     
+    UsuariosServices services=new UsuariosServices();
     UsuariosDAO dao=new UsuariosDAO();//se intancia el objeto de la clase UsuariosDAO
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de obtener todos los usuarios de la base de datos
     public List<Usuario> obtenerUsuarios() {
         return dao.get();//se llamada al metodo get de usuarisosDAO para retornar la lista de los usuarios
+    }
+    
+    @GET
+    @Path("/con-rol")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerUsuariosConCargo() {
+        List<UsuarioDTO> usuarios = services.obtenerUsuariosConRol();
+        return Response.ok(usuarios).build();
     }
     
     @GET

@@ -5,7 +5,7 @@ package MODELO;
 public class Tipo {
     private int id;
     private String tipo;
-    private double precio_hora;
+    double precio_hora;
 
     public Tipo() {}
 

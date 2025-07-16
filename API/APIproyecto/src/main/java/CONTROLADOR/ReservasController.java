@@ -2,7 +2,9 @@
 package CONTROLADOR;
 
 import MODELO.Reserva;
+import MODELO.ReservaDTO;
 import MODELO.ReservasDAO;
+import MODELO.ReservasServices;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,11 +20,21 @@ import javax.ws.rs.core.Response;
 @Path("/reservas")
 public class ReservasController {
     
+    private ReservasServices reservaService = new ReservasServices();
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerReservas() {
         ReservasDAO dao = new ReservasDAO();
         List<Reserva> reservas = dao.getAll();
+        return Response.ok(reservas).build();
+    }
+    
+    @GET
+    @Path("/detalle")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerReservasConDetalle() {
+        List<ReservaDTO> reservas = reservaService.obtenerReservasConDatos();
         return Response.ok(reservas).build();
     }
     

@@ -2,7 +2,9 @@
 package CONTROLADOR;
 
 import MODELO.Consola;
+import MODELO.ConsolaDTO;
 import MODELO.ConsolasDAO;
+import MODELO.ConsolasServices;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,11 +19,20 @@ import javax.ws.rs.core.Response;
 
 @Path("/consolas")
 public class ConsolasController {
+    ConsolasServices conSer=new ConsolasServices();
      @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerConsolas() {
         ConsolasDAO dao = new ConsolasDAO();
         List<Consola> consolas = dao.getAll();
+        return Response.ok(consolas).build();
+    }
+    
+    @GET
+    @Path("/con-precio")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerConsolasConPrecio() {
+        List<ConsolaDTO> consolas = conSer.obtenerConsolasConPrecio();
         return Response.ok(consolas).build();
     }
     
