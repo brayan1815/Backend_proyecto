@@ -2,7 +2,9 @@
 package CONTROLADOR;
 
 import MODELO.Consumo;
+import MODELO.ConsumoDTO;
 import MODELO.ConsumosDAO;
+import MODELO.ConsumosServices;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +17,9 @@ import javax.ws.rs.core.Response;
 
 @Path("/consumos")
 public class ConsumosController {
+    
+    ConsumosServices service = new ConsumosServices();
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,17 +37,31 @@ public class ConsumosController {
     }
     
     @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerConsumoPorId(@PathParam("id") int idConsumo) {
+        try {
+            ConsumoDTO dto = service.obtenerConsumoPorId(idConsumo);
+            if (dto != null) {
+                return Response.ok(dto).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("No se encontró el consumo con ID " + idConsumo)
+                               .build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Error al obtener el consumo: " + e.getMessage())
+                           .build();
+        }
+    }
+    
+     @GET
     @Path("/reserva/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerPorIdReserva(@PathParam("id") int idReserva) {
-        ConsumosDAO dao = new ConsumosDAO();
-        List<Consumo> lista = dao.getByIdReserva(idReserva);
-
-        if (!lista.isEmpty()) {
-            return Response.ok(lista).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity("{\"mensaje\":\"No se encontraron consumos para esta reserva\"}").build();
-        }
+    public Response getConsumosPorReserva(@PathParam("id") int idReserva) {
+        
+        List<ConsumoDTO> lista = service.obtenerConsumosPorIdReserva(idReserva);
+        return Response.ok(lista).build();
     }
 }

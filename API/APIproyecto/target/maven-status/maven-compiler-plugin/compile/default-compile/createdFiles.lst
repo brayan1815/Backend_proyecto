@@ -14,6 +14,7 @@ MODELO\ConsolasServices.class
 CONTROLADOR\ImagenesServlet.class
 CONTROLADOR\ReservasController.class
 MODELO\RolesDAO.class
+MODELO\ConsumosServices.class
 MODELO\Usuario.class
 CONFIG\JacksonConfig.class
 CONTROLADOR\UsuariosController.class
@@ -29,6 +30,7 @@ CONTROLADOR\ProductosController.class
 MODELO\UsuarioDTO.class
 MODELO\ReservaDTO.class
 MODELO\Tipo.class
+MODELO\ConsumoDTO.class
 MODELO\ConsumosDAO.class
 MODELO\TiposDAO.class
 MODELO\UsuariosDAO.class

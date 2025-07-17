@@ -58,6 +58,32 @@ public class ConsumosDAO {
 
         return lista;
     }
+        
+        public Consumo getById(int id) {
+            Consumo consumo = null;
+
+            try (Connection conn = ConexionBD.getConnection()) {
+                String sql = "SELECT * FROM consumos WHERE id = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, id);
+
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    consumo = new Consumo();
+                    consumo.setId(rs.getInt("id"));
+                    consumo.setId_reserva(rs.getInt("id_reserva"));
+                    consumo.setId_producto(rs.getInt("id_producto"));
+                    consumo.setCantidad(rs.getInt("cantidad"));
+                    consumo.setSubtotal(rs.getDouble("subtotal"));
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return consumo;
+        }
 
 }
 
