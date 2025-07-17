@@ -85,6 +85,14 @@ public class ReservasController {
         }
     }
     
+    @GET
+    @Path("/estado-actualizado")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response actualizarEstadoDesdeFrontend() {
+        List<ReservaDTO> actualizadas = reservaService.actualizarEstadoReserva();
+        return Response.ok(actualizadas).build();
+    }
+    
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)

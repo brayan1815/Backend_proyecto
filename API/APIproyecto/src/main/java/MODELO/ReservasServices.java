@@ -1,6 +1,7 @@
 
 package MODELO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +33,48 @@ public class ReservasServices {
         }
 
         return listaDTO;
+    }
+    
+    public List<ReservaDTO> actualizarEstadoReserva(){
+        List<Reserva> reservas = reservaDAO.getAll();
+        List<ReservaDTO> listaActualizadas = new ArrayList<>();
+
+        LocalDateTime ahora = LocalDateTime.now();
+
+        for (Reserva reserva : reservas) {
+            int estadoActual = reserva.getId_estado_reserva();
+            int nuevoEstado;
+
+            if (ahora.isBefore(reserva.getHora_inicio())) {
+                nuevoEstado = 1; // Pendiente
+            } else if (!ahora.isBefore(reserva.getHora_inicio()) && ahora.isBefore(reserva.getHora_finalizacion())) {
+                nuevoEstado = 2; // En proceso
+            } else {
+                nuevoEstado = 3; // Terminada
+            }
+
+            if (estadoActual != nuevoEstado) {
+                reserva.setId_estado_reserva(nuevoEstado);
+                reservaDAO.put(reserva); // Actualizamos en la BD
+
+                Usuario u = usuarioDAO.getById(reserva.getId_usuario());
+                Consola c = consolaDAO.getById(reserva.getId_consola());
+
+                if (u != null && c != null) {
+                    ReservaDTO dto = new ReservaDTO(
+                        reserva.getId(),
+                        u.getDocumento(),
+                        u.getNombre(),
+                        reserva.getHora_inicio(),
+                        reserva.getHora_finalizacion(),
+                        c.getNombre(),
+                        nuevoEstado
+                    );
+                    listaActualizadas.add(dto);
+                }
+            }
+        }
+
+        return listaActualizadas;
     }
 }
