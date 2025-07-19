@@ -7,6 +7,7 @@ import MODELO.ConsumosDAO;
 import MODELO.ConsumosServices;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -99,6 +100,23 @@ public class ConsumosController {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("{\"error\": \"Error interno al actualizar el consumo\"}").build();
+        }
+    }
+    
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response eliminarConsumo(@PathParam("id") int id) {
+
+        boolean eliminado = service.eliminarConsumo(id);//se elimina el consumo
+
+        if (eliminado) { //si el consumose elimino se responde con ok y un mensaje 
+            return Response.ok("{\"mensaje\":\"Consumo eliminado correctamente\"}").build();
+        } else {
+            //si el consuo no se elimino se responde con un codigo de error y un mensaje
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"mensaje\":\"Error al eliminar el consumo\"}")
+                           .build();
         }
     }
 }

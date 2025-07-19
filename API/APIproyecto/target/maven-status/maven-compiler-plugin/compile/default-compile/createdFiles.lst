@@ -4,6 +4,7 @@ MODELO\ReservasServices.class
 CONTROLADOR\RolesController.class
 MODELO\ConsolasDAO.class
 MODELO\ConexionBD.class
+MODELO\FacturasServices.class
 CONTROLADOR\ConsumosController.class
 MODELO\ConsolaDTO.class
 CONTROLADOR\ConsolasController.class
@@ -17,11 +18,14 @@ MODELO\RolesDAO.class
 MODELO\ConsumosServices.class
 MODELO\Usuario.class
 CONFIG\JacksonConfig.class
+MODELO\FacturasDAO.class
 CONTROLADOR\UsuariosController.class
 MODELO\Rol.class
+CONTROLADOR\FacturasController.class
 CONTROLADOR\TiposController.class
 MODELO\UsuariosServices.class
 MODELO\Producto.class
+MODELO\Factura.class
 MODELO\ImagenesDAO.class
 CONFIG\RestConfig.class
 MODELO\Consola.class
@@ -35,4 +39,5 @@ MODELO\ConsumosDAO.class
 MODELO\TiposDAO.class
 MODELO\UsuariosDAO.class
 CONFIG\OptionsResource.class
+MODELO\FacturaDTO.class
 MODELO\Imagen.class

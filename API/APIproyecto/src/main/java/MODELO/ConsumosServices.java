@@ -95,6 +95,34 @@ public class ConsumosServices {
             else return false;
         }
     }
+    
+    public boolean eliminarConsumo(int idConsumo){
+        //se crea el servicio que se encargara de eliminar el consumo
+        
+        //se crean las instancias de las clases ConsumosDAO y ProductosDAO
+        ConsumosDAO consDao=new ConsumosDAO();
+        ProductosDAO prodDao=new ProductosDAO();
+        
+        Consumo consumo=consDao.getById(idConsumo);//se obtiene el consumo   
+        if(consumo==null) return false;//si no se encuentra el consumo se retorna falso
+        
+        Producto producto = prodDao.getById(consumo.getId_producto());//se obtiene el producto
+        if(producto==null)return false;//si no se encuentra el producto se retorna falso
+        
+        //se calcula la nueva cantidad de producto disponible, para esto se obtiene la cantidad anterior y se 
+        //suma la cantidad de producto que se habia conusmido
+        int nuevaCantidad = producto.getCantidades_disponibles() + consumo.getCantidad();
+        producto.setCantidades_disponibles(nuevaCantidad);//se envia al producto las nuevas cantidades
+        
+        //se actualiza el producro
+        boolean productoActualizado = prodDao.put(producto);
+        
+        if (!productoActualizado) return false;//si el producto no se actualizo se retorna falso
+        
+        boolean consumoEliminado = consDao.del(idConsumo);//se elimina el consumo
+        return consumoEliminado;//se retorna consumoEliminado
+        
+    }
 
 
 }

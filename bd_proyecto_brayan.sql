@@ -29,6 +29,7 @@ create table permisos_roles(
     foreign key(id_permiso)references permisos(id) on delete set null
 );
 
+
 insert into permisos_roles (id_rol,id_Permiso) values (2,1);
 
 describe usuarios;
@@ -104,6 +105,7 @@ create table estados_reservas(
 insert into estados_reservas (estado)values('pendiente');
 insert into estados_reservas (estado)values('en proceso');
 insert into estados_reservas (estado)values('terminada');
+insert into estados_reservas (estado)values('cobrada');
 
 select * from estados_reservas;
 
@@ -157,8 +159,9 @@ create table historial(
 );    
 
 use bd_proyecto_brayan;
+SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 25;
 show tables;
-select * from reservas;
+select * from estados_reservas;
 
 insert into tipos(tipo,precio_hora)values('xbox 360',2000);
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;

@@ -102,6 +102,52 @@ public class ConsumosDAO {
 
         return actualizado;
     }
+    
+    public boolean del(int id) {//se crea el metodo para eliminar el conusmo
+        //se declara la variable eliminado y se iniicializa en falso
+        boolean eliminado = false;
+
+        try (Connection conn = ConexionBD.getConnection()) {//se establece la conexion con la base de datos 
+            String sql = "DELETE FROM consumos WHERE id = ?";//se crea la consulta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
+            stmt.setInt(1, id);//se reemplazan los paramtros enviados en la conuslta, en este caso el id
+
+            int filasAfectadas = stmt.executeUpdate();//se obtiene la cantidad de filas afectadas al realizar la 
+                                                      //consulta
+            eliminado = filasAfectadas > 0;//se le reasigna a la variable eliminado el valor que retorne la condicional
+                                          //filaAfectadas>0
+
+        } catch (SQLException e) {
+            e.printStackTrace();//se captura y se manera el error
+        }
+
+        return eliminado;//se retorna la variable eliminado
+    }
+    
+    public double calcularTotalPorReserva(int idReserva) {//se crea el metodo para calcular el total de los consumos
+                                                          //de la reserva
+        double total = 0.0;//se declara la variable total y se inicializa en cero
+
+        try (Connection conn = ConexionBD.getConnection()) {//se establece la conexion a la base de datos
+            
+            String sql = "SELECT SUM(subtotal) FROM consumos WHERE id_reserva = ?";//se crea la conuslta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
+            stmt.setInt(1, idReserva);//se envia el parametro a la conuslta
+
+            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta SQL
+            if (rs.next()) {
+                total = rs.getDouble(1); // Obtenemos el valor de la suma
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejo de error
+        }
+
+        return total; // Retornamos el total calculado
+    }
+
+
+
 
 }
 
