@@ -32,7 +32,7 @@ public class ConsumosDAO {
         return exito;
     }
     
-        public List<Consumo> getByIdReserva(int idReserva) {
+    public List<Consumo> getByIdReserva(int idReserva) {
         List<Consumo> lista = new ArrayList<>();
 
         try (Connection conn = ConexionBD.getConnection()) {
@@ -59,8 +59,8 @@ public class ConsumosDAO {
         return lista;
     }
         
-        public Consumo getById(int id) {
-            Consumo consumo = null;
+    public Consumo getById(int id) {
+        Consumo consumo = null;
 
             try (Connection conn = ConexionBD.getConnection()) {
                 String sql = "SELECT * FROM consumos WHERE id = ?";
@@ -83,7 +83,25 @@ public class ConsumosDAO {
             }
 
             return consumo;
+    }
+    
+    public boolean actualizarConsumo(Consumo consumo) {
+        boolean actualizado = false;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "UPDATE consumos SET cantidad = ?, subtotal = ? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, consumo.getCantidad());
+            stmt.setDouble(2, consumo.getSubtotal());
+            stmt.setInt(3, consumo.getId());
+
+            actualizado = stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return actualizado;
+    }
 
 }
 

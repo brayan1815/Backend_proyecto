@@ -39,4 +39,62 @@ public class ConsumosServices {
         }
         return null;
     }
+    
+    public boolean editarConsumo(Consumo nuevoConsumo) {
+        ConsumosDAO consumoDAO = new ConsumosDAO();//se crea la instancia del objeto de la clase consumosDAO
+        ProductosDAO productoDAO = new ProductosDAO();//se crea la instancia del objeto de la clase productosDAO
+
+    
+        Consumo consumoAnterior = consumoDAO.getById(nuevoConsumo.getId());//se obtiene el consumo anterior
+        if (consumoAnterior == null) {
+            return false; //en caso de que el consumo no exista se retorna falso
+        }
+        
+        Producto producto = productoDAO.getById(nuevoConsumo.getId_producto());//se obtiene el producto al cual 
+                                                                              //se le vana sumar o restar cantidades
+                                                                              //en stock
+        
+        if(nuevoConsumo.getCantidad()>consumoAnterior.getCantidad()){//en caso de que el nuevo consumo sea mayor que 
+                                                                    //el anterior
+                                                                    
+            //se obtiene la diferencia entre el consumo anterior y el nuevo
+            int diferencia=nuevoConsumo.getCantidad()-consumoAnterior.getCantidad();
+            
+            //se envia al producto las nuevas cantidades disponibles
+            producto.setCantidades_disponibles(producto.getCantidades_disponibles()-diferencia);
+            
+            //se actualiza el producto en la base de datos
+            boolean productoActualizado=productoDAO.put(producto);
+            
+            
+            if(productoActualizado){
+                //si el producto en la base de datos se actualizo correctamente se actualiza el consumo
+                boolean consumoActualizado=consumoDAO.actualizarConsumo(nuevoConsumo);
+                if(consumoActualizado) return true;//si el consumo se actualiza correctamente se retorna true
+                else return false;//en caso contrario se retorna falso
+            }
+            else return false;
+        }else{//en caso de que el nuevo conusmo no sea mayor que el anterior
+            
+            //se calcula la diferencia entre el consumo anterior y el nuevo
+            int diferencia=consumoAnterior.getCantidad()-nuevoConsumo.getCantidad();
+            
+            //se envia al producto las nuevas cantidades disponibles
+            producto.setCantidades_disponibles(producto.getCantidades_disponibles()+diferencia);
+            
+            //se actualiza el producto
+            boolean productoActualizado=productoDAO.put(producto);
+            if(productoActualizado){
+                //en caso de que el producto se haya actualizaco correctamente se actualiza el consumo
+                boolean consumoActualizado=consumoDAO.actualizarConsumo(nuevoConsumo);
+                //si el consumo se actualiza correctamente se retornba verdadero
+                if(consumoActualizado)return true;
+                //en caso contrario se retorna falso
+                else return false;
+            }
+            else return false;
+        }
+    }
+
+
 }

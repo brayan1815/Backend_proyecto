@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,12 +20,13 @@ import javax.ws.rs.core.Response;
 public class ConsumosController {
     
     ConsumosServices service = new ConsumosServices();
+    ConsumosDAO dao = new ConsumosDAO();
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearConsumo(Consumo consumo) {
-        ConsumosDAO dao = new ConsumosDAO();
+        
         boolean creado = dao.post(consumo);
 
         if (creado) {
@@ -39,7 +41,22 @@ public class ConsumosController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerConsumoPorId(@PathParam("id") int idConsumo) {
+    public Response obtenerConsumoPorId(@PathParam("id") int id) {
+        Consumo consumo = dao.getById(id);
+
+        if (consumo != null) {
+            return Response.ok(consumo).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                           .entity("{\"mensaje\": \"Consumo no encontrado\"}")
+                           .build();
+        }
+    }
+    
+    @GET
+    @Path("/dto/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerConsumoPorIdDto(@PathParam("id") int idConsumo) {
         try {
             ConsumoDTO dto = service.obtenerConsumoPorId(idConsumo);
             if (dto != null) {
@@ -63,5 +80,25 @@ public class ConsumosController {
         
         List<ConsumoDTO> lista = service.obtenerConsumosPorIdReserva(idReserva);
         return Response.ok(lista).build();
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response actualizarConsumo(Consumo consumo) {
+        try {
+            boolean actualizado = service.editarConsumo(consumo);
+
+            if (actualizado) {
+                return Response.ok("{\"mensaje\": \"Consumo actualizado correctamente\"}").build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("{\"error\": \"No se pudo actualizar el consumo\"}").build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("{\"error\": \"Error interno al actualizar el consumo\"}").build();
+        }
     }
 }
