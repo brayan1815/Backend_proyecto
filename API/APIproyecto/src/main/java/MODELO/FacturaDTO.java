@@ -1,6 +1,7 @@
 package MODELO;
 
 public class FacturaDTO {
+    private int id;
     private long minutosConsumidos;
     private double totalTiempo;
     private double totalProductos;
@@ -8,11 +9,20 @@ public class FacturaDTO {
 
     public FacturaDTO() {}
 
-    public FacturaDTO(long minutosConsumidos, double totalTiempo, double totalProductos, double totalGeneral) {
+    public FacturaDTO(int id,long minutosConsumidos, double totalTiempo, double totalProductos, double totalGeneral) {
+        this.id=id;
         this.minutosConsumidos = minutosConsumidos;
         this.totalTiempo = totalTiempo;
         this.totalProductos = totalProductos;
         this.totalGeneral = totalGeneral;
+    }
+    
+    public int getId(){
+        return id;
+    }
+    
+    public void setId(int id){
+        this.id=id;
     }
 
     public long getMinutosConsumidos() {

@@ -48,14 +48,14 @@ public class FacturasServices {
         double totalGeneral = totalTiempo + totalProductos;//se calcula el total general
 
         //se agrega a la tabla facturas la nueva factura
-        boolean insertado = facturasDAO.post(idReserva, totalGeneral);
-        if (!insertado) return null;//si la factura no se pudo agregar se retorna null
+        int idFactura = facturasDAO.post(idReserva, totalGeneral);
+        if (idFactura == -1) return null;//si el id de la factura es -1 re retorna null
         
         //se retorna la factura en formato DTO
-        return new FacturaDTO(minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
+        return new FacturaDTO(reserva.getId(), minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
     }
 
-    private FacturaDTO construirFacturaDTO(int idReserva) {
+    public FacturaDTO construirFacturaDTO(int idReserva) {
         //se obtiene la reserva
         Reserva reserva = reservasDAO.getById(idReserva);
         //si la reserva no existe se reorna null
@@ -73,6 +73,9 @@ public class FacturasServices {
         //si el tipo de la consola no existe se retorrna null
         if (tipo == null) return null;
         
+        Factura factura=facturasDAO.getByReserva(idReserva);
+        if(factura==null)return null;
+        
         //se calcula el precio por minuto
         double precioPorMinuto = tipo.getPrecio_hora() / 60.0;
         //se calcula el total de los minutos de uso de la consola
@@ -80,10 +83,43 @@ public class FacturasServices {
         //se calcula el total de los productos consumidos
         double totalProductos = consumosDAO.calcularTotalPorReserva(idReserva);
         
+        
         //se calcula el total de los consumos mas el tiempo
         double total=totalTiempo+totalProductos;
 
         //se retorna la facturaDTO
-        return new FacturaDTO(minutosConsumidos, totalTiempo, totalProductos, total);
+        return new FacturaDTO(factura.getId(), minutosConsumidos, totalTiempo, totalProductos, total);
     }
+    
+    public boolean cobrarFactura(int idFactura, int idMetodoPago) {
+        //se obtiene la factura por id
+        Factura factura = facturasDAO.getById(idFactura);
+        if (factura == null) return false;//si no se encuentra la factura se retorna falso
+
+        int idReserva = factura.getIdReserva();//se obtiene el id de la reserva
+
+        // se obtiene la reserva por ID
+        Reserva reserva = reservasDAO.getById(idReserva);
+        if (reserva == null) return false;//en caso de no encontrarse la reserva se retorna falso
+        
+        // se cambia el estado de la reserva a 4(pagada)
+        int nuevoEstado=4;
+        reserva.setId_estado_reserva(nuevoEstado);
+        //se alcualiza la reserva
+        boolean reservaActualizada = reservasDAO.put(reserva);
+        if (!reservaActualizada) return false;//si la reserva no se actualiza correctamente se retorna falso
+
+        // Registrar el pago
+        PagosDAO pagosDAO = new PagosDAO();
+        //se registra el pago
+        boolean pagoRegistrado = pagosDAO.post(idFactura, idMetodoPago);
+        if (!pagoRegistrado) return false;//si el pago no se registoro correctamente se retorna falso
+
+        // Registrar en historial
+        HistorialDAO historialDAO = new HistorialDAO();
+        boolean historialRegistrado = historialDAO.post(idReserva);
+
+        return historialRegistrado;//se retorna la variabel historialRegistrado
+    }
+
 }

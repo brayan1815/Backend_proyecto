@@ -4,6 +4,8 @@
  */
 package CONTROLADOR;
 
+import MODELO.Secured;
+import MODELO.TokenUtils;
 import MODELO.Usuario;
 import MODELO.UsuarioDTO;
 import MODELO.UsuariosDAO;
@@ -20,11 +22,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 @Path("/usuarios")
 public class UsuariosController {
     
     UsuariosServices services=new UsuariosServices();
     UsuariosDAO dao=new UsuariosDAO();//se intancia el objeto de la clase UsuariosDAO
+    
+    @Secured
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de obtener todos los usuarios de la base de datos
@@ -32,6 +37,7 @@ public class UsuariosController {
         return dao.get();//se llamada al metodo get de usuarisosDAO para retornar la lista de los usuarios
     }
     
+    @Secured
     @GET
     @Path("/con-rol")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,6 +46,7 @@ public class UsuariosController {
         return Response.ok(usuarios).build();
     }
     
+    @Secured
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +63,7 @@ public class UsuariosController {
         }   
     }
     
+    @Secured
     @GET
     @Path("/correo/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +84,7 @@ public class UsuariosController {
         }
     }
     
+    @Secured
     @GET
     @Path("/documento/{documento}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,24 +113,27 @@ public class UsuariosController {
     //se crea el metodo que se encargara de validar las credenciales del usuario para iniciar sesion
     public Response login(Usuario usuario){
         
-        UsuariosServices ser=new UsuariosServices();//se isntancia el objeto de la clase UsuariosServices
-        try{
-            if(ser.login(usuario)){
-                //si el metodo login de la clase UsuariosServices retorna verdadero
-                //se retorna una respuesta exitosa
-                return Response.ok("El usuarios puede ingresar").build();
-            }else{
-                //si el login no fue exitosa se arroja una excepcion indicando que el usuario no puede ingresar
-                throw new IllegalArgumentException("El usuario no puede ingresar");
-            }
-        }catch(Exception e){
-            //si ocurtre un error durante el proceso se captura
-            return Response.status(500).entity("Ocurrio un error al buscar la informacion").build();
-            //se retorna una respuesta con codigo 500 y un mensaje infromativo
-        }
+        UsuariosServices ser = new UsuariosServices();
+         try {
+             if (ser.login(usuario)) {
+                 // Si el login fue exitoso, generar el token
+                 String token = TokenUtils.generarToken(usuario.getCorreo());
+
+                 // Retornar el token en formato JSON
+                 return Response.ok("{\"token\":\"" + token + "\"}").build();
+             } else {
+                 return Response.status(Response.Status.UNAUTHORIZED)
+                                .entity("{\"error\":\"Credenciales incorrectas\"}")
+                                .build();
+             }
+         } catch (Exception e) {
+             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                            .entity("{\"error\":\"Ocurrió un error en el servidor\"}")
+                            .build();
+         }
     }
 
-    
+    @Secured
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de crear un nuevo usuario en la base de datos 
@@ -138,6 +150,7 @@ public class UsuariosController {
         }
     }
     
+    @Secured
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -158,6 +171,7 @@ public class UsuariosController {
             }   
     }
     
+    @Secured
     @DELETE
     @Path("/{id}")
     //se crea el metodo que se encargara de eliminar un usuario de la base de datos

@@ -57,7 +57,7 @@ public class ReservasServices {
                 nuevoEstado = 3; // Terminada
             }
 
-            if (estadoActual != nuevoEstado) {
+            if (estadoActual != nuevoEstado && estadoActual!=4) {
                 reserva.setId_estado_reserva(nuevoEstado);
                 reservaDAO.put(reserva); // Actualizamos en la BD
 
@@ -102,6 +102,6 @@ public class ReservasServices {
         facturaDAO.post(idReserva, totalGeneral);
 
         //se retorna la facturaDTO
-        return new FacturaDTO(minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
+        return new FacturaDTO(idReserva,minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
     }
 }

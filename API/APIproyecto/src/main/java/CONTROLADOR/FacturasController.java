@@ -29,5 +29,26 @@ public class FacturasController {
                            .build();
         }
     }
+    
+    @POST
+    @Path("/pago/{idFactura}/{idMetodo}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cobrarFactura(@PathParam("idFactura") int idFactura, @PathParam("idMetodo") int idMetodoPago) {
+        //se crea el metodo para cobrar la factura
+        
+        //se almacena el retorno del metodo cobrarFactura dentro de la variable exito
+        boolean exito = servicio.cobrarFactura(idFactura, idMetodoPago);
+        
+
+        if (exito) {
+            //si la variable exito es true se responde con un ok y un mnesaje
+            return Response.ok("{\"mensaje\":\"Pago registrado correctamente\"}").build();
+        } else {
+            //en caso cotrario se retorna un codigo de error junto con un mensaje
+            return Response.status(Response.Status.BAD_REQUEST)
+                       .entity("{\"error\":\"No se pudo registrar el pago\"}")
+                       .build();
+        }
+    }
 
 }

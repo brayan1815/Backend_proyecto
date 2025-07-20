@@ -121,12 +121,15 @@ public class ReservasDAO {
 
       
     public boolean put(Reserva reserva) {
-        boolean exito = false;
+        //se crea el metodo para actualizar la reserva
+        boolean exito = false;//se declara la variable exito y se inicializa como falsa
 
-        try (Connection conn = ConexionBD.getConnection()) {
+        try (Connection conn = ConexionBD.getConnection()) {//se establece la conexion a la base de datos
+            //se crea la consulta SQL
             String sql = "UPDATE reservas SET id_usuario = ?, id_consola = ?, id_estado_reserva = ?, hora_inicio = ?, hora_finalizacion = ? WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
+            
+            //se reemplazan los parametros enviados en la conuslta SQL
             stmt.setInt(1, reserva.getId_usuario());
             stmt.setInt(2, reserva.getId_consola());
             stmt.setInt(3, reserva.getId_estado_reserva());
@@ -134,14 +137,14 @@ public class ReservasDAO {
             stmt.setTimestamp(5, Timestamp.valueOf(reserva.getHora_finalizacion()));
             stmt.setInt(6, reserva.getId());
 
-            int filas = stmt.executeUpdate();
-            exito = filas > 0;
+            int filas = stmt.executeUpdate();//se ejecuta la consulta sql y se almacena la cantidad de filas afectadas
+            exito = filas > 0;//se almacena en la variable exito el retorno de la condicional 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//se atrapan y se manejan los errores
         }
 
-        return exito;
+        return exito;//se retorna la variable exito
     }
 
 
