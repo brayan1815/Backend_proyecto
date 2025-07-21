@@ -1,6 +1,7 @@
 
 package MODELO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 
@@ -8,7 +9,10 @@ public class ReservaDTO {
     private int id;
     private long documentoUsuario;
     private String nombreUsuario;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime horaInicio;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime horaFinalizacion;
     private String nombreConsola;
     private int idEstadoReserva;
