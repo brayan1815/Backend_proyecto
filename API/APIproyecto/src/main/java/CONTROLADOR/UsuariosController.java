@@ -136,17 +136,18 @@ public class UsuariosController {
     @Secured
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de crear un nuevo usuario en la base de datos 
     public Response crearUsuario(Usuario usuario){
         
         boolean creado = dao.post(usuario);//se lama al metodo post de usuariosDAO para insertar el nuevo usuario
 
         if (creado) {
-            //si el usuario se crea correctamente se devuelve un codigo 201 con un mensaje
-            return Response.status(Response.Status.CREATED).entity("Usuario creado correctamente").build();
+            return Response.status(Response.Status.CREATED)
+                    .entity("{\"mensaje\": \"Usuario creado correctamente\"}").build();
         } else {
-            //si no se puede crear el usuario se retorna un codigo 500 con un mensaje
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No se pudo crear el usuario").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\": \"No se pudo crear el usuario\"}").build();
         }
     }
     
@@ -154,6 +155,8 @@ public class UsuariosController {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+
     //se crea el metodo que se encargra de actualizar un usuario en la base de datos
     public Response actualizarUsuario(@PathParam("id") int id,Usuario usuario)
         {
@@ -162,12 +165,14 @@ public class UsuariosController {
             if (actualizado) 
             {
                 //si el usuario se actualizo correctamente se devuleve un codigo 200 con un mensaje
-                return Response.ok("Usuario actualizado correctamente").build();
+                return Response.status(Response.Status.CREATED)
+                    .entity("{\"mensaje\": \"Usuario actualizaco correctamente\"}").build();
             } 
             else 
             {
                 //si el usuario no se encuentra o no hay cambios se retorna un codigo 404 con un mensaje
-                return Response.status(Response.Status.NOT_FOUND).entity("Usuario no encontrado o sin cambios").build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\": \"No se pudo actualizar el usuario\"}").build();
             }   
     }
     
