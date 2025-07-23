@@ -66,7 +66,7 @@ public class ReservasController {
         if (creada) {
             return Response.status(Response.Status.CREATED).entity("{\"mensaje\":\"Reserva creada correctamente\"}").build();
         } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"mensaje\":\"Error al crear reserva\"}").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"Error al crear reserva\"}").build();
         }
     }
     
@@ -108,6 +108,21 @@ public class ReservasController {
         } else {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("{\"error\": \"No se pudo actualizar la reserva\"}")
+                    .build();
+        }
+    }
+    
+    @GET
+    @Path("/usuario/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerReservasPorUsuario(@PathParam("id") int idUsuario) {
+        List<ReservaDTO> reservas = reservaService.obtenerReservasPorUsuario(idUsuario);
+
+        if (reservas != null && !reservas.isEmpty()) {
+            return Response.ok(reservas).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"mensaje\": \"No se encontraron reservas para este usuario\"}")
                     .build();
         }
     }

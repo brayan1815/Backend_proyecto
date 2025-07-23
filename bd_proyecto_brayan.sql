@@ -144,6 +144,10 @@ create table metodos_pago(
     metodo_pago varchar(30)
 );
 
+insert into metodos_pago(metodo_pago)value('Tranferencia');
+insert into metodos_pago(metodo_pago)value('Nequi');
+insert into metodos_pago(metodo_pago)value('Efectivo');
+
 create table pagos(
 	id int auto_increment primary key,
     id_factura int,
@@ -161,8 +165,12 @@ create table historial(
 use bd_proyecto_brayan;
 SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 25;
 show tables;
-select * from estados_reservas;
+select * from usuarios;
+describe usuarios;
 
+UPDATE reservas SET id_usuario = 2, id_consola = 1, id_estado_reserva = 3, hora_inicio = '2025-07-20T11:30:00', hora_finalizacion = '2025-07-20T12:00:00' WHERE id = 7;
+UPDATE usuarios SET contrasenia='Edwin1234.' WHERE id=1;
 insert into tipos(tipo,precio_hora)values('xbox 360',2000);
 SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
 
+DELETE  from usuarios where id=5;

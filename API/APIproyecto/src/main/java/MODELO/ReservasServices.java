@@ -104,4 +104,29 @@ public class ReservasServices {
         //se retorna la facturaDTO
         return new FacturaDTO(idReserva,minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
     }
+    
+    public List<ReservaDTO> obtenerReservasPorUsuario(int idUsuario) {
+        List<Reserva> reservas = reservaDAO.getByIdUsuario(idUsuario);
+        List<ReservaDTO> listaDTO = new ArrayList<>();
+
+        for (Reserva r : reservas) {
+            Usuario u = usuarioDAO.getById(r.getId_usuario());
+            Consola c = consolaDAO.getById(r.getId_consola());
+
+            if (u != null && c != null) {
+                ReservaDTO dto = new ReservaDTO(
+                    r.getId(),
+                    u.getDocumento(),
+                    u.getNombre(),
+                    r.getHora_inicio(),
+                    r.getHora_finalizacion(),
+                    c.getNombre(),
+                    r.getId_estado_reserva()
+                );
+                listaDTO.add(dto);
+            }
+        }
+
+        return listaDTO;
+    }
 }

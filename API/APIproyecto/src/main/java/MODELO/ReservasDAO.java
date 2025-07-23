@@ -118,6 +118,35 @@ public class ReservasDAO {
 
         return reserva;
     }
+      
+      public List<Reserva> getByIdUsuario(int idUsuario) {
+          //Se crea el metodo para obtener las resevas por id de usuarios
+        List<Reserva> lista = new ArrayList<>();//se crea la lista que almacenara las reservas
+
+        try (Connection conn = ConexionBD.getConnection()) {//se establece la conexion a la base de datos con ayuda de la
+                                                            //clase ConexionBD
+            String sql = "SELECT * FROM reservas WHERE id_usuario = ?";//se crea la consulta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
+            stmt.setInt(1, idUsuario);//se reemplazan los parametros de la consulta
+            ResultSet rs = stmt.executeQuery();//se almacena el resultado de la consulta en la variable rs
+
+            while (rs.next()) {//se recorre el resultado
+                Reserva reserva = new Reserva(//se crea un nuevo objeto reserva
+                    rs.getInt("id"),
+                    rs.getInt("id_usuario"),
+                    rs.getInt("id_consola"),
+                    rs.getInt("id_estado_reserva"),
+                    rs.getTimestamp("hora_inicio").toLocalDateTime(),
+                    rs.getTimestamp("hora_finalizacion").toLocalDateTime()
+                );
+                lista.add(reserva);//se agrega el objeto a la lista 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();//se capturan y se manejan los errores
+        }
+
+        return lista;//se retorna la lista
+    }
 
       
     public boolean put(Reserva reserva) {
