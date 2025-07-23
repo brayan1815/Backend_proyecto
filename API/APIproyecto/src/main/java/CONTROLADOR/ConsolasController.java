@@ -5,6 +5,7 @@ import MODELO.Consola;
 import MODELO.ConsolaDTO;
 import MODELO.ConsolasDAO;
 import MODELO.ConsolasServices;
+import MODELO.ValidadorConsola;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -57,6 +58,14 @@ public class ConsolasController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearConsola(Consola consola) {
+        
+        String error = ValidadorConsola.validarConsola(consola);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity(error)
+                           .build();
+        }
+        
         ConsolasDAO dao = new ConsolasDAO();
         boolean creada = dao.post(consola);
 
@@ -76,7 +85,15 @@ public class ConsolasController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarConsola(@PathParam("id") int id, Consola consola) {
-        consola.setId(id); // Se asegura de usar el ID de la URL
+        consola.setId(id);
+        
+        String error = ValidadorConsola.validarConsola(consola);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity(error)
+                           .build();
+        }
+        
         ConsolasDAO dao = new ConsolasDAO();
 
         boolean actualizado = dao.put(consola);

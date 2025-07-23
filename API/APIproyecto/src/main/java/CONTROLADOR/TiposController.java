@@ -3,6 +3,7 @@ package CONTROLADOR;
 
 import MODELO.Tipo;
 import MODELO.TiposDAO;
+import MODELO.ValidadorTipo;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -45,6 +46,13 @@ public class TiposController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearTipo(Tipo tipo) {
+        
+        String error = ValidadorTipo.validarTipo(tipo);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"error\": \"" + error + "\"}")
+                           .build();
+        }
         TiposDAO dao = new TiposDAO();
         boolean creado = dao.post(tipo);
 
@@ -62,7 +70,15 @@ public class TiposController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarTipo(@PathParam("id") int id, Tipo tipo) {
-        tipo.setId(id); // asegura que se use el ID correcto
+        tipo.setId(id);
+        
+        String error = ValidadorTipo.validarTipo(tipo);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"error\": \"" + error + "\"}")
+                           .build();
+        }
+        
         TiposDAO dao = new TiposDAO();
         boolean actualizado = dao.put(tipo);
 

@@ -6,6 +6,7 @@ import MODELO.Reserva;
 import MODELO.ReservaDTO;
 import MODELO.ReservasDAO;
 import MODELO.ReservasServices;
+import MODELO.ValidadorReserva;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -60,6 +61,14 @@ public class ReservasController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearReserva(Reserva reserva) {
+        
+        String error = ValidadorReserva.validar(reserva);
+
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\": \"" + error + "\"}").build();
+        }
+        
         ReservasDAO dao = new ReservasDAO();
         boolean creada = dao.post(reserva);
 

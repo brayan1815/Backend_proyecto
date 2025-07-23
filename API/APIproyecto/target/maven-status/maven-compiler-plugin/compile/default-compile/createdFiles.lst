@@ -1,9 +1,11 @@
 MODELO\HistorialDAO.class
 CONTROLADOR\ConsolasController.class
 MODELO\ReservasDAO.class
+MODELO\ValidadorReserva.class
 CONTROLADOR\MetodosPagoController.class
 CONTROLADOR\ImagenesController.class
 MODELO\FacturasDAO.class
+MODELO\ValidadorTipo.class
 CONTROLADOR\UsuariosController.class
 CONTROLADOR\FacturasController.class
 CONTROLADOR\TiposController.class
@@ -40,12 +42,15 @@ CONTROLADOR\ReservasController.class
 MODELO\RolesDAO.class
 MODELO\ConsumosServices.class
 MODELO\Usuario.class
+MODELO\ValidadorProducto.class
 CONFIG\JacksonConfig.class
 MODELO\Rol.class
 MODELO\UsuariosServices.class
 MODELO\MetodoPago.class
 MODELO\ImagenesDAO.class
+MODELO\ValidadorUsuario.class
 MODELO\UsuarioDTO.class
 MODELO\ReservaDTO.class
 MODELO\PagosDAO.class
 MODELO\Secured.class
+MODELO\ValidadorConsola.class

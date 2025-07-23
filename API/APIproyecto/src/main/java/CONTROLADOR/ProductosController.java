@@ -6,6 +6,7 @@ package CONTROLADOR;
 
 import MODELO.Producto;
 import MODELO.ProductosDAO;
+import MODELO.ValidadorProducto;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,6 +25,12 @@ public class ProductosController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearProducto(Producto producto) {
+        
+        String error = ValidadorProducto.validarProducto(producto);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+        
         ProductosDAO dao = new ProductosDAO();
         boolean creado = dao.post(producto);
 
@@ -64,7 +71,13 @@ public class ProductosController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarProducto(@PathParam("id") int id, Producto producto) {
-        producto.setId(id); // Asegura que se use el ID de la URL
+        producto.setId(id);
+        
+        String error = ValidadorProducto.validarProducto(producto);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+        
         ProductosDAO dao = new ProductosDAO();
     
         boolean actualizado = dao.put(producto);

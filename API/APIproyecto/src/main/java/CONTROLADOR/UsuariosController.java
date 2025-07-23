@@ -10,6 +10,7 @@ import MODELO.Usuario;
 import MODELO.UsuarioDTO;
 import MODELO.UsuariosDAO;
 import MODELO.UsuariosServices;
+import MODELO.ValidadorUsuario;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -139,7 +140,12 @@ public class UsuariosController {
     @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de crear un nuevo usuario en la base de datos 
     public Response crearUsuario(Usuario usuario){
-        
+        String error = ValidadorUsuario.validarUsuario(usuario, dao);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("{\"error\": \"" + error + "\"}")
+                           .build();
+        }
         boolean creado = dao.post(usuario);//se lama al metodo post de usuariosDAO para insertar el nuevo usuario
 
         if (creado) {
@@ -156,10 +162,19 @@ public class UsuariosController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
         @Produces(MediaType.APPLICATION_JSON)
-
     //se crea el metodo que se encargra de actualizar un usuario en la base de datos
     public Response actualizarUsuario(@PathParam("id") int id,Usuario usuario)
-        {
+    {
+        
+             usuario.setId(id); // Importante para validar bien el ID contra duplicados
+
+            String error = ValidadorUsuario.validarUsuario(usuario, dao);
+            if (error != null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("{\"error\": \"" + error + "\"}")
+                               .build();
+            }
+        
             boolean actualizado = dao.put(id, usuario);//se llama el metod put de usuariosDAO para actualizar el
                                                       //usuario
             if (actualizado) 
