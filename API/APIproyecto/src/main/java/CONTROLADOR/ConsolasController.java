@@ -111,6 +111,14 @@ public class ConsolasController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response eliminarConsola(@PathParam("id") int id) {
+        
+        String error = ValidadorConsola.validarEliminacion(id);
+        if (error != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity(error)
+                           .build();
+        }
+        
         ConsolasDAO dao = new ConsolasDAO();
         boolean eliminado = dao.Delete(id);
 

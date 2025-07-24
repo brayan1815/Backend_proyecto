@@ -1,6 +1,8 @@
 
 package MODELO;
 
+import java.util.List;
+
 public class ValidadorConsola {
     public static String validarConsola(Consola consola) {
 
@@ -42,5 +44,16 @@ public class ValidadorConsola {
         }
 
         return null; //sei se pasan todos los filtros se retorna null
+    }
+    
+    public static String validarEliminacion(int idConsola) {
+        ReservasDAO dao = new ReservasDAO();
+        List<Reserva> reservas = dao.getByIdConsola(idConsola);
+
+        if (!reservas.isEmpty()) {
+            return "{\"error\": \"No se puede eliminar la consola porque tiene reservas asociadas.\"}";
+        }
+
+        return null; // Se puede eliminar
     }
 }

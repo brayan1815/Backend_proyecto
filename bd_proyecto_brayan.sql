@@ -1,176 +1,184 @@
-
-drop database bd_proyecto_brayan;
-
-create database bd_proyecto_brayan;
+DROP DATABASE IF EXISTS bd_proyecto_brayan;
+CREATE DATABASE bd_proyecto_brayan;
 USE bd_proyecto_brayan;
 
-
-create table roles(
-	id int auto_increment primary key,
-    rol varchar(30)
+-- ROLES Y PERMISOS
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rol VARCHAR(30)
 );
 
-insert into roles (rol) values ('administrador');
-insert into roles (rol) values ('usuario');
+INSERT INTO roles (rol) VALUES ('administrador');
+INSERT INTO roles (rol) VALUES ('usuario');
 
-select * from roles;
-
-create table permisos(
-	id int auto_increment primary key,
-    permiso varchar(50)
+CREATE TABLE permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    permiso VARCHAR(50)
 );
 
-insert into permisos(permiso) values ('ver');
+INSERT INTO permisos(permiso) VALUES ('ver');
 
-create table permisos_roles(
-	id_rol int,
-    id_permiso int,
-    foreign key(id_rol) references roles(id)on delete set null,
-    foreign key(id_permiso)references permisos(id) on delete set null
+CREATE TABLE permisos_roles (
+    id_rol INT,
+    id_permiso INT,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_permiso) REFERENCES permisos(id) ON DELETE SET NULL
 );
 
+INSERT INTO permisos_roles (id_rol, id_permiso) VALUES (2, 1);
 
-insert into permisos_roles (id_rol,id_Permiso) values (2,1);
-
-describe usuarios;
-create table usuarios(
-	id int auto_increment primary key,
-	documento bigint unique,
-    nombre varchar(60),
-    telefono bigint,
-    correo varchar(100) unique,
-    contrasenia varchar(30),
-    id_rol int,
-    foreign key (id_rol) references roles(id)
-    on delete set null
+-- USUARIOS
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    documento BIGINT UNIQUE,
+    nombre VARCHAR(60),
+    telefono BIGINT,
+    correo VARCHAR(100) UNIQUE,
+    contrasenia VARCHAR(30),
+    id_rol INT,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL
 );
 
-insert into usuarios (documento,nombre,telefono,correo,contrasenia,id_rol) values (1526352846,'Manuel Villabona',3856312824,'edwin@gmail.com','Edwin1.',1);
-insert into usuarios (documento,nombre,telefono,correo,contrasenia,id_rol) values (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','Brayan123.',1);
+INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol)
+VALUES 
+(1526352846,'Manuel Villabona',3856312824,'edwin@gmail.com','Edwin1.',1),
+(1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','Brayan123.',1);
 
-create table imagenes(
-	id int auto_increment primary key,
-    ruta text
+-- IMÁGENES
+CREATE TABLE imagenes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ruta TEXT
 );
 
-create table tipos(
-	id int auto_increment not null primary key,
-    tipo varchar(30),
-    precio_hora decimal(6,2)
+-- TIPOS DE CONSOLA
+CREATE TABLE tipos (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    tipo VARCHAR(30),
+    precio_hora DECIMAL(6,2)
 );
 
-create table estados_consolas(
-	id int auto_increment primary key,
-    estado varchar(30)
+-- ESTADOS DE CONSOLAS
+CREATE TABLE estados_consolas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    estado VARCHAR(30)
 );
 
-insert into estados_consolas(estado)values('disponible');
+INSERT INTO estados_consolas(estado) VALUES ('disponible');
 
-create table consolas(
-	id int auto_increment primary key,
-    nombre varchar(30),
-    descripcion text,
-    id_tipo int,
-    id_estado int,
-    id_imagen int,
-    foreign key (id_tipo) references tipos(id) on delete set null,
-    foreign key (id_estado)references estados_consolas(id)on delete set null,
-    foreign key (id_imagen)references imagenes(id)on delete set null
+-- CONSOLAS
+CREATE TABLE consolas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30),
+    descripcion TEXT,
+    id_tipo INT,
+    id_estado INT,
+    id_imagen INT,
+    FOREIGN KEY (id_tipo) REFERENCES tipos(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_estado) REFERENCES estados_consolas(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_imagen) REFERENCES imagenes(id) ON DELETE SET NULL
 );
 
-create table estados_productos(
-	id int auto_increment primary key,
-    estado varchar(30)
+-- ESTADOS DE PRODUCTOS
+CREATE TABLE estados_productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    estado VARCHAR(30)
 );
 
-insert into estados_productos(estado) values ('disponible');
+INSERT INTO estados_productos(estado) VALUES ('disponible');
 
-create table productos(
-id int auto_increment primary key,
-nombre varchar(30),
-descripcion text,
-precio decimal(7,2),
-cantidades_disponibles int,
-id_estado_producto int,
-id_imagen int,
-foreign key(id_imagen)references imagenes(id)on delete set null,
-foreign key (id_estado_producto)references estados_productos(id) on delete set null
+-- PRODUCTOS
+CREATE TABLE productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30),
+    descripcion TEXT,
+    precio DECIMAL(7,2),
+    cantidades_disponibles INT,
+    id_estado_producto INT,
+    id_imagen INT,
+    FOREIGN KEY (id_imagen) REFERENCES imagenes(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_estado_producto) REFERENCES estados_productos(id) ON DELETE SET NULL
 );
 
-create table estados_reservas(
-	id int auto_increment primary key,
-    estado varchar (30)
+-- ESTADOS DE RESERVAS
+CREATE TABLE estados_reservas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    estado VARCHAR(30)
 );
 
-insert into estados_reservas (estado)values('pendiente');
-insert into estados_reservas (estado)values('en proceso');
-insert into estados_reservas (estado)values('terminada');
-insert into estados_reservas (estado)values('cobrada');
+INSERT INTO estados_reservas (estado) VALUES
+('pendiente'), ('en proceso'), ('terminada'), ('cobrada');
 
-select * from estados_reservas;
-
-create table reservas(
-	id int auto_increment primary key,
-    id_usuario int,
-    id_consola int,
-    id_estado_reserva int,
-    hora_inicio datetime,
-    hora_finalizacion datetime,
-    foreign key (id_usuario)references usuarios(id) on delete set null,
-    foreign key(id_consola)references consolas(id)on delete set null,
-    foreign key(id_estado_reserva)references estados_reservas(id) on delete set null
+-- RESERVAS
+CREATE TABLE reservas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    id_consola INT,
+    id_estado_reserva INT,
+    hora_inicio DATETIME,
+    hora_finalizacion DATETIME,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_consola) REFERENCES consolas(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_estado_reserva) REFERENCES estados_reservas(id) ON DELETE SET NULL
 );
 
-
-create table facturas(
- id int auto_increment primary key,
- id_reserva int,
- total decimal (7,2),
- foreign key (id_reserva)references reservas(id) on delete set null
+-- FACTURAS (MODIFICADA PARA GUARDAR DATOS HISTÓRICOS)
+CREATE TABLE facturas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_reserva INT UNIQUE,
+    minutos INT,
+    precio_consola_por_hora DECIMAL(6,2),
+    subtotal_consola DECIMAL(7,2),
+    subtotal_consumos DECIMAL(7,2),
+    total DECIMAL(7,2),
+    FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
 );
 
-create table consumos(
-	id int auto_increment primary key,
-	id_reserva int,
-    id_producto int,
-    cantidad int,
-    subtotal decimal(7,2),
-    foreign key (id_reserva) references reservas(id)on delete set null,
-    foreign key (id_producto)references productos(id)on delete set null
+-- NUEVA TABLA: DETALLE DE CONSUMOS EN FACTURA
+CREATE TABLE detalle_factura_consumos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_factura INT,
+    id_producto INT,
+    nombre_producto VARCHAR(100),
+    cantidad INT,
+    precio_unitario DECIMAL(7,2),
+    subtotal DECIMAL(7,2),
+    FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE CASCADE
 );
 
-create table metodos_pago(
-	id int auto_increment primary key,
-    metodo_pago varchar(30)
+-- CONSUMOS TEMPORALES (NO CAMBIAR)
+CREATE TABLE consumos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_reserva INT,
+    id_producto INT,
+    cantidad INT,
+    subtotal DECIMAL(7,2),
+    FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_producto) REFERENCES productos(id) ON DELETE SET NULL
 );
 
-insert into metodos_pago(metodo_pago)value('Tranferencia');
-insert into metodos_pago(metodo_pago)value('Nequi');
-insert into metodos_pago(metodo_pago)value('Efectivo');
-
-create table pagos(
-	id int auto_increment primary key,
-    id_factura int,
-    id_metodo int,
-    foreign key (id_factura) references facturas(id)on delete set null,
-    foreign key(id_metodo)references metodos_pago(id)on delete set null
+-- MÉTODOS DE PAGO
+CREATE TABLE metodos_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    metodo_pago VARCHAR(30)
 );
 
-create table historial(
-	id int auto_increment primary key,
-    id_reserva int,
-    foreign key (id_reserva) references reservas(id) on delete set null
-);    
+INSERT INTO metodos_pago(metodo_pago) VALUES ('Tranferencia'), ('Nequi'), ('Efectivo');
+
+-- PAGOS
+CREATE TABLE pagos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_factura INT,
+    id_metodo INT,
+    FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_metodo) REFERENCES metodos_pago(id) ON DELETE SET NULL
+);
+
+-- HISTORIAL DE RESERVAS
+CREATE TABLE historial (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_reserva INT,
+    FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
+);
 
 use bd_proyecto_brayan;
-SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 25;
-show tables;
-select * from usuarios;
-describe usuarios;
-
-UPDATE reservas SET id_usuario = 2, id_consola = 1, id_estado_reserva = 3, hora_inicio = '2025-07-20T11:30:00', hora_finalizacion = '2025-07-20T12:00:00' WHERE id = 7;
-UPDATE usuarios SET contrasenia='Edwin1234.' WHERE id=1;
-insert into tipos(tipo,precio_hora)values('xbox 360',2000);
-SELECT id,documento,nombre,telefono,correo,id_rol FROM usuarios;
-
-DELETE  from usuarios where id=5;
+select * from facturas;

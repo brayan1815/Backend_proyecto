@@ -2,21 +2,25 @@
 package MODELO;
 
 public class Factura {
-    private int id;
+private int id;
     private int idReserva;
+    private int minutos;
+    private double subtotalConsola;
+    private double subtotalConsumos;
     private double total;
-    
 
     public Factura() {}
 
-
-    public Factura(int id, int idReserva, double total) {
+    public Factura(int id, int idReserva, int minutos, double subtotalConsola, double subtotalConsumos, double total) {
         this.id = id;
         this.idReserva = idReserva;
+        this.minutos = minutos;
+        this.subtotalConsola = subtotalConsola;
+        this.subtotalConsumos = subtotalConsumos;
         this.total = total;
     }
 
-
+    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -31,6 +35,30 @@ public class Factura {
 
     public void setIdReserva(int idReserva) {
         this.idReserva = idReserva;
+    }
+
+    public int getMinutos() {
+        return minutos;
+    }
+
+    public void setMinutos(int minutos) {
+        this.minutos = minutos;
+    }
+
+    public double getSubtotalConsola() {
+        return subtotalConsola;
+    }
+
+    public void setSubtotalConsola(double subtotalConsola) {
+        this.subtotalConsola = subtotalConsola;
+    }
+
+    public double getSubtotalConsumos() {
+        return subtotalConsumos;
+    }
+
+    public void setSubtotalConsumos(double subtotalConsumos) {
+        this.subtotalConsumos = subtotalConsumos;
     }
 
     public double getTotal() {

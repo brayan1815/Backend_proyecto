@@ -30,4 +30,21 @@ public class ValidadorReserva {
 
         return null; // Todo correcto
     }
+    
+    public static String puedeEliminar(Reserva reserva) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime inicio = reserva.getHora_inicio();
+
+        if (inicio == null) {
+            return "La reserva no tiene fecha de inicio válida.";
+        }
+
+        // Debe haber al menos 1 hora de diferencia entre ahora e inicio
+        if (ahora.plusHours(1).isAfter(inicio)) {
+            //se valida que haya una hora entre la hora de iniio y la hora actual
+            return "La reserva solo se puede cancelar al menos 1 hora antes de su inicio.";
+        }
+
+        return null; // Se puede eliminar
+    }
 }

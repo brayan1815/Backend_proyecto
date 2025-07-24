@@ -9,6 +9,7 @@ import MODELO.ReservasServices;
 import MODELO.ValidadorReserva;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -133,6 +134,35 @@ public class ReservasController {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("{\"mensaje\": \"No se encontraron reservas para este usuario\"}")
                     .build();
+        }
+    }
+    
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response eliminarReserva(@PathParam("id") int id) {
+        ReservasDAO dao = new ReservasDAO();
+        Reserva reserva = dao.getById(id);
+
+        if (reserva == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Reserva no encontrada\"}").build();
+        }
+
+        String validacion = ValidadorReserva.puedeEliminar(reserva);
+
+        if (validacion != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\":\"" + validacion + "\"}").build();
+        }
+        
+        boolean eliminada = dao.eliminarReserva(id);
+
+        if (eliminada) {
+            return Response.ok("{\"mensaje\":\"Se cancelo la reserva correctamente\"}").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"No se pudo cancelar la reserva\"}").build();
         }
     }
     

@@ -14,7 +14,7 @@ public class TokenUtils {
         return JWT.create()
                 .withSubject(correo)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 3600000)) // 1 hora
+                .withExpiresAt(new Date(System.currentTimeMillis() + 10*60*1000)) // 10 minutos
                 .sign(Algorithm.HMAC256(SECRET));
     }
 

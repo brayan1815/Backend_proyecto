@@ -82,28 +82,6 @@ public class ReservasServices {
         return listaActualizadas;
     }
     
-    public FacturaDTO generarFactura(int idReserva) {
-        Reserva reserva = reservaDAO.getById(idReserva);//se obtiene la reserva
-        
-        //se calculan los minutos consumidos
-        long minutosConsumidos = ChronoUnit.MINUTES.between(reserva.getHora_inicio(), reserva.getHora_finalizacion());
-        //se obtiene la consola
-        Consola consola = consolaDAO.getById(reserva.getId_consola());
-        Tipo tipo = tipoDAO.getById(consola.getId_tipo());//se obtiene el tipo de la consola
-
-        double precioPorMinuto = tipo.getPrecio_hora() / 60;//se calcula el precio del minuto
-        double totalTiempo = minutosConsumidos * precioPorMinuto;//se calcula el total a pagar con base en los minutos
-
-        double totalProductos = consumoDAO.calcularTotalPorReserva(idReserva);//se calcula el total de los consumos
-        double totalGeneral = totalTiempo + totalProductos;//se calcula el total general (tiempo + consumos)
-
-        // Guardamos la factura en la base de datos
-        FacturasDAO facturaDAO = new FacturasDAO();
-        facturaDAO.post(idReserva, totalGeneral);
-
-        //se retorna la facturaDTO
-        return new FacturaDTO(idReserva,minutosConsumidos, totalTiempo, totalProductos, totalGeneral);
-    }
     
     public List<ReservaDTO> obtenerReservasPorUsuario(int idUsuario) {
         List<Reserva> reservas = reservaDAO.getByIdUsuario(idUsuario);

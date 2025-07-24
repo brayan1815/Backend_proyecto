@@ -175,6 +175,21 @@ public class ReservasDAO {
 
         return exito;//se retorna la variable exito
     }
+    
+    public boolean eliminarReserva(int id) {
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "DELETE FROM reservas WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            int filas = stmt.executeUpdate();
+            return filas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 }

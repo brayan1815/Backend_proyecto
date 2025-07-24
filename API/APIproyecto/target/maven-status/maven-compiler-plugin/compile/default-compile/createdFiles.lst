@@ -52,5 +52,6 @@ MODELO\ValidadorUsuario.class
 MODELO\UsuarioDTO.class
 MODELO\ReservaDTO.class
 MODELO\PagosDAO.class
+MODELO\DetalleFacturaConsumosDAO.class
 MODELO\Secured.class
 MODELO\ValidadorConsola.class
