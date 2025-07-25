@@ -172,13 +172,3 @@ CREATE TABLE pagos (
     FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE SET NULL,
     FOREIGN KEY (id_metodo) REFERENCES metodos_pago(id) ON DELETE SET NULL
 );
-
--- HISTORIAL DE RESERVAS
-CREATE TABLE historial (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_reserva INT,
-    FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
-);
-
-use bd_proyecto_brayan;
-select * from facturas;

@@ -1,9 +1,13 @@
 
 package MODELO;
 
+import static MODELO.ConexionBD.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PagosDAO {
@@ -25,5 +29,30 @@ public class PagosDAO {
         }
 
         return exito;//se retorna la variable exito
+    }
+    
+    
+    public List<Pago> obtenerPagosPorMetodo(int idMetodo) {
+        List<Pago> lista = new ArrayList<>();
+
+        try (Connection con = getConnection()) {
+            String sql = "SELECT * FROM pagos WHERE id_metodo = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idMetodo);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Pago p = new Pago();
+                p.setId(rs.getInt("id"));
+                p.setId_factura(rs.getInt("id_factura"));
+                p.setId_metodo(rs.getInt("id_metodo"));
+                lista.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
     }
 }

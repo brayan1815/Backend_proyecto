@@ -103,5 +103,25 @@ public class FacturasDAO {
             e.printStackTrace();
         }
     }
+    
+    public double calcularTotalPagos() {
+        double total = 0.0;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            
+            String sql = "SELECT SUM(total) FROM facturas;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total = rs.getDouble(1); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return total; 
+    }
 
 }

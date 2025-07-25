@@ -134,13 +134,13 @@ public class FacturasServices {
         PagosDAO pagosDAO = new PagosDAO();
         //se registra el pago
         boolean pagoRegistrado = pagosDAO.post(idFactura, idMetodoPago);
-        if (!pagoRegistrado) return false;//si el pago no se registoro correctamente se retorna falso
+//        if (!pagoRegistrado) return false;//si el pago no se registoro correctamente se retorna falso
 
         // Registrar en historial
-        HistorialDAO historialDAO = new HistorialDAO();
-        boolean historialRegistrado = historialDAO.post(idReserva);
+//        HistorialDAO historialDAO = new HistorialDAO();
+//        boolean historialRegistrado = historialDAO.post(idReserva);
 
-        return historialRegistrado;//se retorna la variabel historialRegistrado
+        return pagoRegistrado;//se retorna la variabel historialRegistrado
     }
 
 }
