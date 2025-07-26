@@ -2,14 +2,16 @@
 package MODELO;
 
 public class Consumo {
-     private int id;
+    // atributos que representan los datos de un consumo
+    private int id;
     private int id_reserva;
     private int id_producto;
     private int cantidad;
     private double subtotal;
 
-    public Consumo() {}
+    public Consumo() {}//constructor vacio
 
+    //constructor con todos los datos
     public Consumo(int id, int id_reserva, int id_producto, int cantidad, double subtotal) {
         this.id = id;
         this.id_reserva = id_reserva;
@@ -19,6 +21,7 @@ public class Consumo {
     }
 
     
+    //Getters y setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

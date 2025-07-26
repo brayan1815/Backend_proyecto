@@ -34,15 +34,10 @@ CREATE TABLE usuarios (
     nombre VARCHAR(60),
     telefono BIGINT,
     correo VARCHAR(100) UNIQUE,
-    contrasenia VARCHAR(30),
+    contrasenia VARCHAR(100),
     id_rol INT,
     FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL
 );
-
-INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol)
-VALUES 
-(1526352846,'Manuel Villabona',3856312824,'edwin@gmail.com','Edwin1.',1),
-(1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','Brayan123.',1);
 
 -- IMÁGENES
 CREATE TABLE imagenes (
@@ -172,3 +167,13 @@ CREATE TABLE pagos (
     FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE SET NULL,
     FOREIGN KEY (id_metodo) REFERENCES metodos_pago(id) ON DELETE SET NULL
 );
+
+use bd_proyecto_brayan;
+select * from reservas;
+
+INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol) VALUES
+(1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1); -- Brayan123.
+
+-- UPDATE reservas
+-- SET id_estado_reserva = 2
+-- WHERE id=1;

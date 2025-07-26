@@ -1,6 +1,7 @@
 
 package MODELO;
 
+import BD.ConexionBD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,37 +12,43 @@ import java.util.List;
 
 public class ConsumosDAO {
     public boolean post(Consumo consumo) {
-        boolean exito = false;
+        //metodo para registrar un consumo nuevo
+        boolean exito = false;//se declara la variable exito y se inicializa como false
 
-        try (Connection conn = ConexionBD.getConnection()) {
+        try (Connection conn = ConexionBD.getConnection()) {//se abre la conexion a la base de datos
+            //se crea la consulta SQL
             String sql = "INSERT INTO consumos (id_reserva, id_producto, cantidad, subtotal) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
 
+            //se reemolazan los parametros de la consulra
             stmt.setInt(1, consumo.getId_reserva());
             stmt.setInt(2, consumo.getId_producto());
             stmt.setInt(3, consumo.getCantidad());
             stmt.setDouble(4, consumo.getSubtotal());
 
-            int filas = stmt.executeUpdate();
-            exito = filas > 0;
+            int filas = stmt.executeUpdate();//se ejecuta la consulta
+            exito = filas > 0;//si se creo mas de 0 filas la variable exito es true
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//se imprimen los errores
         }
 
-        return exito;
+        return exito;//se retorna la variable exito
     }
     
     public List<Consumo> getByIdReserva(int idReserva) {
-        List<Consumo> lista = new ArrayList<>();
+        //se crea el metodo para obtener los consumos por el ID de reserva
+        List<Consumo> lista = new ArrayList<>();//se crea la lista en la cual se almacenaran los consumos
 
-        try (Connection conn = ConexionBD.getConnection()) {
+        try (Connection conn = ConexionBD.getConnection()) {//se abre la conexion a la base de datos
+            //se crea la consulta SQL
             String sql = "SELECT id, id_reserva, id_producto, cantidad, subtotal FROM consumos WHERE id_reserva = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idReserva);
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
+            stmt.setInt(1, idReserva);//se reemplazan los parametros de la consulta
+            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta SQL 
 
             while (rs.next()) {
+                //mientras hayan filas se crea un objeto consumo se agrega a la lista
                 Consumo consumo = new Consumo(
                     rs.getInt("id"),
                     rs.getInt("id_reserva"),
@@ -53,23 +60,25 @@ public class ConsumosDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//si ocurre un error se imprime
         }
 
-        return lista;
+        return lista;//se retorna la lista
     }
         
     public Consumo getById(int id) {
-        Consumo consumo = null;
+        //se crea el metodo para obtener el consumo por su ID
+        Consumo consumo = null;//se declara la variable consumo y se inicializa como null
 
-            try (Connection conn = ConexionBD.getConnection()) {
-                String sql = "SELECT * FROM consumos WHERE id = ?";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, id);
+            try (Connection conn = ConexionBD.getConnection()) {//se abre la conexion a la base de datos
+                String sql = "SELECT * FROM consumos WHERE id = ?";//se crea la consulta SQL
+                PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
+                stmt.setInt(1, id);//se reemplazan los parametros de la consulta
 
-                ResultSet rs = stmt.executeQuery();
+                ResultSet rs = stmt.executeQuery();//se ejecuta la conulta
 
                 if (rs.next()) {
+                    //si hay algun resultao se crea el objeto consumo y se le asigna a la variable consumo
                     consumo = new Consumo();
                     consumo.setId(rs.getInt("id"));
                     consumo.setId_reserva(rs.getInt("id_reserva"));
@@ -79,28 +88,29 @@ public class ConsumosDAO {
                 }
 
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace();//si ocurre un error se imprime
             }
 
-            return consumo;
+            return consumo;//se retorna la variable consumo, si no hay ninguno se retorna null
     }
     
     public boolean actualizarConsumo(Consumo consumo) {
-        boolean actualizado = false;
+        //se crea el metodo actualizar consumo
+        boolean actualizado = false;//se declara la variable actualizado y se iniicializa como false
 
-        try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "UPDATE consumos SET cantidad = ?, subtotal = ? WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, consumo.getCantidad());
+        try (Connection conn = ConexionBD.getConnection()) {//se abre la conexion a la base de datos
+            String sql = "UPDATE consumos SET cantidad = ?, subtotal = ? WHERE id = ?";//se crea la consulta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql);// se prepara la consulta SQL
+            stmt.setInt(1, consumo.getCantidad());//se reemplazan los parametros enviados en la consulta
             stmt.setDouble(2, consumo.getSubtotal());
             stmt.setInt(3, consumo.getId());
 
-            actualizado = stmt.executeUpdate() > 0;
+            actualizado = stmt.executeUpdate() > 0;//si se afectaron mas de 0 filas actualizaco es true
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//si ocurre un error se imprime
         }
 
-        return actualizado;
+        return actualizado;//se retorna la variable actualizado
     }
     
     public boolean del(int id) {//se crea el metodo para eliminar el conusmo

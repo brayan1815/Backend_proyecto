@@ -2,15 +2,17 @@
 package MODELO;
 
 public class Factura {
-private int id;
+    //atributos que representan los datos de la factura
+    private int id;
     private int idReserva;
     private int minutos;
     private double subtotalConsola;
     private double subtotalConsumos;
     private double total;
 
-    public Factura() {}
+    public Factura() {}//constructor vacio
 
+    //constructor con todos los datos
     public Factura(int id, int idReserva, int minutos, double subtotalConsola, double subtotalConsumos, double total) {
         this.id = id;
         this.idReserva = idReserva;

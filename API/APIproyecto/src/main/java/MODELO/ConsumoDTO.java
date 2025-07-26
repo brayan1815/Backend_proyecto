@@ -10,6 +10,7 @@ public class ConsumoDTO {
     private double precioProducto;
     private int cantidadRestanteProducto;
 
+    //metodos getters y setters
     public int getIdConsumo() {
         return idConsumo;
     }

@@ -6,17 +6,20 @@ import java.util.List;
 
 
 public class ConsolasServices {
+    //se crean las intancias de las clses consolasDAO y TiposDAO
     ConsolasDAO consolaDAO = new ConsolasDAO();
     TiposDAO tipoDAO = new TiposDAO();
     
     public List<ConsolaDTO> obtenerConsolasConPrecio() {
-        List<Consola> consolas = consolaDAO.getAll();
-        List<ConsolaDTO> listaDTO = new ArrayList<>();
+        //se crea el metodo obtenerConsolasConPrecio, este metodo devolvera las consolas son su repsectivo precio
+        List<Consola> consolas = consolaDAO.getAll();//se obttienene todas las consolas de la base de datos
+        List<ConsolaDTO> listaDTO = new ArrayList<>();//se crea la lisraDTO, esta devolvera la lista de consolas cons u precio
 
         for (Consola c : consolas) {
-            Tipo t = tipoDAO.getById(c.getId_tipo());
+            //se recorre cada una de las consolas
+            Tipo t = tipoDAO.getById(c.getId_tipo());//se obtiene el tipo correspondiente a la consola
 
-            ConsolaDTO dto = new ConsolaDTO(
+            ConsolaDTO dto = new ConsolaDTO(//se crea un objeto consolasDTO
                 c.getId(),
                 c.getNombre(),
                 c.getDescripcion(),
@@ -25,9 +28,9 @@ public class ConsolasServices {
                 c.getId_imagen()
             );
 
-            listaDTO.add(dto);
+            listaDTO.add(dto);//se agrega a la lista el objetoDTO
         }
 
-        return listaDTO;
+        return listaDTO;//se retorna la lista DTO
     }
 }

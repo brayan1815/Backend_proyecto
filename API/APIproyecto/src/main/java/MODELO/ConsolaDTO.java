@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package MODELO;
 
-import java.math.BigDecimal;
-
 public class ConsolaDTO {
+    //atributos que representan los datos de una consola
     private int id;
     private String nombre;
     private String descripcion;
@@ -16,9 +12,11 @@ public class ConsolaDTO {
     
 
     public ConsolaDTO() {
+        //constructor vacio, por si acaso se necesita crear un objeto sin valores de entrada
     }
 
     public ConsolaDTO(int id, String nombre, String descripcion, double precioHora, int idEstado, int idImagen) {
+        //constructor con todos los ateibutos, sirve para crear el objeto ya con todos sus datos
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,7 +26,7 @@ public class ConsolaDTO {
     }
 
 
-
+    //Getters y Setters
     public int getId() {
         return id;
     }

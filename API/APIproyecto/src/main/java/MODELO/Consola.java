@@ -2,7 +2,9 @@
 package MODELO;
 
 
+//se define la clase consola que define una consola de videojuegos en este caso
 public class Consola {
+    //se declaran las variables que guardan los datos de las consolas
     private int id;
     private String nombre;
     private String descripcion;
@@ -10,10 +12,10 @@ public class Consola {
     private int id_estado;
     private int id_imagen;
 
-    // Constructor vacío
+    // Constructor vacío Se usa cuando no se quiere inicializar con valores de entrada
     public Consola() {}
 
-    // Constructor con todos los atributos
+    // Constructor con todos los atributos, se usa cuando se quiere crear uan consola con todos los datos
     public Consola(int id, String nombre, String descripcion, int id_tipo, int id_estado, int id_imagen) {
         this.id = id;
         this.nombre = nombre;

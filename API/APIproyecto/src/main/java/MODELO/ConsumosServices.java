@@ -12,32 +12,39 @@ public class ConsumosServices {
     ProductosDAO daoProd = new ProductosDAO();
     
     private ConsumoDTO convertirDTO(Consumo consumo) {
-        Producto producto = daoProd.getById(consumo.getId_producto());
-        ConsumoDTO dto = new ConsumoDTO();
+        //se crea el metodo para convertir el consumo a DTO
+        Producto producto = daoProd.getById(consumo.getId_producto());//se obtiene el producto
+        ConsumoDTO dto = new ConsumoDTO();//se crea un objeto der la clase consumo dto
+        //se envian los datos al objeto consumoDTO
         dto.setIdConsumo(consumo.getId());
         dto.setNombreProducto(producto != null ? producto.getNombre() : "Desconocido");
         dto.setCantidad(consumo.getCantidad());
         dto.setSubtotal(consumo.getSubtotal());
         dto.setPrecioProducto(producto != null ? producto.getPrecio() : 0);
         dto.setCantidadRestanteProducto(producto != null ? producto.getCantidades_disponibles(): 0);
+        //se retorna el dto
         return dto;
     }
     
     public List<ConsumoDTO> obtenerConsumosPorIdReserva(int idReserva) {
-        List<Consumo> consumos = daoCons.getByIdReserva(idReserva);
-        List<ConsumoDTO> resultado = new ArrayList<>();
+        //se crea el metodo para obtener los conumso por id de reservba
+        List<Consumo> consumos = daoCons.getByIdReserva(idReserva);//se obtienen todos los consumos por el id de reserva
+        List<ConsumoDTO> resultado = new ArrayList<>();//se crea la lista resultado
         for (Consumo consumo : consumos) {
+            //se recorren los consumos, se convierten a DTO y se agregan a la lista resultado
             resultado.add(convertirDTO(consumo));
         }
-        return resultado;
+        return resultado;//se retorna la lista resultado
     }
     
     public ConsumoDTO obtenerConsumoPorId(int idConsumo) {
-        Consumo consumo = daoCons.getById(idConsumo);
+        //se crea el metodo para obtener el cosnumo por ID
+        Consumo consumo = daoCons.getById(idConsumo);//se obtiene el consumo
         if (consumo != null) {
+            //si el consumo existe se convierte a DTO y se retorna
             return convertirDTO(consumo);
         }
-        return null;
+        return null;//si el consumo no existe se retorna null
     }
     
     public boolean editarConsumo(Consumo nuevoConsumo) {

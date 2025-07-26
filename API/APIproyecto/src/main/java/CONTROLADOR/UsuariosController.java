@@ -4,6 +4,7 @@
  */
 package CONTROLADOR;
 
+import MODELO.PasswordUtils;
 import MODELO.Secured;
 import MODELO.TokenUtils;
 import MODELO.Usuario;
@@ -146,6 +147,7 @@ public class UsuariosController {
                            .entity("{\"error\": \"" + error + "\"}")
                            .build();
         }
+        usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia()));
         boolean creado = dao.post(usuario);//se lama al metodo post de usuariosDAO para insertar el nuevo usuario
 
         if (creado) {
@@ -174,7 +176,7 @@ public class UsuariosController {
                                .entity("{\"error\": \"" + error + "\"}")
                                .build();
             }
-        
+            usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia())); 
             boolean actualizado = dao.put(id, usuario);//se llama el metod put de usuariosDAO para actualizar el
                                                       //usuario
             if (actualizado) 

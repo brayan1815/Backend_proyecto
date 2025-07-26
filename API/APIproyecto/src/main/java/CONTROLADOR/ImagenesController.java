@@ -24,10 +24,11 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/imagenes")
 public class ImagenesController {
 
-    
+    // Se declara una variable para guardar la ruta donde se almacenarán las imágenes físicamente.
     private final String carpeta;
 
     public ImagenesController() {
+        //se define la ruta de almacenamiento de imágenes y crea la carpeta si no existe.
         carpeta = "C:/imagenes-api/";
         File dir = new File(carpeta);
         if (!dir.exists()) {
@@ -41,31 +42,35 @@ public class ImagenesController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearImagen(
         @FormDataParam("archivo") InputStream inputStream,
-        @FormDataParam("archivo") FormDataContentDisposition fileDetail
+        @FormDataParam("archivo") FormDataContentDisposition fileDetail 
+        //se captura el contenido del archivo que se envia e informacion del archivo como nombre o detalles 
     ) {
         try {
             // Crear carpeta si no existe
             File dir = new File(carpeta);
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists()) dir.mkdirs();//se asegura nuevamente de que el archivo exista 
 
-            // Generar nombre único
+            //Crea un nombre único para el archivo con UUID para evitar duplicados.
             String nombreArchivo = UUID.randomUUID().toString() + "_" + fileDetail.getFileName();
+            // Guarda la ruta completa (para guardarlo físicamente) y la relativa (para guardar en la BD).
             String rutaCompleta = carpeta + nombreArchivo;
             String rutaRelativa = "imagenes/" + nombreArchivo;
             
-            System.out.println("RUTA COMPLETAAAAAAAAAAAA: "+rutaCompleta);
+            System.out.println("RUTA COMPLETAAAAAAAAAAAA: "+rutaCompleta);//se imprime la ruta completa donde se gaurdara la imagen
 
-            // Guardar físicamente
+            // se copia el archivo desde el inputStream a la ruta física del servidor.
             Files.copy(inputStream, Paths.get(rutaCompleta), StandardCopyOption.REPLACE_EXISTING);
 
-            // Guardar solo la ruta relativa en la BD
+            // Llama al DAO para guardar la ruta relativa en la base de datos y obtener el ID generado.
             ImagenesDAO dao = new ImagenesDAO();
             int id = dao.post(rutaRelativa);
-
+            
+            // Devuelve una respuesta 201 CREATED con un JSON que contiene el ID y la ruta de la imagen.
             return Response.status(Response.Status.CREATED)
                 .entity("{\"id_imagen\":" + id + ", \"ruta\":\"" + rutaRelativa + "\"}")
                 .build();
         } catch (IOException e) {
+            //en caso de error de imprime y se devuelve un codigo 500
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error al guardar imagen").build();
@@ -76,9 +81,12 @@ public class ImagenesController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerImagenPorId(@PathParam("id") int id) {
+        //metodo para obtener la imagen por ID
         ImagenesDAO dao = new ImagenesDAO();
+        //Busca la imagen con el ID proporcionado.
         Imagen imagen = dao.getById(id);
-
+        
+        // Si encuentra la imagen, devuelve su ID y ruta. Si no, envía un 404 NOT FOUND.
         if (imagen != null) {
             String ruta = imagen.getRuta(); // ya es relativa: "imagenes/nombre.png"
             String json = String.format("{\"id\":%d,\"ruta\":\"%s\"}", imagen.getId(), ruta);

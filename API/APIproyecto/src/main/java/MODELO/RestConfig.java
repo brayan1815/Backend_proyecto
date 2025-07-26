@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package CONFIG;
+package MODELO;
 
-import MODELO.ConexionBD;
+import BD.ConexionBD;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.ws.rs.ApplicationPath;

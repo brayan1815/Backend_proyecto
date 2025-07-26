@@ -1,7 +1,8 @@
 
 package MODELO;
 
-import static MODELO.ConexionBD.getConnection;
+import BD.ConexionBD;
+import static BD.ConexionBD.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,15 +34,17 @@ public class PagosDAO {
     
     
     public List<Pago> obtenerPagosPorMetodo(int idMetodo) {
-        List<Pago> lista = new ArrayList<>();
+        //se crea el metodo que va a obtener los pagos por id del metodo de pago
+        List<Pago> lista = new ArrayList<>();//se crea la lista que almacenara los pagos
 
-        try (Connection con = getConnection()) {
-            String sql = "SELECT * FROM pagos WHERE id_metodo = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, idMetodo);
-            ResultSet rs = ps.executeQuery();
+        try (Connection con = getConnection()) {//se abre la conexion a la base de datos
+            String sql = "SELECT * FROM pagos WHERE id_metodo = ?";//se crea la consulta SQL
+            PreparedStatement ps = con.prepareStatement(sql);//se prepara la consulta SQL
+            ps.setInt(1, idMetodo);//se reemplazan los parametros de la consulta
+            ResultSet rs = ps.executeQuery();//se ejecuta la conuslta
 
             while (rs.next()) {
+                //se recorre cada uno de lo resultados, se crea un objeto Pago y se agrega a la lista
                 Pago p = new Pago();
                 p.setId(rs.getInt("id"));
                 p.setId_factura(rs.getInt("id_factura"));
@@ -50,9 +53,9 @@ public class PagosDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//si ocurre algun error se imprime
         }
 
-        return lista;
+        return lista;//se retorna la lista
     }
 }
