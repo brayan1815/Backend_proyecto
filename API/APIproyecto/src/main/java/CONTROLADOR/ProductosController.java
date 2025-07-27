@@ -73,6 +73,13 @@ public class ProductosController {
     public Response actualizarProducto(@PathParam("id") int id, Producto producto) {
         producto.setId(id);
         
+        if(producto.getCantidades_disponibles()>0){
+            producto.setId_estado_producto(1);
+        }
+        else{
+            producto.setId_estado_producto(2);
+        }
+        
         String error = ValidadorProducto.validarProducto(producto);
         if (error != null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(error).build();

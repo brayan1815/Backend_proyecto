@@ -80,6 +80,7 @@ CREATE TABLE estados_productos (
 );
 
 INSERT INTO estados_productos(estado) VALUES ('disponible');
+INSERT INTO estados_productos(estado) VALUES ('agotado');
 
 -- PRODUCTOS
 CREATE TABLE productos (
@@ -169,12 +170,19 @@ CREATE TABLE pagos (
 );
 
 use bd_proyecto_brayan;
+select * from estados_productos;
 select * from reservas;
 
 INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol) VALUES
 (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1); -- Brayan123.
 
--- UPDATE reservas
--- SET id_estado_reserva = 2
--- WHERE id=1;
 
+-- RESERVA EN PROCESO:
+-- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
+-- VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
+
+-- RESERVA FIANLIZADA:
+-- INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
+-- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
+
+show tables;

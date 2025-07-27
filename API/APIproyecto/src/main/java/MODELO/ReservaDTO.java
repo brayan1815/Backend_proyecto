@@ -9,7 +9,7 @@ public class ReservaDTO {
     private int id;
     private long documentoUsuario;
     private String nombreUsuario;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")//se indica que el formato de la fecha sera de esta forma
     private LocalDateTime horaInicio;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

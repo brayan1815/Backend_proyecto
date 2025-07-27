@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 @Path("/consolas")
 public class ConsolasController {
     ConsolasServices conSer=new ConsolasServices();
-     @GET
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerConsolas() {
         ConsolasDAO dao = new ConsolasDAO();

@@ -70,6 +70,13 @@ public class ConsumosServices {
             //se envia al producto las nuevas cantidades disponibles
             producto.setCantidades_disponibles(producto.getCantidades_disponibles()-diferencia);
             
+            if(producto.getCantidades_disponibles()==0){
+                producto.setId_estado_producto(2);
+            }
+            else{
+                producto.setId_estado_producto(1);
+            }
+            
             //se actualiza el producto en la base de datos
             boolean productoActualizado=productoDAO.put(producto);
             
@@ -120,6 +127,13 @@ public class ConsumosServices {
         //suma la cantidad de producto que se habia conusmido
         int nuevaCantidad = producto.getCantidades_disponibles() + consumo.getCantidad();
         producto.setCantidades_disponibles(nuevaCantidad);//se envia al producto las nuevas cantidades
+        
+        if(producto.getCantidades_disponibles()>0){
+            producto.setId_estado_producto(1);
+        }
+        else{
+            producto.setId_estado_producto(2);
+        }
         
         //se actualiza el producro
         boolean productoActualizado = prodDao.put(producto);

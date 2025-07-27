@@ -9,8 +9,8 @@ public class Reserva {
     private int id_consola;
     private int id_estado_reserva;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime hora_inicio;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")//se indica que la hora sera en este formato
+    private LocalDateTime hora_inicio; 
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime hora_finalizacion;
