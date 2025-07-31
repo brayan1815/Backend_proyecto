@@ -18,7 +18,7 @@ public class RestConfig extends Application{
             System.out.println("CONEXION A LA BASE DE DATOS ESTABLECIDA");
         }catch(SQLException e){
             //si ocurre un error al obtener la conexion se muestra este mensaje
-            System.out.println("Ocurrio un error al conectar con la base de datos");
+            System.out.println("OCURRIO UN ERROR AL INTENTAR CONECTAR CON LA BASE DE DATOS");
         }
     }
 }

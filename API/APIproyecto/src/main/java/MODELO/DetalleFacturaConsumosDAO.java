@@ -1,10 +1,14 @@
 
 package MODELO;
 
+import BD.ConexionBD;
 import static BD.ConexionBD.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetalleFacturaConsumosDAO {
     public boolean insertar(int idFactura, int idProducto, String nombreProducto, int cantidad, double precioUnitario, double subtotal) {
@@ -32,5 +36,35 @@ public class DetalleFacturaConsumosDAO {
         }
 
         return exito;//se retorna la variable exito
+    }
+    
+    public List<DetalleFacturaConsumos> getByIdFactura(int idFactura) {
+        // Método para obtener los detalles de factura por el ID de factura
+        List<DetalleFacturaConsumos> lista = new ArrayList<>();
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "SELECT * FROM detalle_factura_consumos WHERE id_factura = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idFactura);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                DetalleFacturaConsumos detalle = new DetalleFacturaConsumos(
+                    rs.getInt("id"),
+                    rs.getInt("id_factura"),
+                    rs.getInt("id_producto"),
+                    rs.getString("nombre_producto"),
+                    rs.getInt("cantidad"),
+                    rs.getDouble("precio_unitario"),
+                    rs.getDouble("subtotal")
+                );
+                lista.add(detalle);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
     }
 }
