@@ -15,10 +15,11 @@ public class FacturasServices {
 
         
      FacturasDAO facturasDAO = new FacturasDAO();//se crea la instancia del objeto de las clases DAO
+     ConsumosDAO consumosDAO=new ConsumosDAO();
      ReservasDAO reservasDAO = new ReservasDAO();
      ConsolasDAO consolasDAO = new ConsolasDAO();
      TiposDAO tiposDAO = new TiposDAO();
-     ProductosDAO productosDAO=new ProductosDAO();
+//     ProductosDAO productosDAO=new ProductosDAO();
 
     public FacturaDTO obtenerOCrearFactura(int idReserva) {
         //se crea el metodo para obtener o crear la factura
@@ -48,52 +49,52 @@ public class FacturasServices {
         double precioPorMinuto = precioHora / 60.0;//se calcula el precio de cada uno de los minutos
         double subtotalConsola = minutosConsumidos * precioPorMinuto;//se calcula el subtotal del uso de la consola
 
-        // Obtener consumos actuales
-        ConsumosDAO consumosDAO = new ConsumosDAO();
-        List<Consumo> listaConsumos = consumosDAO.getByIdReserva(idReserva);//se obtienen los consumos
 
-        double subtotalProductos = 0;//se declara la variable subtotalProductos y se inicializa en 0
 
-        // DAO para registrar detalle de consumos con precio congelado
-        DetalleFacturaConsumosDAO detalleDAO = new DetalleFacturaConsumosDAO();
-
+        Double subtotalProductos = consumosDAO.calcularTotalPorReserva(idReserva);//se declara la variable subtotalProductos y se inicializa en 0
+        if(subtotalProductos==null){
+            subtotalProductos=0.0;
+        }
+        
+        double total=subtotalConsola+subtotalProductos;
+        
+        
         // Primero insertamos la factura sin detalle
         int idFactura = facturasDAO.post(
             idReserva,
             (int) minutosConsumidos,
-            precioHora,
-            subtotalConsola,
-            0, // temporal
-            0  // temporal
+            total
         );
 
         if (idFactura == -1) return null;//si la factura no se creo se retorna null
 
         // Ahora agregamos los detalles de productos y calculamos subtotalProductos
-        for (Consumo consumo : listaConsumos) {
-            Producto producto = productosDAO.getById(consumo.getId_producto());//se obtiene el producto del consumo
-            if (producto == null) continue;//si el producto no existe se pasa al siguiente
+//        for (Consumo consumo : listaConsumos) {
+//            Producto producto = productosDAO.getById(consumo.getId_producto());//se obtiene el producto del consumo
+//            if (producto == null) continue;//si el producto no existe se pasa al siguiente
+//
+//            double precioUnitario = producto.getPrecio();//se obtiene el precio unitario del producto
+//            double subtotal = precioUnitario * consumo.getCantidad();//se calcula el subtotal
+//            subtotalProductos += subtotal;//se suma a la variable subtotal productos el subtotal de ese producto
+//
+//            detalleDAO.insertar(//se inserta en los detalles de consumos de factura el consumo
+//                idFactura,
+//                producto.getId(),
+//                producto.getNombre(),
+//                consumo.getCantidad(),
+//                precioUnitario,
+//                subtotal
+//            );
+//        }
 
-            double precioUnitario = producto.getPrecio();//se obtiene el precio unitario del producto
-            double subtotal = precioUnitario * consumo.getCantidad();//se calcula el subtotal
-            subtotalProductos += subtotal;//se suma a la variable subtotal productos el subtotal de ese producto
-
-            detalleDAO.insertar(//se inserta en los detalles de consumos de factura el consumo
-                idFactura,
-                producto.getId(),
-                producto.getNombre(),
-                consumo.getCantidad(),
-                precioUnitario,
-                subtotal
-            );
-        }
-
-        double total = subtotalConsola + subtotalProductos;//se calcula el total a pagar por la resevra
+//        double total = subtotalConsola + subtotalProductos;//se calcula el total a pagar por la resevra
 
         // Actualizamos la factura con los subtotales reales
-        facturasDAO.actualizarTotales(idFactura, subtotalProductos, total);
+//        facturasDAO.actualizarTotales(idFactura, subtotalProductos, total);
         //se retorna la facturaDTO
-        return new FacturaDTO(idFactura, minutosConsumidos, subtotalConsola, subtotalProductos, total);
+        
+        Factura facGen=facturasDAO.getById(idFactura);
+        return new FacturaDTO(idFactura, facGen.getMinutos(), subtotalConsola, subtotalProductos, total);
     }
 
     public FacturaDTO construirFacturaDTO(int idReserva) {
@@ -103,8 +104,13 @@ public class FacturasServices {
 
         //se obtienen los datos de la factura
         int minutosConsumidos = factura.getMinutos();
-        double subtotalConsola = factura.getSubtotalConsola();
-        double subtotalConsumos = factura.getSubtotalConsumos();
+        Reserva reserva=reservasDAO.getById(factura.getIdReserva());
+        Consola consola=consolasDAO.getById(reserva.getId_consola());
+        Tipo tipo=tiposDAO.getById(consola.getId_tipo());
+        double subtotalConsola = (tipo.getPrecio_hora()/60)*factura.getMinutos();
+        
+        
+        double subtotalConsumos = consumosDAO.calcularTotalPorReserva(idReserva);
         double total = factura.getTotal();
 
         // Construimos y devolvemos el DTO

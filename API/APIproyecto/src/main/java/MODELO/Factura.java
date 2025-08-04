@@ -1,24 +1,20 @@
-
 package MODELO;
 
 public class Factura {
-    //atributos que representan los datos de la factura
+    // Atributos que representan los datos de la factura
     private int id;
     private int idReserva;
     private int minutos;
-    private double subtotalConsola;
-    private double subtotalConsumos;
     private double total;
 
-    public Factura() {}//constructor vacio
+    // Constructor vacío
+    public Factura() {}
 
-    //constructor con todos los datos
-    public Factura(int id, int idReserva, int minutos, double subtotalConsola, double subtotalConsumos, double total) {
+    // Constructor con todos los datos
+    public Factura(int id, int idReserva, int minutos, double total) {
         this.id = id;
         this.idReserva = idReserva;
         this.minutos = minutos;
-        this.subtotalConsola = subtotalConsola;
-        this.subtotalConsumos = subtotalConsumos;
         this.total = total;
     }
 
@@ -45,22 +41,6 @@ public class Factura {
 
     public void setMinutos(int minutos) {
         this.minutos = minutos;
-    }
-
-    public double getSubtotalConsola() {
-        return subtotalConsola;
-    }
-
-    public void setSubtotalConsola(double subtotalConsola) {
-        this.subtotalConsola = subtotalConsola;
-    }
-
-    public double getSubtotalConsumos() {
-        return subtotalConsumos;
-    }
-
-    public void setSubtotalConsumos(double subtotalConsumos) {
-        this.subtotalConsumos = subtotalConsumos;
     }
 
     public double getTotal() {

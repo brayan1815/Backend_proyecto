@@ -10,23 +10,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class FacturasDAO {
-    public int post(int idReserva, int minutos, double precioHora, double subtotalConsola, double subtotalConsumos, double total) {
+    public int post(int idReserva, int minutos,double total) {
         //se crea el metodo para crear una nueva factura, esye metodo devuelve el id despues de crearla
         int idGenerado = -1;//se declara la variable id generado y se inicializa en -1
 
         try (Connection conn = getConnection()) {//se abre la conexiona a la base de datos
             //se crea la consulra SQL
-            String sql = "INSERT INTO facturas (id_reserva, minutos, precio_consola_por_hora, subtotal_consola, subtotal_consumos, total) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO facturas (id_reserva, minutos, total) VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);//se prepara la consulta
                                                                                        //esta retornara las keys generadas
              
             //re reemplazan los aprametros de la consulta
             stmt.setInt(1, idReserva);
             stmt.setInt(2, minutos);
-            stmt.setDouble(3, precioHora);
-            stmt.setDouble(4, subtotalConsola);
-            stmt.setDouble(5, subtotalConsumos);
-            stmt.setDouble(6, total);
+            stmt.setDouble(3, total);
 
             int rows = stmt.executeUpdate();//se ejecuta la consulta
 
@@ -61,8 +58,6 @@ public class FacturasDAO {
                 factura.setId(rs.getInt("id"));
                 factura.setIdReserva(rs.getInt("id_reserva"));
                 factura.setMinutos(rs.getInt("minutos"));
-                factura.setSubtotalConsola(rs.getDouble("subtotal_consola"));
-                factura.setSubtotalConsumos(rs.getDouble("subtotal_consumos"));
                 factura.setTotal(rs.getDouble("total"));
             }
 
@@ -89,8 +84,6 @@ public class FacturasDAO {
                 factura.setId(rs.getInt("id"));
                 factura.setIdReserva(rs.getInt("id_reserva"));
                 factura.setMinutos(rs.getInt("minutos"));
-                factura.setSubtotalConsola(rs.getDouble("subtotal_consola"));
-                factura.setSubtotalConsumos(rs.getDouble("subtotal_consumos"));
                 factura.setTotal(rs.getDouble("total"));
             }
 

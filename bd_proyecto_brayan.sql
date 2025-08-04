@@ -117,28 +117,13 @@ CREATE TABLE reservas (
     FOREIGN KEY (id_estado_reserva) REFERENCES estados_reservas(id) ON DELETE SET NULL
 );
 
--- FACTURAS (MODIFICADA PARA GUARDAR DATOS HISTÓRICOS)
+-- FACTURAS (modificada)
 CREATE TABLE facturas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT UNIQUE,
     minutos INT,
-    precio_consola_por_hora DECIMAL(6,2),
-    subtotal_consola DECIMAL(7,2),
-    subtotal_consumos DECIMAL(7,2),
     total DECIMAL(7,2),
     FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
-);
-
--- NUEVA TABLA: DETALLE DE CONSUMOS EN FACTURA
-CREATE TABLE detalle_factura_consumos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_factura INT,
-    id_producto INT,
-    nombre_producto VARCHAR(100),
-    cantidad INT,
-    precio_unitario DECIMAL(7,2),
-    subtotal DECIMAL(7,2),
-    FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE CASCADE
 );
 
 -- CONSUMOS TEMPORALES (NO CAMBIAR)
@@ -169,12 +154,12 @@ CREATE TABLE pagos (
     FOREIGN KEY (id_metodo) REFERENCES metodos_pago(id) ON DELETE SET NULL
 );
 
-use bd_proyecto_brayan;
-select * from estados_productos;
-select * from reservas;
-
+-- USUARIO DE PRUEBA
 INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol) VALUES
 (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1); -- Brayan123.
+
+select * from consumos;
+SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 3;
 
 
 -- RESERVA EN PROCESO:
@@ -182,7 +167,5 @@ INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol) VALUES
 -- VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 
 -- RESERVA FIANLIZADA:
--- INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
+-- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
-
-show tables;

@@ -24,9 +24,9 @@ public class FacturasController {
         if (factura != null) {
             return Response.ok(factura).build(); // Se devuelve 200 con el JSON de la factura
         } else {
-            return Response.status(Response.Status.NOT_FOUND)
-                           .entity("No se pudo generar la factura para la reserva " + idReserva)
-                           .build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                       .entity("{\"error\":\"No se pudo generar la factura para la reserva\"}")
+                       .build();
         }
     }
     
