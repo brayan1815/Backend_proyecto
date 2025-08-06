@@ -9,12 +9,13 @@ public class UsuarioDTO {
     private String correo;
     private String contrasenia;
     private String rol;
+    private int id_estado;
 
     public UsuarioDTO() {
     }
 
 
-    public UsuarioDTO(int id, long documento, String nombre, long telefono, String correo, String contrasenia, String rol) {
+    public UsuarioDTO(int id, long documento, String nombre, long telefono, String correo, String contrasenia, String rol, int id_estado) {
         this.id = id;
         this.documento = documento;
         this.nombre = nombre;
@@ -22,6 +23,7 @@ public class UsuarioDTO {
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.rol = rol;
+        this.id_estado=id_estado;
     }
 
     // Getters y Setters
@@ -80,6 +82,14 @@ public class UsuarioDTO {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+    
+    public int getId_estado(){
+        return id_estado;
+    }
+    
+    public void setId_estado(int id_estado){
+        this.id_estado=id_estado;
     }
 }
 

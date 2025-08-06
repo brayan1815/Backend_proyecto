@@ -112,15 +112,17 @@ public class ConsolasController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response eliminarConsola(@PathParam("id") int id) {
         
-        String error = ValidadorConsola.validarEliminacion(id);
-        if (error != null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity(error)
-                           .build();
-        }
+//        String error = ValidadorConsola.validarEliminacion(id);
+//        if (error != null) {
+//            return Response.status(Response.Status.BAD_REQUEST)
+//                           .entity(error)
+//                           .build();
+//        }
         
         ConsolasDAO dao = new ConsolasDAO();
-        boolean eliminado = dao.Delete(id);
+        Consola consola=dao.getById(id);
+        consola.setId_estado(2);
+        boolean eliminado = dao.put(consola);
 
         if (eliminado) {
             return Response.ok("{\"mensaje\":\"Consola eliminada correctamente\"}").build();

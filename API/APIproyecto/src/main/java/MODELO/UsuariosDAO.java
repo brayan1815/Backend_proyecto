@@ -22,7 +22,7 @@ public class UsuariosDAO {
                                                           //la clase conexionBD
                                                           
             //se define la consulta SQL para obtener los usuarios
-            String sql="SELECT id,documento,nombre,telefono,correo,contrasenia,id_rol FROM usuarios";
+            String sql="SELECT id,documento,nombre,telefono,correo,contrasenia,id_rol,id_estado FROM usuarios";
             PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
             ResultSet rs = stmt.executeQuery();//se ejecuta la conuslta y se almacenan los resultados en la variable rs
             
@@ -34,7 +34,8 @@ public class UsuariosDAO {
                     rs.getLong("telefono"),
                     rs.getString("correo"),
                     rs.getString("contrasenia"),
-                    rs.getInt("id_rol")
+                    rs.getInt("id_rol"),
+                    rs.getInt("id_estado")
                 );
                 //se agrega a la lista el usuario
                 lista.add(u);
@@ -48,7 +49,7 @@ public class UsuariosDAO {
     public Usuario getById(int id) {
         Usuario usuario = null;
         try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol FROM usuarios WHERE id = ?";
+            String sql = "SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -56,12 +57,13 @@ public class UsuariosDAO {
             if (rs.next()) {
                 usuario = new Usuario(
                     rs.getInt("id"),
-                    rs.getInt("documento"),
+                    rs.getLong("documento"),
                     rs.getString("nombre"),
                     rs.getLong("telefono"),
                     rs.getString("correo"),
                     rs.getString("contrasenia"),
-                    rs.getInt("id_rol")
+                    rs.getInt("id_rol"),
+                    rs.getInt("id_estado")
                 );
             }
         } catch (SQLException e) 
@@ -76,7 +78,7 @@ public class UsuariosDAO {
         
         try(Connection conn=ConexionBD.getConnection()){//se instancia el objeto de la clase conexionBD y se hace
                                                         //referencia al metodo getConnection
-            String sql="SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol FROM usuarios WHERE correo = ?";//se hace la consulta sql
+            String sql="SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE correo = ?";//se hace la consulta sql
             PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
             stmt.setString(1, correo);//se envia el correo que se recibe como parametro a la consulta
             ResultSet rs = stmt.executeQuery();//se ejecuta la consulta y se almacena el resultado en la variable rs
@@ -84,12 +86,13 @@ public class UsuariosDAO {
             if(rs.next()){ //se verifica que la consulta devuelva por lo menos un resultado y se procede a leerlos
                 usuario = new Usuario( //se crea el objeto usuario con los valores obtenidos de la base de datos
                     rs.getInt("id"),
-                    rs.getInt("documento"),
+                    rs.getLong("documento"),
                     rs.getString("nombre"),
                     rs.getLong("telefono"),
                     rs.getString("correo"),
                     rs.getString("contrasenia"),
-                    rs.getInt("id_rol")
+                    rs.getInt("id_rol"),
+                    rs.getInt("id_estado")
                 );
             }
         }catch (SQLException e){
@@ -116,6 +119,7 @@ public class UsuariosDAO {
                 usuario.setCorreo(rs.getString("correo"));
                 usuario.setContrasenia(rs.getString("contrasenia"));
                 usuario.setId_rol(rs.getInt("id_rol"));
+                usuario.setId_estado(rs.getInt("id_estado"));
             }
 
         } catch (SQLException e) {
@@ -128,7 +132,7 @@ public class UsuariosDAO {
     
     public boolean post(Usuario usuario) {
         try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol,id_estado) VALUES (?, ?, ?, ?, ?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setLong(1, usuario.getDocumento());
             stmt.setString(2, usuario.getNombre());
@@ -136,6 +140,7 @@ public class UsuariosDAO {
             stmt.setString(4, usuario.getCorreo());
             stmt.setString(5, usuario.getContrasenia());
             stmt.setInt(6, usuario.getId_rol());
+            stmt.setInt(7, usuario.getId_estado());
 
             int filas = stmt.executeUpdate();
             return filas > 0;
@@ -147,7 +152,7 @@ public class UsuariosDAO {
     }
     
     public boolean put(int id, Usuario usuario) {
-        String sql = "UPDATE usuarios SET documento = ?, nombre = ?, telefono = ?, correo = ?, contrasenia = ?, id_rol = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET documento = ?, nombre = ?, telefono = ?, correo = ?, contrasenia = ?, id_rol = ?,id_estado=? WHERE id = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -157,7 +162,9 @@ public class UsuariosDAO {
             stmt.setString(4, usuario.getCorreo());
             stmt.setString(5, usuario.getContrasenia());
             stmt.setInt(6, usuario.getId_rol());
-            stmt.setInt(7, id);
+            stmt.setInt(7, usuario.getId_estado());
+            stmt.setInt(8, id);
+            
 
             int filas = stmt.executeUpdate();
             return filas > 0;

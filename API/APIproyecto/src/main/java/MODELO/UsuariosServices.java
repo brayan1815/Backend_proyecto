@@ -16,8 +16,10 @@ public class UsuariosServices {
         String contrasenia = usuario.getContrasenia();//se obtiene la contraseña
 
         Usuario usuBD = usuDao.getByCorreo(correo);//se obtiene el usuario de la base de datos por correo
-
+        
+        
         if (usuBD != null) {
+            if(usuBD.getId_estado()!=1) return false;
             //si el usuario existe
             // Comparar usando BCrypt
             return PasswordUtils.checkPassword(contrasenia, usuBD.getContrasenia());
@@ -40,7 +42,8 @@ public class UsuariosServices {
                 u.getTelefono(),
                 u.getCorreo(), 
                 u.getContrasenia(),
-                r.getRol()
+                r.getRol(),
+                u.getId_estado()
             );
             listaFinal.add(dto);
         }

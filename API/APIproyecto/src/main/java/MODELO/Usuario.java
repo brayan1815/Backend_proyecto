@@ -16,12 +16,13 @@ public class Usuario {
     private String correo;
     private String contrasenia;
     private int id_rol;
+    private int id_estado;
     
     
     public Usuario(){      
     }
     
-    public Usuario( int id, long documento,String nombre,long telefono, String correo,String contrasenia, int id_rol) {
+    public Usuario( int id, long documento,String nombre,long telefono, String correo,String contrasenia, int id_rol,int id_estado) {
         this.id = id;
         this.documento = documento;
         this.nombre = nombre;
@@ -29,6 +30,7 @@ public class Usuario {
         this.correo=correo;
         this.contrasenia=contrasenia;
         this.id_rol=id_rol;
+        this.id_estado=id_estado;
     }
 
     public int getId(){return id;}
@@ -51,4 +53,7 @@ public class Usuario {
     
     public int getId_rol(){return id_rol;}
     public void setId_rol(int id_rol){this.id_rol=id_rol;}
+    
+    public int getId_estado(){return id_estado;}
+    public void setId_estado(int id_estado){this.id_estado=id_estado;}
 }

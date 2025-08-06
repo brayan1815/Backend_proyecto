@@ -96,7 +96,11 @@ public class TiposController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response eliminarTipo(@PathParam("id") int id) {
         TiposDAO dao = new TiposDAO();
-        boolean eliminado = dao.delete(id);
+        
+        Tipo tipo=dao.getById(id);
+        tipo.set_id_estado_tipo(2);
+        
+        boolean eliminado = dao.put(tipo);
 
         if (eliminado) {
             return Response.ok("{\"mensaje\": \"Tipo eliminado correctamente\"}").build();

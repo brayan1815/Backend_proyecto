@@ -26,6 +26,7 @@ public class TiposDAO {
                 t.setId(rs.getInt("id"));
                 t.setTipo(rs.getString("tipo"));
                 t.setPrecio_hora(rs.getDouble("precio_hora"));
+                t.set_id_estado_tipo(rs.getInt("id_estado_tipo"));
                 lista.add(t);
             }
 
@@ -64,10 +65,11 @@ public class TiposDAO {
         boolean exito = false;
 
         try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "INSERT INTO tipos (tipo, precio_hora) VALUES (?, ?)";
+            String sql = "INSERT INTO tipos (tipo, precio_hora,id_estado_tipo) VALUES (?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, tipo.getTipo());
             stmt.setDouble(2, tipo.getPrecio_hora());
+            stmt.setInt(3, tipo.getId_estado_tipo());
 
             int filas = stmt.executeUpdate();
             exito = filas > 0;
@@ -83,11 +85,12 @@ public class TiposDAO {
         boolean actualizado = false;
 
         try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "UPDATE tipos SET tipo = ?, precio_hora = ? WHERE id = ?";
+            String sql = "UPDATE tipos SET tipo = ?, precio_hora = ?, id_estado_tipo=? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, tipo.getTipo());
             stmt.setDouble(2, tipo.getPrecio_hora());
-            stmt.setInt(3, tipo.getId());
+            stmt.setInt(3, tipo.id_estado_tipo);
+            stmt.setInt(4, tipo.getId());
 
             actualizado = stmt.executeUpdate() > 0;
 

@@ -199,7 +199,17 @@ public class UsuariosController {
     @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de eliminar un usuario de la base de datos
     public Response eliminarUsuario(@PathParam("id") int id) {
-        boolean eliminado = dao.delete(id);//se llama al metodo delete de la clase usuariosDAO para eliminar el usuario
+        
+        Usuario usuario=dao.getById(id);
+        
+        if (usuario == null) {
+            // Retorna error si el usuario no existe
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("{\"error\":\"Usuario no encontrado\"}").build();
+        }
+        usuario.setId_estado(2);
+        
+        boolean eliminado = dao.put(id, usuario);
     
         if (eliminado) {
             //si el usuario se elimina se retorna un codigo 200 con un mensaje
@@ -210,5 +220,5 @@ public class UsuariosController {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("{\"error\":\"Ocurrio un error al intentar eliminar el usuario\"}").build();
         }
-}
+    }
 }

@@ -103,7 +103,9 @@ public class ProductosController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response eliminarProducto(@PathParam("id") int id) {
         ProductosDAO dao = new ProductosDAO();
-        boolean eliminado = dao.Delete(id);
+        Producto producto=dao.getById(id);
+        producto.setId_estado_producto(3);
+        boolean eliminado = dao.put(producto);
 
         if (eliminado) {
             return Response.ok("{\"mensaje\":\"Producto eliminado correctamente\"}").build();

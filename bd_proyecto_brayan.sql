@@ -27,6 +27,14 @@ CREATE TABLE permisos_roles (
 
 INSERT INTO permisos_roles (id_rol, id_permiso) VALUES (2, 1);
 
+CREATE TABLE estados_usuarios(
+	id int auto_increment primary key,
+    estado varchar(50)
+);
+
+INSERT INTO estados_usuarios(estado)VALUES ('Activo');
+INSERT INTO estados_usuarios(estado)VALUES ('Inactivo');
+
 -- USUARIOS
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +44,9 @@ CREATE TABLE usuarios (
     correo VARCHAR(100) UNIQUE,
     contrasenia VARCHAR(100),
     id_rol INT,
-    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL
+    id_estado INT,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_estado)REFERENCES estados_usuarios(id) ON DELETE SET NULL
 );
 
 -- IMÁGENES
@@ -45,11 +55,21 @@ CREATE TABLE imagenes (
     ruta TEXT
 );
 
+CREATE TABLE estados_tipos(
+id INT AUTO_INCREMENT PRIMARY KEY,
+estado VARCHAR(50)
+);
+
+INSERT INTO estados_tipos(estado) VALUES ('Activo');
+INSERT INTO estados_tipos(estado) VALUES ('Inactivo');
+
 -- TIPOS DE CONSOLA
 CREATE TABLE tipos (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     tipo VARCHAR(30),
-    precio_hora DECIMAL(6,2)
+    precio_hora DECIMAL(6,2),
+    id_estado_tipo INT,
+    FOREIGN KEY (id_estado_tipo) REFERENCES estados_tipos(id)
 );
 
 -- ESTADOS DE CONSOLAS
@@ -59,6 +79,7 @@ CREATE TABLE estados_consolas (
 );
 
 INSERT INTO estados_consolas(estado) VALUES ('disponible');
+INSERT INTO estados_consolas(estado) VALUES ('Inactivo');
 
 -- CONSOLAS
 CREATE TABLE consolas (
@@ -81,6 +102,7 @@ CREATE TABLE estados_productos (
 
 INSERT INTO estados_productos(estado) VALUES ('disponible');
 INSERT INTO estados_productos(estado) VALUES ('agotado');
+INSERT INTO estados_productos(estado) VALUES ('inactivo');
 
 -- PRODUCTOS
 CREATE TABLE productos (
@@ -155,13 +177,15 @@ CREATE TABLE pagos (
 );
 
 -- USUARIO DE PRUEBA
-INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol) VALUES
-(1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1); -- Brayan123.
+INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol,id_estado) VALUES
+(1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1,1); -- Brayan123.
 
-select * from consumos;
+select * from productos;
+
+select * from estados_productos;
 SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 3;
 
-
+use bd_proyecto_brayan;
 -- RESERVA EN PROCESO:
 -- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 -- VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
