@@ -6,6 +6,7 @@ package MODELO;
 public class Consola {
     //se declaran las variables que guardan los datos de las consolas
     private int id;
+    private String numero_serie;
     private String nombre;
     private String descripcion;
     private int id_tipo;
@@ -16,8 +17,9 @@ public class Consola {
     public Consola() {}
 
     // Constructor con todos los atributos, se usa cuando se quiere crear uan consola con todos los datos
-    public Consola(int id, String nombre, String descripcion, int id_tipo, int id_estado, int id_imagen) {
+    public Consola(int id, String nombre, String descripcion, int id_tipo, int id_estado, int id_imagen, String numero_serie) {
         this.id = id;
+        this.numero_serie=numero_serie;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.id_tipo = id_tipo;
@@ -29,6 +31,9 @@ public class Consola {
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    
+    public String getNumero_serie(){return numero_serie;}
+    public void setNumero_serie(String numero_serie){this.numero_serie=numero_serie;}
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

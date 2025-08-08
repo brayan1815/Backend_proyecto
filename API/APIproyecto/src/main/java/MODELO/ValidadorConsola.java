@@ -4,7 +4,11 @@ package MODELO;
 import java.util.List;
 
 public class ValidadorConsola {
+    
+    
+    
     public static String validarConsola(Consola consola) {
+        ConsolasDAO dao=new ConsolasDAO();
 
         //VALIDAR QUE EL NOMBRE DE LA CONSOLA NO VENGA VACIO
         if (consola.getNombre() == null || consola.getNombre().trim().isEmpty()) {
@@ -42,18 +46,24 @@ public class ValidadorConsola {
         if (consola.getId_imagen() <= 0) {
             return "{\"error\": \"El id_imagen no puede estar vacío o en cero.\"}";
         }
+        
+        Consola cons=dao.getByNumeroSerie(consola.getNumero_serie());
+        
+        if(cons!=null && cons.getId()!=consola.getId()){
+            return "{\"error\": \"Ya se encuentra una consola registrada con este numero de serie.\"}";
+        }
 
         return null; //sei se pasan todos los filtros se retorna null
     }
     
-    public static String validarEliminacion(int idConsola) {
-        ReservasDAO dao = new ReservasDAO();
-        List<Reserva> reservas = dao.getByIdConsola(idConsola);
-
-        if (!reservas.isEmpty()) {
-            return "{\"error\": \"No se puede eliminar la consola porque tiene reservas asociadas.\"}";
-        }
-
-        return null; // Se puede eliminar
-    }
+//    public static String validarEliminacion(int idConsola) {
+//        ReservasDAO dao = new ReservasDAO();
+//        List<Reserva> reservas = dao.getByIdConsola(idConsola);
+//
+//        if (!reservas.isEmpty()) {
+//            return "{\"error\": \"No se puede eliminar la consola porque tiene reservas asociadas.\"}";
+//        }
+//
+//        return null; // Se puede eliminar
+//    }
 }

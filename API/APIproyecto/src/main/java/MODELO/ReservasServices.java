@@ -10,33 +10,33 @@ public class ReservasServices {
     UsuariosDAO usuarioDAO = new UsuariosDAO();
     ConsolasDAO consolaDAO = new ConsolasDAO();
     
-    public List<ReservaDTO> obtenerReservasConDatos() {
-        //se crea el metodo que me va a obtener las reservas en formato DTO
-        List<Reserva> reservas = reservaDAO.getAll();//se obtienenen todas las reservas
-        List<ReservaDTO> listaDTO = new ArrayList<>();//se crea la lista donde se almacenaran en formato DTO
-
-        for (Reserva r : reservas) {
-            //se recorre cada una de las reservas y se obtiene su usuario y su consola
-            Usuario u = usuarioDAO.getById(r.getId_usuario());
-            Consola c = consolaDAO.getById(r.getId_consola());
-
-            if (u != null && c != null) {
-                //se arma el objeto DTO y se agrega a la lista 
-                ReservaDTO dto = new ReservaDTO(
-                    r.getId(),
-                    u.getDocumento(),
-                    u.getNombre(),
-                    r.getHora_inicio(),
-                    r.getHora_finalizacion(),
-                    c.getNombre(),
-                    r.getId_estado_reserva()
-                );
-                listaDTO.add(dto);
-            }
-        }
-
-        return listaDTO;//se retorna la lista
-    }
+//    public List<ReservaDTO> obtenerReservasConDatos() {
+//        //se crea el metodo que me va a obtener las reservas en formato DTO
+//        List<Reserva> reservas = reservaDAO.getAll();//se obtienenen todas las reservas
+//        List<ReservaDTO> listaDTO = new ArrayList<>();//se crea la lista donde se almacenaran en formato DTO
+//
+//        for (Reserva r : reservas) {
+//            //se recorre cada una de las reservas y se obtiene su usuario y su consola
+//            Usuario u = usuarioDAO.getById(r.getId_usuario());
+//            Consola c = consolaDAO.getById(r.getId_consola());
+//
+//            if (u != null && c != null) {
+//                //se arma el objeto DTO y se agrega a la lista 
+//                ReservaDTO dto = new ReservaDTO(
+//                    r.getId(),
+//                    u.getDocumento(),
+//                    u.getNombre(),
+//                    r.getHora_inicio(),
+//                    r.getHora_finalizacion(),
+//                    c.getNombre(),
+//                    r.getId_estado_reserva()
+//                );
+//                listaDTO.add(dto);
+//            }
+//        }
+//
+//        return listaDTO;//se retorna la lista
+//    }
     
     public List<ReservaDTO> actualizarEstadoReserva(){
         //se crea el metodo que va a actualizar el estado de las reservas

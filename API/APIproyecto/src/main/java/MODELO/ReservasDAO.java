@@ -41,6 +41,48 @@ public class ReservasDAO {
 
         return lista;
     }
+    
+    public List<ReservaDTO> getAllConInfo() {
+        List<ReservaDTO> lista = new ArrayList<>();
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "SELECT \n" +
+                        "    r.id,\n" +
+                        "    u.documento AS documentoUsuario,\n" +
+                        "    u.nombre AS nombreUsuario,\n" +
+                        "    r.hora_inicio,\n" +
+                        "    r.hora_finalizacion,\n" +
+                        "    c.nombre AS nombreConsola,\n" +
+                        "    r.id_estado_reserva AS idEstadoReserva\n" +
+                        "FROM \n" +
+                        "    reservas r\n" +
+                        "INNER JOIN \n" +
+                        "    usuarios u ON r.id_usuario = u.id\n" +
+                        "INNER JOIN \n" +
+                        "    consolas c ON r.id_consola = c.id\n" +
+                        "ORDER BY \n" +
+                        "    r.hora_inicio ASC;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ReservaDTO reserva = new ReservaDTO(
+                    rs.getInt("id"),
+                    rs.getLong("documentoUsuario"),
+                    rs.getString("nombreUsuario"),
+                    rs.getTimestamp("hora_inicio").toLocalDateTime(),
+                    rs.getTimestamp("hora_finalizacion").toLocalDateTime(),
+                    rs.getString("nombreConsola"),
+                    rs.getInt("idEstadoReserva")
+                );
+                lista.add(reserva);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 
     
       public boolean post(Reserva reserva) {

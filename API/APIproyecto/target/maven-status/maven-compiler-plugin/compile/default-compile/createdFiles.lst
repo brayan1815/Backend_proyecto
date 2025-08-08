@@ -24,9 +24,11 @@ MODELO\UsuariosDAO.class
 MODELO\FacturaDTO.class
 MODELO\Pago.class
 MODELO\MetodosPagoDAO.class
+MODELO\EstadosUsuarios.class
 MODELO\TokenUtils.class
 MODELO\Imagen.class
 MODELO\Reserva.class
+MODELO\EstadosUsuariosDAO.class
 MODELO\ReservasServices.class
 CONTROLADOR\RolesController.class
 MODELO\ConsolasDAO.class
@@ -35,7 +37,6 @@ CONTROLADOR\ConsumosController.class
 MODELO\ConsolaDTO.class
 BD\ConexionBD.class
 MODELO\Consumo.class
-MODELO\ConsolasServices.class
 CONTROLADOR\ReservasController.class
 MODELO\RolesDAO.class
 MODELO\Usuario.class
@@ -48,11 +49,12 @@ MODELO\UsuariosServices.class
 MODELO\MetodoPago.class
 MODELO\ImagenesDAO.class
 CONTROLADOR\PagosController.class
-MODELO\ValidadorUsuario.class
 MODELO\UsuarioDTO.class
+MODELO\ValidadorUsuario.class
 MODELO\PagosDAO.class
 MODELO\ReservaDTO.class
 MODELO\RestConfig.class
+CONTROLADOR\EstadosUsuariosController.class
 MODELO\Secured.class
 MODELO\PasswordUtils.class
 MODELO\ValidadorConsola.class

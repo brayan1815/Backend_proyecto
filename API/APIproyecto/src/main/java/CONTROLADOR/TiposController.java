@@ -70,7 +70,9 @@ public class TiposController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarTipo(@PathParam("id") int id, Tipo tipo) {
+        
         tipo.setId(id);
+        tipo.set_id_estado_tipo(1);
         
         String error = ValidadorTipo.validarTipo(tipo);
         if (error != null) {

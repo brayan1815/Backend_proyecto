@@ -37,7 +37,8 @@ public class ReservasController {
     @Path("/detalle")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerReservasConDetalle() {
-        List<ReservaDTO> reservas = reservaService.obtenerReservasConDatos();
+        ReservasDAO dao=new ReservasDAO();
+        List<ReservaDTO> reservas = dao.getAllConInfo();
         return Response.ok(reservas).build();
     }
     

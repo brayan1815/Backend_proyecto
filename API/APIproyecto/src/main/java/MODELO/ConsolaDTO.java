@@ -4,6 +4,7 @@ package MODELO;
 public class ConsolaDTO {
     //atributos que representan los datos de una consola
     private int id;
+    private String numero_serie;
     private String nombre;
     private String descripcion;
     private double precioHora; 
@@ -15,9 +16,10 @@ public class ConsolaDTO {
         //constructor vacio, por si acaso se necesita crear un objeto sin valores de entrada
     }
 
-    public ConsolaDTO(int id, String nombre, String descripcion, double precioHora, int idEstado, int idImagen) {
+    public ConsolaDTO(int id,String numero_serie, String nombre, String descripcion, double precioHora, int idEstado, int idImagen) {
         //constructor con todos los ateibutos, sirve para crear el objeto ya con todos sus datos
         this.id = id;
+        this.numero_serie=numero_serie;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precioHora = precioHora;
@@ -34,6 +36,9 @@ public class ConsolaDTO {
     public void setId(int id) {
         this.id = id;
     }
+    
+    public String getNumero_serie(){return numero_serie;}
+    public void setNumero_serie(String numero_serie){this.numero_serie=numero_serie;}
 
     public String getNombre() {
         return nombre;

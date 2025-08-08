@@ -44,7 +44,7 @@ public class UsuariosController {
     @Path("/con-rol")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuariosConCargo() {
-        List<UsuarioDTO> usuarios = services.obtenerUsuariosConRol();
+        List<UsuarioDTO> usuarios = dao.getConRol();
         return Response.ok(usuarios).build();
     }
     
@@ -141,7 +141,7 @@ public class UsuariosController {
     @Produces(MediaType.APPLICATION_JSON)
     //se crea el metodo que se encargara de crear un nuevo usuario en la base de datos 
     public Response crearUsuario(Usuario usuario){
-        String error = ValidadorUsuario.validarUsuario(usuario, dao);
+        String error = ValidadorUsuario.validarUsuario(usuario, dao,false);
         if (error != null) {
             return Response.status(Response.Status.BAD_REQUEST)
                            .entity("{\"error\": \"" + error + "\"}")
@@ -168,15 +168,16 @@ public class UsuariosController {
     public Response actualizarUsuario(@PathParam("id") int id,Usuario usuario)
     {
         
-             usuario.setId(id); // Importante para validar bien el ID contra duplicados
+            usuario.setId(id); // Importante para validar bien el ID contra duplicados
+             
 
-            String error = ValidadorUsuario.validarUsuario(usuario, dao);
+            String error = ValidadorUsuario.validarUsuario(usuario, dao,true);
             if (error != null) {
                 return Response.status(Response.Status.BAD_REQUEST)
                                .entity("{\"error\": \"" + error + "\"}")
                                .build();
             }
-            usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia())); 
+//            usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia())); 
             boolean actualizado = dao.put(id, usuario);//se llama el metod put de usuariosDAO para actualizar el
                                                       //usuario
             if (actualizado) 

@@ -5,6 +5,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Metodos
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ReservaDTO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsumoDTO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\JacksonConfig.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\EstadosUsuariosController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\PagosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\FacturasServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\TiposDAO.java
@@ -13,6 +14,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Consumo
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ConsumosController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\PagosServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Rol.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadosUsuariosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\RolesDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsumosServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\TokenUtils.java
@@ -46,6 +48,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Consumo
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ProductosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Reserva.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\PagosController.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadosUsuarios.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\UsuariosController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\MetodosPagoController.java

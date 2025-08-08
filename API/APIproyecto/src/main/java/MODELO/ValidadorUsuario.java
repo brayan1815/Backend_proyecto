@@ -10,7 +10,7 @@ public class ValidadorUsuario {
     private static final Pattern SOLO_LETRAS_PATTERN = Pattern.compile("^[a-zA-Z\\s]+$");
     private static final Pattern CONTRASENIA_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?=.*\\d).{8,}$");
 
-    public static String validarUsuario(Usuario usuario, UsuariosDAO dao) {
+    public static String validarUsuario(Usuario usuario, UsuariosDAO dao, boolean actualizar) {
         //se crea el metodo que va a validar que todos los campos sean correctos
 
         if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty())
@@ -35,10 +35,12 @@ public class ValidadorUsuario {
             //se valida que el formato del correo sea valido
             return "El correo no tiene un formato válido.";
 
-        if (usuario.getContrasenia() == null || !CONTRASENIA_PATTERN.matcher(usuario.getContrasenia()).matches())
+        if(!actualizar){
+              if (usuario.getContrasenia() == null || !CONTRASENIA_PATTERN.matcher(usuario.getContrasenia()).matches())
             //se valida que el formato de la contraseña del usuario sea valido
             return "La contraseña debe tener mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.";
-
+        }
+        
         //se valida que el correo no se haya registrado previamente
         Usuario porCorreo = dao.getByCorreo(usuario.getCorreo());
         if (porCorreo != null && porCorreo.getId() != usuario.getId())

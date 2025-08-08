@@ -46,6 +46,51 @@ public class UsuariosDAO {
         return lista;//se retorna con los usuarios
     }
     
+    public List<UsuarioDTO> getConRol(){
+        //se crea una lista vacia para almacenar los usuarios
+        List<UsuarioDTO> lista = new ArrayList<>();
+        
+        
+        try(Connection conn = ConexionBD.getConnection()){//se oobtiene la conexion a la base de datos usando 
+                                                          //la clase conexionBD
+                                                          
+            //se define la consulta SQL para obtener los usuarios
+            String sql="SELECT \n" +
+                        "    u.id AS id,\n" +
+                        "    u.documento AS documento,\n" +
+                        "    u.nombre,\n" +
+                        "    u.telefono,\n" +
+                        "    u.correo,\n" +
+                        "    u.contrasenia,\n" +
+                        "    r.rol AS rol,\n" +
+                        "    u.id_estado\n" +
+                        "FROM \n" +
+                        "    usuarios u\n" +
+                        "INNER JOIN \n" +
+                        "    roles r ON u.id_rol = r.id;";
+            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
+            ResultSet rs = stmt.executeQuery();//se ejecuta la conuslta y se almacenan los resultados en la variable rs
+            
+            while(rs.next()){//se recorre cada fila del resultado
+                UsuarioDTO u = new UsuarioDTO(//se crea un objeto usuario con los datos de la fila
+                    rs.getInt("id"),
+                    rs.getLong("documento"),
+                    rs.getString("nombre"),
+                    rs.getLong("telefono"),
+                    rs.getString("correo"),
+                    rs.getString("contrasenia"),
+                    rs.getString("rol"),
+                    rs.getInt("id_estado")
+                );
+                //se agrega a la lista el usuario
+                lista.add(u);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();//si ocurre un error se imprime en la consola
+        }
+        return lista;//se retorna con los usuarios
+    }
+    
     public Usuario getById(int id) {
         Usuario usuario = null;
         try (Connection conn = ConexionBD.getConnection()) {
@@ -152,7 +197,7 @@ public class UsuariosDAO {
     }
     
     public boolean put(int id, Usuario usuario) {
-        String sql = "UPDATE usuarios SET documento = ?, nombre = ?, telefono = ?, correo = ?, contrasenia = ?, id_rol = ?,id_estado=? WHERE id = ?";
+        String sql = "UPDATE usuarios SET documento = ?, nombre = ?, telefono = ?, correo = ?, id_rol = ?,id_estado=? WHERE id = ?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -160,10 +205,9 @@ public class UsuariosDAO {
             stmt.setString(2, usuario.getNombre());
             stmt.setLong(3, usuario.getTelefono());
             stmt.setString(4, usuario.getCorreo());
-            stmt.setString(5, usuario.getContrasenia());
-            stmt.setInt(6, usuario.getId_rol());
-            stmt.setInt(7, usuario.getId_estado());
-            stmt.setInt(8, id);
+            stmt.setInt(5, usuario.getId_rol());
+            stmt.setInt(6, usuario.getId_estado());
+            stmt.setInt(7, id);
             
 
             int filas = stmt.executeUpdate();
