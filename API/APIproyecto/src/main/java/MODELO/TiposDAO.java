@@ -59,6 +59,29 @@ public class TiposDAO {
 
         return tipo;
     }
+    
+    public Tipo getByNombre(String nombre) {
+        Tipo tipo = null;
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "SELECT * FROM tipos WHERE tipo = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nombre);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                tipo = new Tipo();
+                tipo.setId(rs.getInt("id"));
+                tipo.setTipo(rs.getString("tipo"));
+                tipo.setPrecio_hora(rs.getDouble("precio_hora"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tipo;
+    }
 
     
     public boolean post(Tipo tipo) {

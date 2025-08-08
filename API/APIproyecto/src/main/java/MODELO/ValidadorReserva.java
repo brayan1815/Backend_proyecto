@@ -2,6 +2,7 @@
 package MODELO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ValidadorReserva {
     public static String validar(Reserva reserva) {
@@ -46,5 +47,17 @@ public class ValidadorReserva {
         }
 
         return null; // Se puede eliminar
+    }
+    
+    public static String puedeReservar(Reserva reserva){
+        ReservasDAO dao=new ReservasDAO();
+        
+        List<Reserva> reservas = dao.getAllReservasActivasUsuario(reserva.getId_usuario());
+        int cantidad=reservas.size();
+        
+        if(cantidad>=5){
+            return "El usuario no puede tener mas de cinco reservas activas";
+        }
+        else return null;
     }
 }

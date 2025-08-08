@@ -17,6 +17,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Rol.jav
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadosUsuariosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\RolesDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsumosServices.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\EstadosConsolasController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\TokenUtils.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorUsuario.java
@@ -51,8 +52,10 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\Pa
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadosUsuarios.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\UsuariosServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\UsuariosController.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadosConsolasDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\MetodosPagoController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Pago.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadoConsola.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorTipo.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\CORSFilter.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ImagenesController.java

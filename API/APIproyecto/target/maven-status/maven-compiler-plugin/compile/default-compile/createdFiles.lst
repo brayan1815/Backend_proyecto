@@ -5,6 +5,7 @@ CONTROLADOR\MetodosPagoController.class
 MODELO\ReservasDAO.class
 MODELO\ValidadorReserva.class
 CONTROLADOR\ImagenesController.class
+MODELO\EstadoConsola.class
 MODELO\FacturasDAO.class
 CONTROLADOR\UsuariosController.class
 MODELO\ValidadorTipo.class
@@ -12,6 +13,7 @@ CONTROLADOR\FacturasController.class
 CONTROLADOR\TiposController.class
 MODELO\Producto.class
 MODELO\Factura.class
+CONTROLADOR\EstadosConsolasController.class
 MODELO\Consola.class
 MODELO\ProductosDAO.class
 CONTROLADOR\ProductosController.class
@@ -36,6 +38,7 @@ MODELO\FacturasServices.class
 CONTROLADOR\ConsumosController.class
 MODELO\ConsolaDTO.class
 BD\ConexionBD.class
+MODELO\EstadosConsolasDAO.class
 MODELO\Consumo.class
 CONTROLADOR\ReservasController.class
 MODELO\RolesDAO.class

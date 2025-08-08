@@ -64,6 +64,13 @@ public class ReservasController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearReserva(Reserva reserva) {
         
+        String puedeRes=ValidadorReserva.puedeReservar(reserva);
+        
+        if(puedeRes!=null){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\": \"" + puedeRes + "\"}").build();
+        }
+        
         String error = ValidadorReserva.validar(reserva);
 
         if (error != null) {

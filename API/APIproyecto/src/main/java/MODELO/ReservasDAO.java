@@ -42,6 +42,35 @@ public class ReservasDAO {
         return lista;
     }
     
+    public List<Reserva> getAllReservasActivasUsuario(int id_usuario) {
+        List<Reserva> lista = new ArrayList<>();
+
+        try (Connection conn = ConexionBD.getConnection()) {
+            String sql = "SELECT * FROM reservas WHERE id_estado_reserva!=4 AND id_estado_reserva!=3 AND id_usuario=?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            
+            stmt.setInt(1, id_usuario);
+            
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Reserva reserva = new Reserva(
+                    rs.getInt("id"),
+                    rs.getInt("id_usuario"),
+                    rs.getInt("id_consola"),
+                    rs.getInt("id_estado_reserva"),
+                    rs.getTimestamp("hora_inicio").toLocalDateTime(),
+                    rs.getTimestamp("hora_finalizacion").toLocalDateTime()
+                );
+                lista.add(reserva);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+    
     public List<ReservaDTO> getAllConInfo() {
         List<ReservaDTO> lista = new ArrayList<>();
 

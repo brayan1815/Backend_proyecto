@@ -84,6 +84,7 @@ INSERT INTO estados_consolas(estado) VALUES ('Inactivo');
 -- CONSOLAS
 CREATE TABLE consolas (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_serie VARCHAR(10) UNIQUE,
     nombre VARCHAR(30),
     descripcion TEXT,
     id_tipo INT,
@@ -180,7 +181,8 @@ CREATE TABLE pagos (
 INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol,id_estado) VALUES
 (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1,1); -- Brayan123.
 
-select * from productos;
+select * from consolas;
+SELECT * FROM consolas WHERE numero_serie='asd123';
 
 select * from estados_productos;
 SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 3;
@@ -193,3 +195,23 @@ use bd_proyecto_brayan;
 -- RESERVA FIANLIZADA:
 -- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
+select * from reservas;
+SELECT 
+    r.id,
+    u.documento AS documentoUsuario,
+    u.nombre AS nombreUsuario,
+    r.hora_inicio,
+    r.hora_finalizacion,
+    c.nombre AS nombreConsola,
+    r.id_estado_reserva AS idEstadoReserva
+FROM 
+    reservas r
+INNER JOIN 
+    usuarios u ON r.id_usuario = u.id
+INNER JOIN 
+    consolas c ON r.id_consola = c.id
+ORDER BY 
+    r.hora_inicio ASC;
+    
+SELECT * FROM usuarios;
+
