@@ -1,151 +1,83 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package MODELO;
 
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
-/**
- *
- * @author Brayan Estiven
- */
 public class FacturasServices {
 
-        
-     FacturasDAO facturasDAO = new FacturasDAO();//se crea la instancia del objeto de las clases DAO
-     ConsumosDAO consumosDAO=new ConsumosDAO();
-     ReservasDAO reservasDAO = new ReservasDAO();
-     ConsolasDAO consolasDAO = new ConsolasDAO();
-     TiposDAO tiposDAO = new TiposDAO();
-//     ProductosDAO productosDAO=new ProductosDAO();
+    // Instancia de los DAO necesarios para operaciones sobre facturas, consumos, reservas, consolas y tipos
+    FacturasDAO facturasDAO = new FacturasDAO();
+    ConsumosDAO consumosDAO = new ConsumosDAO();
+    ReservasDAO reservasDAO = new ReservasDAO();
+    ConsolasDAO consolasDAO = new ConsolasDAO();
+    TiposDAO tiposDAO = new TiposDAO();
 
-    public FacturaDTO obtenerOCrearFactura(int idReserva) {
-        //se crea el metodo para obtener o crear la factura
-        Factura facturaExistente = facturasDAO.getByReserva(idReserva);//se obtiene la factura por id de reserva
+    // Método que obtiene una factura asociada a una reserva o la crea si no existe
+    public Factura obtenerOCrearFactura(int idReserva) {
+        // Buscar si ya existe una factura para la reserva dada
+        Factura facturaExistente = facturasDAO.getByReserva(idReserva);
 
         if (facturaExistente != null) {
-            return construirFacturaDTO(idReserva); //si la factura existe se construye un DTO y se retorna
+            // Si existe la factura, se devuelve tal cual está en la base de datos
+            return facturaExistente;
         }
-        //en caso de que la factura no exista
-        //se obtiene la reserva por id
+
+        // Obtener la reserva con el id proporcionado
         Reserva reserva = reservasDAO.getById(idReserva);
-        if (reserva == null) return null;//si la reserva no existe se retorna null
-        
-        //se calculan los minutos que se uso la consola y se almacena ne la variable minutosConsumidos
+        if (reserva == null) return null; // Si no existe la reserva, retornar null
+
+        // Calcular los minutos consumidos entre la hora de inicio y finalización de la reserva
         long minutosConsumidos = ChronoUnit.MINUTES.between(reserva.getHora_inicio(), reserva.getHora_finalizacion());
-        
-        //se obtiene la consola por id
+
+        // Obtener la consola asociada a la reserva
         Consola consola = consolasDAO.getById(reserva.getId_consola());
-        if (consola == null) return null;//si la consola no existe se retorna null
-        
-        //se obtiene el tipo por id
+        if (consola == null) return null; // Si no existe la consola, retornar null
+
+        // Obtener el tipo de consola para saber el precio por hora
         Tipo tipo = tiposDAO.getById(consola.getId_tipo());
-        if (tipo == null) return null;//si el tipo no existe se retorna null
+        if (tipo == null) return null; // Si no existe el tipo, retornar null
 
-        
-        double precioHora = tipo.getPrecio_hora();//se obtiene el precio por hora de la consola
-        double precioPorMinuto = precioHora / 60.0;//se calcula el precio de cada uno de los minutos
-        double subtotalConsola = minutosConsumidos * precioPorMinuto;//se calcula el subtotal del uso de la consola
+        // Obtener el precio por hora y calcular precio por minuto
+        double precioHora = tipo.getPrecio_hora();
+        double precioPorMinuto = precioHora / 60.0;
+        // Calcular subtotal de la consola basado en minutos consumidos
+        double subtotalConsola = minutosConsumidos * precioPorMinuto;
 
+        // Calcular el subtotal de los productos consumidos en la reserva
+        Double subtotalProductos = consumosDAO.calcularTotalPorReserva(idReserva);
+        if (subtotalProductos == null) subtotalProductos = 0.0; // Si no hay consumos, subtotal es cero
 
+        // Calcular el total sumando consola y productos
+        double total = subtotalConsola + subtotalProductos;
 
-        Double subtotalProductos = consumosDAO.calcularTotalPorReserva(idReserva);//se declara la variable subtotalProductos y se inicializa en 0
-        if(subtotalProductos==null){
-            subtotalProductos=0.0;
-        }
-        
-        double total=subtotalConsola+subtotalProductos;
-        
-        
-        // Primero insertamos la factura sin detalle
-        int idFactura = facturasDAO.post(
-            idReserva,
-            (int) minutosConsumidos,
-            total
-        );
+        // Guardar la factura nueva con los datos calculados y obtener su id
+        int idFactura = facturasDAO.post(idReserva, (int) minutosConsumidos, subtotalProductos, subtotalConsola, total);
 
-        if (idFactura == -1) return null;//si la factura no se creo se retorna null
+        if (idFactura == -1) return null; // Si la inserción falla, retornar null
 
-        // Ahora agregamos los detalles de productos y calculamos subtotalProductos
-//        for (Consumo consumo : listaConsumos) {
-//            Producto producto = productosDAO.getById(consumo.getId_producto());//se obtiene el producto del consumo
-//            if (producto == null) continue;//si el producto no existe se pasa al siguiente
-//
-//            double precioUnitario = producto.getPrecio();//se obtiene el precio unitario del producto
-//            double subtotal = precioUnitario * consumo.getCantidad();//se calcula el subtotal
-//            subtotalProductos += subtotal;//se suma a la variable subtotal productos el subtotal de ese producto
-//
-//            detalleDAO.insertar(//se inserta en los detalles de consumos de factura el consumo
-//                idFactura,
-//                producto.getId(),
-//                producto.getNombre(),
-//                consumo.getCantidad(),
-//                precioUnitario,
-//                subtotal
-//            );
-//        }
-
-//        double total = subtotalConsola + subtotalProductos;//se calcula el total a pagar por la resevra
-
-        // Actualizamos la factura con los subtotales reales
-//        facturasDAO.actualizarTotales(idFactura, subtotalProductos, total);
-        //se retorna la facturaDTO
-        
-        Factura facGen=facturasDAO.getById(idFactura);
-        return new FacturaDTO(idFactura, facGen.getMinutos(), subtotalConsola, subtotalProductos, total);
-    }
-
-    public FacturaDTO construirFacturaDTO(int idReserva) {
-        //se obtiene la factura por ID de reserva
-        Factura factura = facturasDAO.getByReserva(idReserva);
-        if (factura == null) return null;//si la factura no existe se retorna null
-
-        //se obtienen los datos de la factura
-        int minutosConsumidos = factura.getMinutos();
-        Reserva reserva=reservasDAO.getById(factura.getIdReserva());
-        Consola consola=consolasDAO.getById(reserva.getId_consola());
-        Tipo tipo=tiposDAO.getById(consola.getId_tipo());
-        double subtotalConsola = (tipo.getPrecio_hora()/60)*factura.getMinutos();
-        
-        
-        double subtotalConsumos = consumosDAO.calcularTotalPorReserva(idReserva);
-        double total = factura.getTotal();
-
-        // Construimos y devolvemos el DTO
-        return new FacturaDTO(
-            factura.getId(),
-            minutosConsumidos,
-            subtotalConsola,
-            subtotalConsumos,
-            total
-        );
+        // Retornar la factura recién creada obtenida por su id
+        return facturasDAO.getById(idFactura);
     }
     
+    // Método para cobrar una factura dada su id y el método de pago usado
     public boolean cobrarFactura(int idFactura, int idMetodoPago) {
-        //se obtiene la factura por id
+        // Obtener la factura por su id
         Factura factura = facturasDAO.getById(idFactura);
-        if (factura == null) return false;//si no se encuentra la factura se retorna falso
+        if (factura == null) return false; // Si no existe la factura, retornar falso
 
-        int idReserva = factura.getIdReserva();//se obtiene el id de la reserva
-
-        // se obtiene la reserva por ID
+        // Obtener la reserva asociada a la factura
+        int idReserva = factura.getIdReserva();
         Reserva reserva = reservasDAO.getById(idReserva);
-        if (reserva == null) return false;//en caso de no encontrarse la reserva se retorna falso
-        
-        // se cambia el estado de la reserva a 4(pagada)
-        int nuevoEstado=4;
-        reserva.setId_estado_reserva(nuevoEstado);
-        //se alcualiza la reserva
-        boolean reservaActualizada = reservasDAO.put(reserva);
-        if (!reservaActualizada) return false;//si la reserva no se actualiza correctamente se retorna falso
+        if (reserva == null) return false; // Si no existe la reserva, retornar falso
 
-        // Registrar el pago
+        // Cambiar el estado de la reserva a 'pagada'
+        reserva.setId_estado_reserva(4);
+        // Actualizar la reserva en la base de datos
+        boolean reservaActualizada = reservasDAO.put(reserva);
+        if (!reservaActualizada) return false; // Si no se pudo actualizar, retornar falso
+
+        // Registrar el pago en la base de datos con el id de factura y método de pago
         PagosDAO pagosDAO = new PagosDAO();
-        //se registra el pago
-        boolean pagoRegistrado = pagosDAO.post(idFactura, idMetodoPago);
-        return pagoRegistrado;//se retorna la variabel pagoRegistrado
+        return pagosDAO.post(idFactura, idMetodoPago); // Retorna true si se registra el pago correctamente
     }
 
 }

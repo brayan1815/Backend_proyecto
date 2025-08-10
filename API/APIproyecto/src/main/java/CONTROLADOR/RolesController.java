@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package CONTROLADOR;
 
 import MODELO.Rol;
@@ -12,16 +8,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-/**
- *
- * @author Brayan Estiven
- */
-@Path("/roles")
+@Path("/roles") //ruta base para acceder a los roles
 public class RolesController {
-    RolesDAO dao=new RolesDAO();
+    
+    //instancia de RolesDAO para manejar operaciones con la base de datos
+    RolesDAO dao = new RolesDAO();
+    
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) //indica que la respuesta se devuelve en formato JSON
     public List<Rol> obtenerUsuarios() {
+        //obtiene la lista de todos los roles desde la base de datos
         return dao.get();
     }
 }

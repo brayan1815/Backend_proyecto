@@ -16,7 +16,7 @@ public class TokenUtils {
         return JWT.create()//crea un nuevo token
                 .withSubject(correo)//asigan el sujeto del token
                 .withIssuedAt(new Date())//fecha de creacion del token
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10*60*1000)) //fecha de expiracion(10 minutos desde ahora)
+                .withExpiresAt(new Date(System.currentTimeMillis() + 120*60*1000)) //fecha de expiracion(120 minutos desde ahora)
                 .sign(Algorithm.HMAC256(SECRET));//firma el token con la palabra secreta
     }
     //metodo para verificar si el token es valido

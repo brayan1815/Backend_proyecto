@@ -1,4 +1,3 @@
-
 package CONTROLADOR;
 
 import MODELO.Imagen;
@@ -21,56 +20,56 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-@Path("/imagenes")
+@Path("/imagenes")//se define la ruta base para los endpoints de esta clase
 public class ImagenesController {
 
-    // Se declara una variable para guardar la ruta donde se almacenarán las imágenes físicamente.
+    //se declara la variable para almacenar la ruta física donde se guardarán las imágenes
     private final String carpeta;
 
     public ImagenesController() {
-        //se define la ruta de almacenamiento de imágenes y crea la carpeta si no existe.
+        //se define la ruta física para almacenar las imágenes
         carpeta = "C:/imagenes-api/";
+        
+        //se verifica si la carpeta existe, en caso contrario se crea
         File dir = new File(carpeta);
         if (!dir.exists()) {
-            dir.mkdirs(); // 🔧 Crea carpeta si no existe
+            dir.mkdirs();//crea la carpeta si no existe
         }
     }
     
-
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearImagen(
-        @FormDataParam("archivo") InputStream inputStream,
-        @FormDataParam("archivo") FormDataContentDisposition fileDetail 
-        //se captura el contenido del archivo que se envia e informacion del archivo como nombre o detalles 
+        @FormDataParam("archivo") InputStream inputStream,//se recibe el flujo de datos del archivo
+        @FormDataParam("archivo") FormDataContentDisposition fileDetail //se recibe información adicional del archivo como nombre y tipo
     ) {
         try {
-            // Crear carpeta si no existe
+            //se asegura que la carpeta de destino exista
             File dir = new File(carpeta);
-            if (!dir.exists()) dir.mkdirs();//se asegura nuevamente de que el archivo exista 
+            if (!dir.exists()) dir.mkdirs();
 
-            //Crea un nombre único para el archivo con UUID para evitar duplicados.
+            //se genera un nombre único para el archivo usando UUID para evitar duplicados
             String nombreArchivo = UUID.randomUUID().toString() + "_" + fileDetail.getFileName();
-            // Guarda la ruta completa (para guardarlo físicamente) y la relativa (para guardar en la BD).
+            
+            //se define la ruta completa en disco y la ruta relativa para base de datos
             String rutaCompleta = carpeta + nombreArchivo;
             String rutaRelativa = "imagenes/" + nombreArchivo;
             
-            System.out.println("RUTA COMPLETAAAAAAAAAAAA: "+rutaCompleta);//se imprime la ruta completa donde se gaurdara la imagen
-
-            // se copia el archivo desde el inputStream a la ruta física del servidor.
+           
+            //se guarda físicamente el archivo en el servidor
             Files.copy(inputStream, Paths.get(rutaCompleta), StandardCopyOption.REPLACE_EXISTING);
 
-            // Llama al DAO para guardar la ruta relativa en la base de datos y obtener el ID generado.
+            //se guarda la ruta relativa en la base de datos y se obtiene el ID de la imagen
             ImagenesDAO dao = new ImagenesDAO();
             int id = dao.post(rutaRelativa);
             
-            // Devuelve una respuesta 201 CREATED con un JSON que contiene el ID y la ruta de la imagen.
+            //se retorna respuesta con código 201 CREATED y datos de la imagen guardada
             return Response.status(Response.Status.CREATED)
                 .entity("{\"id_imagen\":" + id + ", \"ruta\":\"" + rutaRelativa + "\"}")
                 .build();
         } catch (IOException e) {
-            //en caso de error de imprime y se devuelve un codigo 500
+            //en caso de error se imprime el stacktrace y se retorna un código 500 con mensaje de error
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error al guardar imagen").build();
@@ -81,17 +80,18 @@ public class ImagenesController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerImagenPorId(@PathParam("id") int id) {
-        //metodo para obtener la imagen por ID
-        ImagenesDAO dao = new ImagenesDAO();
-        //Busca la imagen con el ID proporcionado.
-        Imagen imagen = dao.getById(id);
+        //se crea el método para obtener una imagen por su ID
         
-        // Si encuentra la imagen, devuelve su ID y ruta. Si no, envía un 404 NOT FOUND.
+        ImagenesDAO dao = new ImagenesDAO();//instancia del DAO
+        Imagen imagen = dao.getById(id);//se obtiene la imagen con el ID proporcionado
+        
+        //si la imagen existe se retorna su información en formato JSON
         if (imagen != null) {
-            String ruta = imagen.getRuta(); // ya es relativa: "imagenes/nombre.png"
+            String ruta = imagen.getRuta();//se obtiene la ruta relativa
             String json = String.format("{\"id\":%d,\"ruta\":\"%s\"}", imagen.getId(), ruta);
             return Response.ok(json).build();
         } else {
+            //si no se encuentra la imagen se retorna un código 404 con mensaje de error
             return Response.status(Response.Status.NOT_FOUND)
                 .entity("Imagen no encontrada").build();
         }

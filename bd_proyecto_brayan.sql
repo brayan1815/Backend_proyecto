@@ -28,12 +28,12 @@ CREATE TABLE permisos_roles (
 INSERT INTO permisos_roles (id_rol, id_permiso) VALUES (2, 1);
 
 CREATE TABLE estados_usuarios(
-	id int auto_increment primary key,
+    id int auto_increment primary key,
     estado varchar(50)
 );
 
-INSERT INTO estados_usuarios(estado)VALUES ('Activo');
-INSERT INTO estados_usuarios(estado)VALUES ('Inactivo');
+INSERT INTO estados_usuarios(estado) VALUES ('Activo');
+INSERT INTO estados_usuarios(estado) VALUES ('Inactivo');
 
 -- USUARIOS
 CREATE TABLE usuarios (
@@ -46,7 +46,7 @@ CREATE TABLE usuarios (
     id_rol INT,
     id_estado INT,
     FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL,
-    FOREIGN KEY (id_estado)REFERENCES estados_usuarios(id) ON DELETE SET NULL
+    FOREIGN KEY (id_estado) REFERENCES estados_usuarios(id) ON DELETE SET NULL
 );
 
 -- IMÁGENES
@@ -56,8 +56,8 @@ CREATE TABLE imagenes (
 );
 
 CREATE TABLE estados_tipos(
-id INT AUTO_INCREMENT PRIMARY KEY,
-estado VARCHAR(50)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    estado VARCHAR(50)
 );
 
 INSERT INTO estados_tipos(estado) VALUES ('Activo');
@@ -140,12 +140,14 @@ CREATE TABLE reservas (
     FOREIGN KEY (id_estado_reserva) REFERENCES estados_reservas(id) ON DELETE SET NULL
 );
 
--- FACTURAS (modificada)
+-- FACTURAS (con subtotales en DECIMAL(8,2))
 CREATE TABLE facturas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT UNIQUE,
     minutos INT,
-    total DECIMAL(7,2),
+    subtotal_consumos DECIMAL(8,2) DEFAULT 0,
+    subtotal_consola DECIMAL(8,2) DEFAULT 0,
+    total DECIMAL(8,2) DEFAULT 0,
     FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
 );
 
@@ -181,21 +183,30 @@ CREATE TABLE pagos (
 INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol,id_estado) VALUES
 (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1,1); -- Brayan123.
 
-select * from consolas;
+-- Ejemplo de consultas y datos para probar
+select * from facturas;
 SELECT * FROM consolas WHERE numero_serie='asd123';
 
-select * from estados_productos;
+select * from tipos;
 SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 3;
 
 use bd_proyecto_brayan;
--- RESERVA EN PROCESO:
--- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
--- VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 
--- RESERVA FIANLIZADA:
+-- RESERVA EN PROCESO:
+INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
+VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
+
+-- RESERVA EN PROCESO:
+INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
+VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
+
+-- RESERVA FINALIZADA:
 -- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
-select * from reservas;
+
+-- UPDATE reservas SET hora_finalizacion = '2025-08-09 19:15:45' WHERE id=2;
+
+select * from facturas;
 SELECT 
     r.id,
     u.documento AS documentoUsuario,
@@ -213,5 +224,4 @@ INNER JOIN
 ORDER BY 
     r.hora_inicio ASC;
     
-SELECT * FROM usuarios;
-
+SELECT * FROM reservas;

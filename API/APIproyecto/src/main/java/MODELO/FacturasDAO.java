@@ -1,134 +1,139 @@
-
 package MODELO;
 
 import BD.ConexionBD;
 import static BD.ConexionBD.getConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class FacturasDAO {
-    public int post(int idReserva, int minutos,double total) {
-        //se crea el metodo para crear una nueva factura, esye metodo devuelve el id despues de crearla
-        int idGenerado = -1;//se declara la variable id generado y se inicializa en -1
 
-        try (Connection conn = getConnection()) {//se abre la conexiona a la base de datos
-            //se crea la consulra SQL
-            String sql = "INSERT INTO facturas (id_reserva, minutos, total) VALUES (?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);//se prepara la consulta
-                                                                                       //esta retornara las keys generadas
-             
-            //re reemplazan los aprametros de la consulta
+    // Método para insertar una nueva factura en la base de datos
+    // Recibe id de reserva, minutos usados, subtotales y total
+    // Retorna el id generado de la factura insertada, o -1 si falla
+    public int post(int idReserva, int minutos, double subtotalConsumos, double subtotalConsola, double total) {
+        int idGenerado = -1; // valor por defecto si no se genera id
+        String sql = "INSERT INTO facturas (id_reserva, minutos, subtotal_consumos, subtotal_consola, total) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Asignar valores a los parámetros de la consulta
             stmt.setInt(1, idReserva);
             stmt.setInt(2, minutos);
-            stmt.setDouble(3, total);
+            stmt.setDouble(3, subtotalConsumos);
+            stmt.setDouble(4, subtotalConsola);
+            stmt.setDouble(5, total);
 
-            int rows = stmt.executeUpdate();//se ejecuta la consulta
+            int rows = stmt.executeUpdate(); // ejecutar la inserción
 
-            if (rows > 0) {//si se afectaron mas de 0 columnas
-                //se obtienen las keys generadas
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {//si hay keys generadas
-                    idGenerado = generatedKeys.getInt(1);//se le asigna a la variable idGenerado la primera key generada
+            if (rows > 0) {
+                // Obtener la clave generada (id) de la factura insertada
+                ResultSet keys = stmt.getGeneratedKeys();
+                if (keys.next()) {
+                    idGenerado = keys.getInt(1); // asignar id generado
                 }
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();//si ocurre un error se imprime
+            e.printStackTrace(); // mostrar error en consola si ocurre excepción
         }
-
-        return idGenerado;//se retorna el id generado
+        return idGenerado; // retornar id generado o -1 si hubo error
     }
 
+    // Método para obtener una factura por el id de la reserva
+    // Retorna un objeto Factura con todos los datos, o null si no existe
     public Factura getByReserva(int idReserva) {
-        //se obtiene la factura por el id de reservas
-        Factura factura = null;//se declara la variable factura y se inicializa en null
+        Factura factura = null;
+        String sql = "SELECT * FROM facturas WHERE id_reserva = ?";
 
-        try (Connection conn = ConexionBD.getConnection()) {//se abre la conexion a la base de datos
-            String sql = "SELECT * FROM facturas WHERE id_reserva = ?";//e crea la consulta SQL
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
-            stmt.setInt(1, idReserva);//se reemplazan los parametros de la cosnulta
-            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idReserva); // asignar parámetro idReserva
+            ResultSet rs = stmt.executeQuery(); // ejecutar consulta
 
             if (rs.next()) {
-                //si la consulta trajo resulatdos se crea un nuevo objeto Factura y se asigna a la variable factura
+                // Crear objeto Factura y asignar valores desde la base de datos
                 factura = new Factura();
                 factura.setId(rs.getInt("id"));
                 factura.setIdReserva(rs.getInt("id_reserva"));
                 factura.setMinutos(rs.getInt("minutos"));
+                factura.setSubtotalConsumos(rs.getDouble("subtotal_consumos"));
+                factura.setSubtotalConsola(rs.getDouble("subtotal_consola"));
                 factura.setTotal(rs.getDouble("total"));
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();//si ocurre algun error se imprime
+            e.printStackTrace(); // mostrar error si hay excepción SQL
         }
-
-        return factura;//se retorna la facrtura
+        return factura; // retornar factura o null si no se encontró
     }
-    
+
+    // Método para obtener una factura por su id
+    // Retorna objeto Factura con todos los datos o null si no existe
     public Factura getById(int idFactura) {
-        //se crea el metodo para obtener la factura por el id 
-        Factura factura = null;//se declara la variable fatura y se inicializa como null
+        Factura factura = null;
+        String sql = "SELECT * FROM facturas WHERE id = ?";
 
-        try (Connection conn = ConexionBD.getConnection()) {//se abre la conexiona a la base de datos
-            String sql = "SELECT * FROM facturas WHERE id = ?";//se ejecuta la conuslta SQL
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
-            stmt.setInt(1, idFactura);//se reemplazan los parametros de la consulta
-            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idFactura); // asignar parámetro idFactura
+            ResultSet rs = stmt.executeQuery(); // ejecutar consulta
 
             if (rs.next()) {
-                //si hay resultados se crea un nuevo objeto Factura y se asignaa la variable factura
+                // Crear objeto Factura y asignar los datos obtenidos
                 factura = new Factura();
                 factura.setId(rs.getInt("id"));
                 factura.setIdReserva(rs.getInt("id_reserva"));
                 factura.setMinutos(rs.getInt("minutos"));
+                factura.setSubtotalConsumos(rs.getDouble("subtotal_consumos"));
+                factura.setSubtotalConsola(rs.getDouble("subtotal_consola"));
                 factura.setTotal(rs.getDouble("total"));
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();//si ocurre un error se imprime
+            e.printStackTrace(); // mostrar error si ocurre excepción
         }
-
-        return factura;//se retorna la factura
+        return factura; // retornar factura o null si no existe
     }
-    
-    //actualiza los totales de la factura si hubo algún cambio
-    public void actualizarTotales(int idFactura, double subtotalConsumos, double total) {
-        try (Connection conn = getConnection()) {//se establece la conexion a la base de datos
-            //se crea la consulta SQL
-            String sql = "UPDATE facturas SET subtotal_consumos = ?, total = ? WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
-            stmt.setDouble(1, subtotalConsumos);//se reemplazan los parametros
-            stmt.setDouble(2, total);
-            stmt.setInt(3, idFactura);
-            stmt.executeUpdate();//se ejecuta la consulta
+
+    // Método para actualizar los subtotales y total de una factura existente
+    public void actualizarTotales(int idFactura, double subtotalConsumos, double subtotalConsola, double total) {
+        String sql = "UPDATE facturas SET subtotal_consumos = ?, subtotal_consola = ?, total = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Asignar valores a los parámetros de actualización
+            stmt.setDouble(1, subtotalConsumos);
+            stmt.setDouble(2, subtotalConsola);
+            stmt.setDouble(3, total);
+            stmt.setInt(4, idFactura);
+
+            stmt.executeUpdate(); // ejecutar actualización
+
         } catch (SQLException e) {
-            e.printStackTrace();//si ocurre un error se imprime 
+            e.printStackTrace(); // imprimir error si hay excepción
         }
     }
-    
-    public double calcularTotalPagos() {
-        //se crea el metodo para calcular el total de los pagos
-        double total = 0.0;//se declara la variable total y se inicializa en 0.0
 
-        try (Connection conn = ConexionBD.getConnection()) {//se abre la coenxion a la base de datos
-            
-            String sql = "SELECT SUM(total) FROM facturas;";//se crea la consulta SQL
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta
-            
-            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta
+    // Método que calcula el total acumulado de todos los pagos realizados
+    // Retorna la suma de la columna total en la tabla facturas
+    public double calcularTotalPagos() {
+        double total = 0.0;
+        String sql = "SELECT SUM(total) FROM facturas";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
             if (rs.next()) {
-                //si hay resultados se almacena en la variable total el primer resultado
-                total = rs.getDouble(1); 
+                total = rs.getDouble(1); // obtener suma total de pagos
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();//si ocurre un error se imprime
+            e.printStackTrace(); // mostrar error si ocurre excepción
         }
-
-        return total; //se retorna la variable total
+        return total; // retornar suma total
     }
-
 }

@@ -1,5 +1,6 @@
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\BD\ConexionBD.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Imagen.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\EstadosTiposController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Factura.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\MetodosPagoDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ReservaDTO.java
@@ -32,7 +33,6 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorConsola.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorReserva.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\FiltroJWT.java
-D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsolasServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ConsolasController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\TiposController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ReservasDAO.java
@@ -44,6 +44,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Usuario
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ReservasServices.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorProducto.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Secured.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadoTipo.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsolasDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ConsumosDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ProductosDAO.java
@@ -58,6 +59,7 @@ D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\Pago.ja
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadoConsola.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\ValidadorTipo.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\CORSFilter.java
+D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\MODELO\EstadoTipoDAO.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ImagenesController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\FacturasController.java
 D:\EVIDENCIAS SENA\Backend_proyecto\API\APIproyecto\src\main\java\CONTROLADOR\ReservasController.java

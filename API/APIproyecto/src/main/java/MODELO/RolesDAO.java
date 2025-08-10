@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package MODELO;
 
 import BD.ConexionBD;
@@ -12,53 +8,52 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Brayan Estiven
- */
 public class RolesDAO {
-    public List<Rol> get(){
-        List<Rol> lista = new ArrayList<>();
+    
+    // método para obtener todos los roles de la base de datos
+    public List<Rol> get() {
+        List<Rol> lista = new ArrayList<>(); // se crea la lista que almacenará los roles
         
-        try(Connection conn = ConexionBD.getConnection()){
-            String sql="SELECT id,rol FROM roles";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+        try (Connection conn = ConexionBD.getConnection()) { // se abre la conexión a la base de datos
+            String sql = "SELECT id, rol FROM roles"; // consulta SQL para obtener id y nombre del rol
+            PreparedStatement stmt = conn.prepareStatement(sql); // se prepara la consulta
+            ResultSet rs = stmt.executeQuery(); // se ejecuta la consulta y se obtiene el resultado
             
-            while(rs.next()){
+            while (rs.next()) { // se recorre cada fila del resultado
+                // se crea un objeto Rol con los datos obtenidos
                 Rol r = new Rol(
-                    rs.getInt("id"),
-                    rs.getString("rol")
+                    rs.getInt("id"), // se obtiene el id del rol
+                    rs.getString("rol") // se obtiene el nombre del rol
                 );
-                lista.add(r);
+                lista.add(r); // se agrega el rol a la lista
             }
-        }catch(SQLException e){
-            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace(); // en caso de error, se imprime la traza para depuración
         }
-        return lista;
+        
+        return lista; // se retorna la lista con todos los roles obtenidos
     }
     
+    // método para obtener un rol específico por su id
     public Rol getById(int id) {
-        Rol rol = null;
-
-        try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "SELECT id, rol FROM roles WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                rol = new Rol();
-                rol.setId(rs.getInt("id"));
-                rol.setRol(rs.getString("rol"));
+        Rol rol = null; // variable para almacenar el rol encontrado (o null si no existe)
+        
+        try (Connection conn = ConexionBD.getConnection()) { // se abre la conexión a la base de datos
+            String sql = "SELECT id, rol FROM roles WHERE id = ?"; // consulta SQL con parámetro para id
+            PreparedStatement stmt = conn.prepareStatement(sql); // se prepara la consulta
+            stmt.setInt(1, id); // se asigna el valor del id al parámetro
+            
+            ResultSet rs = stmt.executeQuery(); // se ejecuta la consulta
+            
+            if (rs.next()) { // si se encuentra un resultado
+                rol = new Rol(); // se crea un objeto Rol vacío
+                rol.setId(rs.getInt("id")); // se asigna el id obtenido
+                rol.setRol(rs.getString("rol")); // se asigna el nombre del rol obtenido
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // en caso de error, se imprime la traza para depuración
         }
-
-        return rol;
+        
+        return rol; // se retorna el rol encontrado o null si no existe
     }
-
 }

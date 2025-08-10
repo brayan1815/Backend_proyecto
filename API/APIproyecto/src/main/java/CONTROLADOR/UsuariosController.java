@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package CONTROLADOR;
 
 import MODELO.PasswordUtils;
@@ -24,19 +20,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
 @Path("/usuarios")
 public class UsuariosController {
-    
-    UsuariosServices services=new UsuariosServices();
-    UsuariosDAO dao=new UsuariosDAO();//se intancia el objeto de la clase UsuariosDAO
+    UsuariosDAO dao = new UsuariosDAO();//se instancia el objeto de la clase UsuariosDAO
     
     @Secured
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de obtener todos los usuarios de la base de datos
     public List<Usuario> obtenerUsuarios() {
-        return dao.get();//se llamada al metodo get de usuarisosDAO para retornar la lista de los usuarios
+        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios
+        //este método retorna todos los usuarios de la base de datos
+        return dao.get();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios
     }
     
     @Secured
@@ -44,24 +38,27 @@ public class UsuariosController {
     @Path("/con-rol")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuariosConCargo() {
-        List<UsuarioDTO> usuarios = dao.getConRol();
-        return Response.ok(usuarios).build();
+        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/con-rol
+        List<UsuarioDTO> usuarios = dao.getConRol();//se declara una lista de tipo UsuarioDTO en la que se almacena el retorno
+                                                    //del método getConRol de la clase UsuariosDAO
+        return Response.ok(usuarios).build();//se retorna una respuesta OK con la lista de usuarios
     }
     
     @Secured
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de obtener un usuario por su id en la base de datos
     public Response obtenerUsuarioPorId(@PathParam("id") int id) {
-        Usuario usuario = dao.getById(id);//se llama el metodo getById de usuarios DAO para obtener el usuario
-        if (usuario != null) 
-        {
-            return Response.ok(usuario).build();//si el usuario existe se retorna un codigo 200 y se retorna el usuario
-        } else 
-        {
-            //si el usuario no se encuentra se retorna un codigo 404 con un mensaje
-            return Response.status(Response.Status.NOT_FOUND).entity("Usuario no encontrado").build();
+        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/{id}
+        //este método recibe como parámetro en la URL el id del usuario a buscar
+        Usuario usuario = dao.getById(id);//se declara la variable usuario en la que se almacena el retorno del método getById
+                                          //de la clase UsuariosDAO
+        if (usuario != null) {//si el usuario existe
+            return Response.ok(usuario).build();//se retorna una respuesta OK junto con el usuario
+        } else {//si el usuario no existe
+            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+                           .entity("Usuario no encontrado")//con un mensaje de error
+                           .build();
         }   
     }
     
@@ -69,20 +66,17 @@ public class UsuariosController {
     @GET
     @Path("/correo/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de obtener el usuario por su correo en la base de datos
     public Response obtenerUsuarioPorCorreo(@PathParam("correo") String correo) {
-        UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase usuariosDAO
-        Usuario usuario = dao.getByCorreo(correo);//se llama el metodo getByCorreo de la clase usuariosDAO para
-                                                    //obtener el usuario
-
-        if (usuario != null) {
-            //si el usuario existe se retorna un codigo 200 y el objeto del usuario en formato JSON
-            return Response.ok(usuario).build();
-        } else {
-            //si el usuario no se encuentra se retorna un codigo 404 con un mensaje en formato JSON
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuario no encontrado\"}")
-                    .build();
+        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/correo/{correo}
+        UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
+        Usuario usuario = dao.getByCorreo(correo);//se declara la variable usuario en la que se almacena el retorno
+                                                  //del método getByCorreo de la clase UsuariosDAO
+        if (usuario != null) {//si el usuario existe
+            return Response.ok(usuario).build();//se retorna una respuesta OK con el usuario
+        } else {//si el usuario no existe
+            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+                           .entity("{\"error\":\"Usuario no encontrado\"}")//con un mensaje de error en formato JSON
+                           .build();
         }
     }
     
@@ -90,72 +84,76 @@ public class UsuariosController {
     @GET
     @Path("/documento/{documento}")
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de obtener el usuario por su documento
-    public Response obtenerUsuarioPorCorreo(@PathParam("documento") long documento) {
-        UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase usuariosDAO
-        Usuario usuario = dao.getByDocumento(documento);//se llama al metodo  getByDocumento de usuariod DAO para
-                                                        //obtener el usuariuo
-
-        if (usuario != null) {
-             //si el usuario existe se retorna un codigo 200 con el objeto usuario el formato JSON
-            return Response.ok(usuario).build();
-        } else {
-            //si el usuario no se encuentra se devuelve un codigo 404 con un mensaje de error el formato JSON
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuario no encontrado\"}")
-                    .build();
+    public Response obtenerUsuarioPorDocumento(@PathParam("documento") long documento) {
+        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/documento/{documento}
+        UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
+        Usuario usuario = dao.getByDocumento(documento);//se declara la variable usuario en la que se almacena el retorno
+                                                        //del método getByDocumento de la clase UsuariosDAO
+        if (usuario != null) {//si el usuario existe
+            return Response.ok(usuario).build();//se retorna una respuesta OK con el usuario
+        } else {//si el usuario no existe
+            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+                           .entity("{\"error\":\"Usuario no encontrado\"}")//con un mensaje de error en formato JSON
+                           .build();
         }
     }
     
-
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de validar las credenciales del usuario para iniciar sesion
     public Response login(Usuario usuario){
-        
-        UsuariosServices ser = new UsuariosServices();
-         try {
-             if (ser.login(usuario)) {
-                 // Si el login fue exitoso, generar el token
-                 String token = TokenUtils.generarToken(usuario.getCorreo());
-
-                 // Retornar el token en formato JSON
-                 return Response.ok("{\"token\":\"" + token + "\"}").build();
-             } else {
-                 return Response.status(Response.Status.UNAUTHORIZED)
-                                .entity("{\"error\":\"Credenciales incorrectas\"}")
-                                .build();
-             }
-         } catch (Exception e) {
-             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                            .entity("{\"error\":\"Ocurrió un error en el servidor\"}")
-                            .build();
-         }
+        //se crea el método que va a responder a las solicitudes POST del endpoint /usuarios/login
+        //este método valida las credenciales del usuario para iniciar sesión
+        UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
+        UsuariosServices ser = new UsuariosServices();//se instancia un objeto de la clase UsuariosServices
+        try {
+            if (ser.login(usuario)) {//si el login es exitoso
+                String token = TokenUtils.generarToken(usuario.getCorreo());//se genera el token usando el correo del usuario
+                return Response.ok("{\"token\":\"" + token + "\"}").build();//se retorna el token en formato JSON
+            } else {//si las credenciales no son correctas
+                Usuario user = dao.getByCorreo(usuario.getCorreo());//se busca el usuario por su correo
+                if (user != null) {//si el usuario existe
+                    if (user.getId_estado() != 1) {//si el usuario está deshabilitado
+                        return Response.status(Response.Status.UNAUTHORIZED)//se retorna un estado UNAUTHORIZED
+                                       .entity("{\"error\":\"Su cuenta se encuentra deshabilitada, si desea recuperarla pongase en contacto con un administrador\"}")
+                                       .build();
+                    }
+                }
+                return Response.status(Response.Status.UNAUTHORIZED)//se retorna un estado UNAUTHORIZED
+                               .entity("{\"error\":\"Credenciales incorrectas\"}")//con un mensaje de error
+                               .build();
+            }
+        } catch (Exception e) {//en caso de que ocurra un error en el servidor
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)//se retorna un estado INTERNAL_SERVER_ERROR
+                           .entity("{\"error\":\"Ocurrió un error en el servidor\"}")//con un mensaje de error
+                           .build();
+        }
     }
 
-    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de crear un nuevo usuario en la base de datos 
     public Response crearUsuario(Usuario usuario){
-        String error = ValidadorUsuario.validarUsuario(usuario, dao,false);
-        if (error != null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("{\"error\": \"" + error + "\"}")
+        //se crea el método que va a responder a las solicitudes POST del endpoint /usuarios
+        //este método crea un nuevo usuario en la base de datos
+        String error = ValidadorUsuario.validarUsuario(usuario, dao, false);//se valida el usuario antes de crearlo
+        if (error != null) {//si hay errores en la validación
+            return Response.status(Response.Status.BAD_REQUEST)//se retorna un estado BAD_REQUEST
+                           .entity("{\"error\": \"" + error + "\"}")//con el mensaje de error
                            .build();
         }
-        usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia()));
-        boolean creado = dao.post(usuario);//se lama al metodo post de usuariosDAO para insertar el nuevo usuario
+        usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia()));//se encripta la contraseña del usuario
+        boolean creado = dao.post(usuario);//se llama al método post de la clase UsuariosDAO para crear el usuario
 
-        if (creado) {
-            return Response.status(Response.Status.CREATED)
-                    .entity("{\"mensaje\": \"Usuario creado correctamente\"}").build();
-        } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"No se pudo crear el usuario\"}").build();
+        if (creado) {//si el usuario se crea correctamente
+            return Response.status(Response.Status.CREATED)//se retorna un estado CREATED
+                           .entity("{\"mensaje\": \"Usuario creado correctamente\"}")//con un mensaje de éxito
+                           .build();
+        } else {//si el usuario no se pudo crear
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)//se retorna un estado INTERNAL_SERVER_ERROR
+                           .entity("{\"error\": \"No se pudo crear el usuario\"}")//con un mensaje de error
+                           .build();
         }
     }
     
@@ -163,63 +161,50 @@ public class UsuariosController {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-        @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargra de actualizar un usuario en la base de datos
-    public Response actualizarUsuario(@PathParam("id") int id,Usuario usuario)
-    {
-        
-            usuario.setId(id); // Importante para validar bien el ID contra duplicados
-             
-
-            String error = ValidadorUsuario.validarUsuario(usuario, dao,true);
-            if (error != null) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                               .entity("{\"error\": \"" + error + "\"}")
-                               .build();
-            }
-//            usuario.setContrasenia(PasswordUtils.hashPassword(usuario.getContrasenia())); 
-            boolean actualizado = dao.put(id, usuario);//se llama el metod put de usuariosDAO para actualizar el
-                                                      //usuario
-            if (actualizado) 
-            {
-                //si el usuario se actualizo correctamente se devuleve un codigo 200 con un mensaje
-                return Response.status(Response.Status.CREATED)
-                    .entity("{\"mensaje\": \"Usuario actualizaco correctamente\"}").build();
-            } 
-            else 
-            {
-                //si el usuario no se encuentra o no hay cambios se retorna un codigo 404 con un mensaje
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"No se pudo actualizar el usuario\"}").build();
-            }   
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response actualizarUsuario(@PathParam("id") int id, Usuario usuario) {
+        //se crea el método que va a responder a las solicitudes PUT del endpoint /usuarios/{id}
+        //este método actualiza los datos de un usuario en la base de datos
+        usuario.setId(id);//se asigna el id recibido por parámetro al objeto usuario
+        String error = ValidadorUsuario.validarUsuario(usuario, dao, true);//se valida el usuario antes de actualizarlo
+        if (error != null) {//si hay errores en la validación
+            return Response.status(Response.Status.BAD_REQUEST)//se retorna un estado BAD_REQUEST
+                           .entity("{\"error\": \"" + error + "\"}")//con el mensaje de error
+                           .build();
+        }
+        boolean actualizado = dao.put(id, usuario);//se llama al método put de la clase UsuariosDAO para actualizar el usuario
+        if (actualizado) {//si el usuario se actualiza correctamente
+            return Response.status(Response.Status.CREATED)//se retorna un estado CREATED
+                           .entity("{\"mensaje\": \"Usuario actualizado correctamente\"}")//con un mensaje de éxito
+                           .build();
+        } else {//si el usuario no se pudo actualizar
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)//se retorna un estado INTERNAL_SERVER_ERROR
+                           .entity("{\"error\": \"No se pudo actualizar el usuario\"}")//con un mensaje de error
+                           .build();
+        }
     }
     
     @Secured
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    //se crea el metodo que se encargara de eliminar un usuario de la base de datos
     public Response eliminarUsuario(@PathParam("id") int id) {
-        
-        Usuario usuario=dao.getById(id);
-        
-        if (usuario == null) {
-            // Retorna error si el usuario no existe
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Usuario no encontrado\"}").build();
+        //se crea el método que va a responder a las solicitudes DELETE del endpoint /usuarios/{id}
+        //este método elimina un usuario de la base de datos
+        Usuario usuario = dao.getById(id);//se busca el usuario por su id
+        if (usuario == null) {//si el usuario no existe
+            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+                           .entity("{\"error\":\"Usuario no encontrado\"}")//con un mensaje de error
+                           .build();
         }
-        usuario.setId_estado(2);
-        
-        boolean eliminado = dao.put(id, usuario);
-    
-        if (eliminado) {
-            //si el usuario se elimina se retorna un codigo 200 con un mensaje
-            return Response.ok("{\"mensaje\":\"Usuario eliminado correctamente\"}").build();
-
-        } else {
-            //si el usuario no se encuentra se retorna un codigo 400 con un mensaje
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Ocurrio un error al intentar eliminar el usuario\"}").build();
+        usuario.setId_estado(2);//se cambia el estado del usuario a 2 (eliminado)
+        boolean eliminado = dao.put(id, usuario);//se actualiza el usuario con el nuevo estado
+        if (eliminado) {//si el usuario se elimina correctamente
+            return Response.ok("{\"mensaje\":\"Usuario eliminado correctamente\"}").build();//se retorna una respuesta OK
+        } else {//si el usuario no se pudo eliminar
+            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+                           .entity("{\"error\":\"Ocurrió un error al intentar eliminar el usuario\"}")//con un mensaje de error
+                           .build();
         }
     }
 }

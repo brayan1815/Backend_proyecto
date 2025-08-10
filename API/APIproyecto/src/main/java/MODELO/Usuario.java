@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package MODELO;
 
 /**
@@ -9,51 +5,109 @@ package MODELO;
  * @author Brayan Estiven
  */
 public class Usuario {
-    private int id;    
-    private long documento;
-    private String nombre;
-    private long telefono;
-    private String correo;
-    private String contrasenia;
-    private int id_rol;
-    private int id_estado;
-    
-    
-    public Usuario(){      
-    }
-    
-    public Usuario( int id, long documento,String nombre,long telefono, String correo,String contrasenia, int id_rol,int id_estado) {
-        this.id = id;
-        this.documento = documento;
-        this.nombre = nombre;
-        this.telefono=telefono;
-        this.correo=correo;
-        this.contrasenia=contrasenia;
-        this.id_rol=id_rol;
-        this.id_estado=id_estado;
+    // atributos que representan las propiedades de un usuario
+    private int id; // identificador único del usuario
+    private long documento; // número de documento del usuario
+    private String nombre; // nombre completo del usuario
+    private long telefono; // número de teléfono del usuario
+    private String correo; // correo electrónico del usuario
+    private String contrasenia; // contraseña del usuario
+    private int id_rol; // identificador del rol asignado al usuario
+    private int id_estado; // identificador del estado del usuario (activo, inactivo, etc.)
+
+    // constructor vacío para crear un objeto sin inicializar atributos
+    public Usuario() {
     }
 
-    public int getId(){return id;}
-    public void setId(int id){this.id=id;}
-    
-    public long getDocumento(){return documento;}
-    public void setDocumento(long documento){this.documento=documento;}
-    
-    public String getNombre(){return nombre;}
-    public void setNombre(String nombre){this.nombre=nombre;}
-    
-    public long getTelefono(){return telefono;}
-    public void setTelefono(long telefono){this.telefono=telefono;}
-    
-    public String getCorreo(){return correo;}
-    public void setCorreo(String correo){this.correo=correo;}
-    
-    public String getContrasenia(){return contrasenia;}
-    public void setContrasenia(String contrasenia){this.contrasenia=contrasenia;}
-    
-    public int getId_rol(){return id_rol;}
-    public void setId_rol(int id_rol){this.id_rol=id_rol;}
-    
-    public int getId_estado(){return id_estado;}
-    public void setId_estado(int id_estado){this.id_estado=id_estado;}
+    // constructor con parámetros para inicializar los atributos al crear el objeto
+    public Usuario(int id, long documento, String nombre, long telefono, String correo, String contrasenia, int id_rol, int id_estado) {
+        this.id = id; // asigna el id recibido al atributo id
+        this.documento = documento; // asigna el documento recibido
+        this.nombre = nombre; // asigna el nombre recibido
+        this.telefono = telefono; // asigna el teléfono recibido
+        this.correo = correo; // asigna el correo recibido
+        this.contrasenia = contrasenia; // asigna la contraseña recibida
+        this.id_rol = id_rol; // asigna el id del rol
+        this.id_estado = id_estado; // asigna el id del estado
+    }
+
+    // getter para obtener el id del usuario
+    public int getId() {
+        return id;
+    }
+
+    // setter para asignar un nuevo id al usuario
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    // getter para obtener el documento del usuario
+    public long getDocumento() {
+        return documento;
+    }
+
+    // setter para asignar un nuevo documento al usuario
+    public void setDocumento(long documento) {
+        this.documento = documento;
+    }
+
+    // getter para obtener el nombre del usuario
+    public String getNombre() {
+        return nombre;
+    }
+
+    // setter para asignar un nuevo nombre al usuario
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // getter para obtener el teléfono del usuario
+    public long getTelefono() {
+        return telefono;
+    }
+
+    // setter para asignar un nuevo teléfono al usuario
+    public void setTelefono(long telefono) {
+        this.telefono = telefono;
+    }
+
+    // getter para obtener el correo del usuario
+    public String getCorreo() {
+        return correo;
+    }
+
+    // setter para asignar un nuevo correo al usuario
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    // getter para obtener la contraseña del usuario
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    // setter para asignar una nueva contraseña al usuario
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
+    // getter para obtener el id del rol del usuario
+    public int getId_rol() {
+        return id_rol;
+    }
+
+    // setter para asignar un nuevo id de rol al usuario
+    public void setId_rol(int id_rol) {
+        this.id_rol = id_rol;
+    }
+
+    // getter para obtener el id del estado del usuario
+    public int getId_estado() {
+        return id_estado;
+    }
+
+    // setter para asignar un nuevo id de estado al usuario
+    public void setId_estado(int id_estado) {
+        this.id_estado = id_estado;
+    }
 }

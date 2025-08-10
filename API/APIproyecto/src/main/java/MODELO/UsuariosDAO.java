@@ -1,33 +1,28 @@
-
 package MODELO;
 
 import BD.ConexionBD;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-
+import java.sql.Connection;          // Para la conexión a la base de datos
+import java.sql.PreparedStatement;  // Para preparar consultas SQL con parámetros
+import java.sql.ResultSet;           // Para manejar resultados de consultas
+import java.sql.SQLException;        // Para manejo de excepciones SQL
+import java.util.ArrayList;          // Para crear listas dinámicas
+import java.util.List;               // Interfaz para listas
 
 public class UsuariosDAO {
-    //se crea el metodo que se encargara de obtener todos los usuarios de la base de datos
-    public List<Usuario> get(){
-        //se crea una lista vacia para almacenar los usuarios
-        List<Usuario> lista = new ArrayList<>();
-        
-        
-        try(Connection conn = ConexionBD.getConnection()){//se oobtiene la conexion a la base de datos usando 
-                                                          //la clase conexionBD
-                                                          
-            //se define la consulta SQL para obtener los usuarios
-            String sql="SELECT id,documento,nombre,telefono,correo,contrasenia,id_rol,id_estado FROM usuarios";
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
-            ResultSet rs = stmt.executeQuery();//se ejecuta la conuslta y se almacenan los resultados en la variable rs
-            
-            while(rs.next()){//se recorre cada fila del resultado
-                Usuario u = new Usuario(//se crea un objeto usuario con los datos de la fila
+
+    // Método que obtiene todos los usuarios de la base de datos como objetos Usuario
+    public List<Usuario> get() {
+        List<Usuario> lista = new ArrayList<>(); // Lista para almacenar usuarios obtenidos
+
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión a la BD
+            // Consulta SQL para obtener todos los usuarios con sus campos relevantes
+            String sql = "SELECT id,documento,nombre,telefono,correo,contrasenia,id_rol,id_estado FROM usuarios";
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
+            ResultSet rs = stmt.executeQuery(); // Ejecutar consulta y obtener resultados
+
+            while (rs.next()) { // Recorrer cada fila del resultado
+                // Crear un objeto Usuario con los datos obtenidos
+                Usuario u = new Usuario(
                     rs.getInt("id"),
                     rs.getLong("documento"),
                     rs.getString("nombre"),
@@ -37,42 +32,40 @@ public class UsuariosDAO {
                     rs.getInt("id_rol"),
                     rs.getInt("id_estado")
                 );
-                //se agrega a la lista el usuario
-                lista.add(u);
+                lista.add(u); // Agregar usuario a la lista
             }
-        }catch(SQLException e){
-            e.printStackTrace();//si ocurre un error se imprime en la consola
+        } catch (SQLException e) {
+            e.printStackTrace(); // Imprimir error en caso de excepción SQL
         }
-        return lista;//se retorna con los usuarios
+
+        return lista; // Retornar lista de usuarios
     }
-    
-    public List<UsuarioDTO> getConRol(){
-        //se crea una lista vacia para almacenar los usuarios
-        List<UsuarioDTO> lista = new ArrayList<>();
-        
-        
-        try(Connection conn = ConexionBD.getConnection()){//se oobtiene la conexion a la base de datos usando 
-                                                          //la clase conexionBD
-                                                          
-            //se define la consulta SQL para obtener los usuarios
-            String sql="SELECT \n" +
-                        "    u.id AS id,\n" +
-                        "    u.documento AS documento,\n" +
-                        "    u.nombre,\n" +
-                        "    u.telefono,\n" +
-                        "    u.correo,\n" +
-                        "    u.contrasenia,\n" +
-                        "    r.rol AS rol,\n" +
-                        "    u.id_estado\n" +
-                        "FROM \n" +
-                        "    usuarios u\n" +
-                        "INNER JOIN \n" +
-                        "    roles r ON u.id_rol = r.id;";
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
-            ResultSet rs = stmt.executeQuery();//se ejecuta la conuslta y se almacenan los resultados en la variable rs
-            
-            while(rs.next()){//se recorre cada fila del resultado
-                UsuarioDTO u = new UsuarioDTO(//se crea un objeto usuario con los datos de la fila
+
+    // Método que obtiene todos los usuarios junto con el nombre de su rol (UsuarioDTO)
+    public List<UsuarioDTO> getConRol() {
+        List<UsuarioDTO> lista = new ArrayList<>(); // Lista para almacenar DTOs de usuarios
+
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión
+            // Consulta SQL con INNER JOIN para obtener usuarios junto con nombre de rol
+            String sql = "SELECT \n" +
+                         "    u.id AS id,\n" +
+                         "    u.documento AS documento,\n" +
+                         "    u.nombre,\n" +
+                         "    u.telefono,\n" +
+                         "    u.correo,\n" +
+                         "    u.contrasenia,\n" +
+                         "    r.rol AS rol,\n" +
+                         "    u.id_estado\n" +
+                         "FROM \n" +
+                         "    usuarios u\n" +
+                         "INNER JOIN \n" +
+                         "    roles r ON u.id_rol = r.id;";
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
+            ResultSet rs = stmt.executeQuery(); // Ejecutar consulta
+
+            while (rs.next()) { // Recorrer resultados
+                // Crear UsuarioDTO con datos obtenidos
+                UsuarioDTO u = new UsuarioDTO(
                     rs.getInt("id"),
                     rs.getLong("documento"),
                     rs.getString("nombre"),
@@ -82,24 +75,27 @@ public class UsuariosDAO {
                     rs.getString("rol"),
                     rs.getInt("id_estado")
                 );
-                //se agrega a la lista el usuario
-                lista.add(u);
+                lista.add(u); // Agregar DTO a la lista
             }
-        }catch(SQLException e){
-            e.printStackTrace();//si ocurre un error se imprime en la consola
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción
         }
-        return lista;//se retorna con los usuarios
-    }
-    
-    public Usuario getById(int id) {
-        Usuario usuario = null;
-        try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+        return lista; // Retornar lista con usuarios y roles
+    }
+
+    // Método para obtener un usuario por su id
+    public Usuario getById(int id) {
+        Usuario usuario = null; // Objeto para almacenar el usuario encontrado
+
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión
+            String sql = "SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
+            stmt.setInt(1, id); // Asignar parámetro id
+            ResultSet rs = stmt.executeQuery(); // Ejecutar consulta
+
+            if (rs.next()) { // Si se encontró usuario
+                // Crear objeto Usuario con datos obtenidos
                 usuario = new Usuario(
                     rs.getInt("id"),
                     rs.getLong("documento"),
@@ -111,25 +107,26 @@ public class UsuariosDAO {
                     rs.getInt("id_estado")
                 );
             }
-        } catch (SQLException e) 
-        {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción
         }
-        return usuario;
+
+        return usuario; // Retornar usuario encontrado o null
     }
-    
-    public Usuario getByCorreo(String correo){
-        Usuario usuario=null; //se crea la variable usuario y se inicializa como null
-        
-        try(Connection conn=ConexionBD.getConnection()){//se instancia el objeto de la clase conexionBD y se hace
-                                                        //referencia al metodo getConnection
-            String sql="SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE correo = ?";//se hace la consulta sql
-            PreparedStatement stmt = conn.prepareStatement(sql);//se prepara la consulta SQL
-            stmt.setString(1, correo);//se envia el correo que se recibe como parametro a la consulta
-            ResultSet rs = stmt.executeQuery();//se ejecuta la consulta y se almacena el resultado en la variable rs
-            
-            if(rs.next()){ //se verifica que la consulta devuelva por lo menos un resultado y se procede a leerlos
-                usuario = new Usuario( //se crea el objeto usuario con los valores obtenidos de la base de datos
+
+    // Método para obtener un usuario por su correo electrónico
+    public Usuario getByCorreo(String correo) {
+        Usuario usuario = null; // Objeto para almacenar el usuario
+
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión
+            // Consulta para buscar usuario por correo
+            String sql = "SELECT id, documento, nombre, telefono, correo, contrasenia, id_rol,id_estado FROM usuarios WHERE correo = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
+            stmt.setString(1, correo); // Asignar parámetro correo
+            ResultSet rs = stmt.executeQuery(); // Ejecutar consulta
+
+            if (rs.next()) { // Si se encontró usuario
+                usuario = new Usuario(
                     rs.getInt("id"),
                     rs.getLong("documento"),
                     rs.getString("nombre"),
@@ -140,22 +137,24 @@ public class UsuariosDAO {
                     rs.getInt("id_estado")
                 );
             }
-        }catch (SQLException e){
-            e.printStackTrace();//si ocurre un error se imprime en lac consola
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción
         }
-        return usuario;//se retorna el objeto usuario, si no hay ninguno se retorna null
+
+        return usuario; // Retornar usuario o null
     }
-    
+
+    // Método para obtener un usuario por su número de documento
     public Usuario getByDocumento(long documento) {
-        Usuario usuario = null;
+        Usuario usuario = null; // Objeto para almacenar el usuario
 
-        try (Connection conn = ConexionBD.getConnection()) {
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión
             String sql = "SELECT * FROM usuarios WHERE documento = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, documento);
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
+            stmt.setLong(1, documento); // Asignar parámetro documento
+            ResultSet rs = stmt.executeQuery(); // Ejecutar consulta
 
-            if (rs.next()) {
+            if (rs.next()) { // Si se encontró usuario
                 usuario = new Usuario();
                 usuario.setId(rs.getInt("id"));
                 usuario.setDocumento(rs.getLong("documento"));
@@ -166,19 +165,19 @@ public class UsuariosDAO {
                 usuario.setId_rol(rs.getInt("id_rol"));
                 usuario.setId_estado(rs.getInt("id_estado"));
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Manejar excepción
         }
 
-        return usuario;
+        return usuario; // Retornar usuario o null
     }
 
-    
+    // Método para insertar un nuevo usuario en la base de datos
     public boolean post(Usuario usuario) {
-        try (Connection conn = ConexionBD.getConnection()) {
-            String sql = "INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol,id_estado) VALUES (?, ?, ?, ?, ?, ?,?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexionBD.getConnection()) { // Abrir conexión
+            // Consulta para insertar un nuevo usuario con todos sus campos
+            String sql = "INSERT INTO usuarios (documento, nombre, telefono, correo, contrasenia, id_rol,id_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql); // Preparar consulta
             stmt.setLong(1, usuario.getDocumento());
             stmt.setString(2, usuario.getNombre());
             stmt.setLong(3, usuario.getTelefono());
@@ -187,20 +186,21 @@ public class UsuariosDAO {
             stmt.setInt(6, usuario.getId_rol());
             stmt.setInt(7, usuario.getId_estado());
 
-            int filas = stmt.executeUpdate();
-            return filas > 0;
-        } catch (SQLException e) 
-        {
-            e.printStackTrace();
-            return false;
-        }   
+            int filas = stmt.executeUpdate(); // Ejecutar inserción y obtener filas afectadas
+            return filas > 0; // Retornar true si se insertó al menos un registro
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción
+            return false; // Retornar false en caso de error
+        }
     }
-    
+
+    // Método para actualizar los datos de un usuario existente (sin modificar contraseña)
     public boolean put(int id, Usuario usuario) {
         String sql = "UPDATE usuarios SET documento = ?, nombre = ?, telefono = ?, correo = ?, id_rol = ?,id_estado=? WHERE id = ?";
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) { // Abrir conexión y preparar consulta
 
+            // Asignar parámetros con los datos a actualizar
             stmt.setLong(1, usuario.getDocumento());
             stmt.setString(2, usuario.getNombre());
             stmt.setLong(3, usuario.getTelefono());
@@ -208,32 +208,28 @@ public class UsuariosDAO {
             stmt.setInt(5, usuario.getId_rol());
             stmt.setInt(6, usuario.getId_estado());
             stmt.setInt(7, id);
-            
 
-            int filas = stmt.executeUpdate();
-            return filas > 0;
+            int filas = stmt.executeUpdate(); // Ejecutar actualización
+            return filas > 0; // Retornar true si se actualizó algún registro
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            e.printStackTrace(); // Manejar excepción
+            return false; // Retornar false en caso de error
         }
     }
-    
+
+    // Método para eliminar un usuario por su id
     public boolean delete(int id) {
         String sql = "DELETE FROM usuarios WHERE id = ?";
         try (Connection conn = ConexionBD.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-        
-            stmt.setInt(1, id);
-            int filas = stmt.executeUpdate();
-            return filas > 0;      
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+             PreparedStatement stmt = conn.prepareStatement(sql)) { // Abrir conexión y preparar consulta
+
+            stmt.setInt(1, id); // Asignar parámetro id
+            int filas = stmt.executeUpdate(); // Ejecutar eliminación
+            return filas > 0; // Retornar true si se eliminó algún registro
+        } catch (SQLException e) {
+            e.printStackTrace(); // Manejar excepción
+            return false; // Retornar false en caso de error
         }
     }
-
-    
-    
 
 }
