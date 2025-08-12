@@ -57,12 +57,16 @@ public class ConsumosServices {
             int diferencia = nuevoConsumo.getCantidad() - consumoAnterior.getCantidad();//se calcula la diferencia
             producto.setCantidades_disponibles(producto.getCantidades_disponibles() - diferencia);//se descuentan las cantidades disponibles en el producto
             
-            //se valida el estado del producto segun su cantidad
-            if(producto.getCantidades_disponibles() == 0){
-                producto.setId_estado_producto(2);//producto sin stock
-            } else {
-                producto.setId_estado_producto(1);//producto con stock
+            
+            if(producto.getId_estado_producto()!=3){
+                //se valida el estado del producto segun su cantidad
+                if(producto.getCantidades_disponibles() == 0){
+                    producto.setId_estado_producto(2);//producto sin stock
+                } else {
+                    producto.setId_estado_producto(1);//producto con stock
+                }
             }
+            
             
             boolean productoActualizado = productoDAO.put(producto);//se actualiza el producto en la base de datos
             if(productoActualizado){
@@ -74,6 +78,13 @@ public class ConsumosServices {
         } else {//si la cantidad del nuevo consumo es menor o igual a la anterior
             int diferencia = consumoAnterior.getCantidad() - nuevoConsumo.getCantidad();//se calcula la diferencia
             producto.setCantidades_disponibles(producto.getCantidades_disponibles() + diferencia);//se suman las cantidades al stock del producto
+            
+            if(producto.getCantidades_disponibles()>0 && producto.getId_estado_producto()!=3){
+                producto.setId_estado_producto(1);
+            }else if(producto.getCantidades_disponibles()<=0 && producto.getId_estado_producto()!=3){
+                producto.setId_estado_producto(2);
+            }
+            
             
             boolean productoActualizado = productoDAO.put(producto);//se actualiza el producto
             if(productoActualizado){
