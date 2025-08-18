@@ -110,7 +110,14 @@ public class UsuariosController {
         try {
             if (ser.login(usuario)) {//si el login es exitoso
                 String token = TokenUtils.generarToken(usuario.getCorreo());//se genera el token usando el correo del usuario
-                return Response.ok("{\"token\":\"" + token + "\"}").build();//se retorna el token en formato JSON
+                String refreshToken=TokenUtils.generarRefreshToken(usuario.getCorreo());//se genera el toekn de refresco
+                
+                String json = "{"
+                        + "\"token\":\"" + token + "\","
+                        + "\"refreshToken\":\"" + refreshToken + "\""
+                        + "}";
+                
+                return Response.ok(json).build();//se retorna el token en formato JSON
             } else {//si las credenciales no son correctas
                 Usuario user = dao.getByCorreo(usuario.getCorreo());//se busca el usuario por su correo
                 if (user != null) {//si el usuario existe

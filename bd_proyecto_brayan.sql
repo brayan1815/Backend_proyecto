@@ -16,7 +16,53 @@ CREATE TABLE permisos (
     permiso VARCHAR(50)
 );
 
-INSERT INTO permisos(permiso) VALUES ('ver');
+-- Permisos Consolas
+INSERT INTO permisos (permiso) VALUES
+('consolas.index'),
+('consolas.crear'),
+('consolas.editar'),
+('consolas.eliminar');
+-- Permisos Consumos
+INSERT INTO permisos(permiso) VALUES
+('consumos.index'),
+('consumos.crear'),
+('consumos.editar'),
+('consumos.eliminar');
+-- Permiso Metodos Pago
+INSERT INTO permisos(permiso) VALUES
+('metodos.index'),
+('metodos.crear'),
+('metodos.editar'),
+('metodos.eliminar');
+-- Permisos Pagos
+INSERT INTO permisos(permiso) VALUES
+('pagos.crear');
+-- Permisos Productos
+INSERT INTO permisos(permiso) VALUES
+('productos.index'),
+('productos.crear'),
+('productos.editar'),
+('productos.eliminar');
+-- Permisos Reservas
+INSERT INTO permisos(permiso) VALUES
+('reservas.index'),
+('reservas.crear'),
+('reservas.eliminar');
+-- Permisos tipos
+INSERT INTO permisos(permiso) VALUES
+('tipos.index'),
+('tipos.crear'),
+('tipos.editar'),
+('tipos.eliminar');
+-- Permisos Usuarios
+INSERT INTO permisos(permiso) VALUES
+('usuarios.index'),
+('usuarios.crear'),
+('usuarios.editar'),
+('usuarios.eliminar');
+
+select * from permisos;
+
 
 CREATE TABLE permisos_roles (
     id_rol INT,
@@ -24,16 +70,32 @@ CREATE TABLE permisos_roles (
     FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL,
     FOREIGN KEY (id_permiso) REFERENCES permisos(id) ON DELETE SET NULL
 );
+-- Permisos Administrador
+INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
+(1,1),(1,2),(1,3),(1,4),
+(1,5),(1,6),(1,7),(1,8),
+(1,9),(1,10),(1,11),(1,12),
+(1,13),(1,14),(1,15),(1,15),(1,17),
+(1,18),(1,19),(1,20),
+(1,21),(1,22),(1,23),(1,24),
+(1,25),(1,26),(1,27),(1,28);
 
-INSERT INTO permisos_roles (id_rol, id_permiso) VALUES (2, 1);
+-- Permisos Usuario
+INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
+(2,1),
+(2,5),
+(2,14),
+(2,18),(2,19),(2,20);
+
+select * from permisos_roles;
 
 CREATE TABLE estados_usuarios(
-    id int auto_increment primary key,
+	id int auto_increment primary key,
     estado varchar(50)
 );
 
-INSERT INTO estados_usuarios(estado) VALUES ('Activo');
-INSERT INTO estados_usuarios(estado) VALUES ('Inactivo');
+INSERT INTO estados_usuarios(estado)VALUES ('Activo');
+INSERT INTO estados_usuarios(estado)VALUES ('Inactivo');
 
 -- USUARIOS
 CREATE TABLE usuarios (
@@ -46,7 +108,7 @@ CREATE TABLE usuarios (
     id_rol INT,
     id_estado INT,
     FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE SET NULL,
-    FOREIGN KEY (id_estado) REFERENCES estados_usuarios(id) ON DELETE SET NULL
+    FOREIGN KEY (id_estado)REFERENCES estados_usuarios(id) ON DELETE SET NULL
 );
 
 -- IMÁGENES
@@ -56,8 +118,8 @@ CREATE TABLE imagenes (
 );
 
 CREATE TABLE estados_tipos(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    estado VARCHAR(50)
+id INT AUTO_INCREMENT PRIMARY KEY,
+estado VARCHAR(50)
 );
 
 INSERT INTO estados_tipos(estado) VALUES ('Activo');
@@ -140,14 +202,12 @@ CREATE TABLE reservas (
     FOREIGN KEY (id_estado_reserva) REFERENCES estados_reservas(id) ON DELETE SET NULL
 );
 
--- FACTURAS (con subtotales en DECIMAL(8,2))
+-- FACTURAS (modificada)
 CREATE TABLE facturas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT UNIQUE,
     minutos INT,
-    subtotal_consumos DECIMAL(8,2) DEFAULT 0,
-    subtotal_consola DECIMAL(8,2) DEFAULT 0,
-    total DECIMAL(8,2) DEFAULT 0,
+    total DECIMAL(7,2),
     FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
 );
 
@@ -183,7 +243,6 @@ CREATE TABLE pagos (
 INSERT INTO usuarios(documento,nombre,telefono,correo,contrasenia,id_rol,id_estado) VALUES
 (1096512824,'Brayan Fernandez',3112114081,'brayan@gmail.com','$2a$10$XWDD07M527ov2C1.R/wYnedQuxhK2f5ACmUTysVXAE0Az752TKQqq',1,1); -- Brayan123.
 
--- Ejemplo de consultas y datos para probar
 select * from facturas;
 SELECT * FROM consolas WHERE numero_serie='asd123';
 
@@ -191,37 +250,14 @@ select * from tipos;
 SELECT SUM(subtotal) FROM consumos WHERE id_reserva = 3;
 
 use bd_proyecto_brayan;
-
 -- RESERVA EN PROCESO:
 INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 
--- RESERVA EN PROCESO:
-INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
-VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
-
--- RESERVA FINALIZADA:
+-- RESERVA FIANLIZADA:
 -- INSERT INTO reservas (id_usuario, id_consola,id_estado_reserva,hora_inicio,hora_finalizacion)
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
 
--- UPDATE reservas SET hora_finalizacion = '2025-08-09 19:15:45' WHERE id=2;
-
-select * from facturas;
-SELECT 
-    r.id,
-    u.documento AS documentoUsuario,
-    u.nombre AS nombreUsuario,
-    r.hora_inicio,
-    r.hora_finalizacion,
-    c.nombre AS nombreConsola,
-    r.id_estado_reserva AS idEstadoReserva
-FROM 
-    reservas r
-INNER JOIN 
-    usuarios u ON r.id_usuario = u.id
-INNER JOIN 
-    consolas c ON r.id_consola = c.id
-ORDER BY 
-    r.hora_inicio ASC;
     
 SELECT * FROM reservas;
+
