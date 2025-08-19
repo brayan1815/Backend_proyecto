@@ -46,6 +46,18 @@ public class ReservasController {
     }
     
     @GET
+    @Path("/detalle/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerReservasConDetalleByUser(@PathParam("id") int id) {
+        //se crea el método que va a responder a la solicitud GET del endpoint /reservas/detallle/id
+        
+        ReservasDAO dao = new ReservasDAO();//se crea una instancia de la clase ReservasDAO
+        List<ReservaDTO> reservas = dao.getAllConInfoByUser(id);//se crea una lista de tipo ReservaDTO en la cual se almacenará
+                                                        //el retorno del método getAllConInfoByUser de la clase ReservasDAO
+        return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista de reservas
+    }
+    
+    @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerReservaPorId(@PathParam("id") int id) {

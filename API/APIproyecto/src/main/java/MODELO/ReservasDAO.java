@@ -111,6 +111,48 @@ public class ReservasDAO {
 
         return lista; // retornar lista con info extendida
     }
+    
+    // método que obtiene todas las reservas con información extendida para el usuario
+    public List<ReservaDTO> getAllConInfoByUser(int id) {
+        List<ReservaDTO> lista = new ArrayList<>(); // lista para almacenar objetos ReservaDTO
+
+        try (Connection conn = ConexionBD.getConnection()) { // abrir conexión
+            // consulta SQL que une reservas, usuarios y consolas para obtener información combinada
+            String sql = "SELECT \n" +
+                        "	r.id,u.documento AS documentoUsuario,\n" +
+                        "    u.nombre AS nombreUsuario,r.hora_inicio,\n" +
+                        "    r.hora_finalizacion,\n" +
+                        "    c.nombre AS nombreConsola,\n" +
+                        "    r.id_estado_reserva AS idEstadoReserva\n" +
+                        "    FROM reservas r\n" +
+                        "		INNER JOIN usuarios u ON r.id_usuario = u.id\n" +
+                        "		INNER JOIN consolas c ON r.id_consola = c.id\n" +
+                        "		WHERE r.id_usuario=?\n" +
+                        "		ORDER BY r.hora_inicio ASC ;";
+            PreparedStatement stmt = conn.prepareStatement(sql); // preparar consulta
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery(); // ejecutar consulta
+
+            while (rs.next()) { // recorrer resultados
+                // crear objeto ReservaDTO con los datos obtenidos
+                ReservaDTO reserva = new ReservaDTO(
+                    rs.getInt("id"),
+                    rs.getLong("documentoUsuario"),
+                    rs.getString("nombreUsuario"),
+                    rs.getTimestamp("hora_inicio").toLocalDateTime(),
+                    rs.getTimestamp("hora_finalizacion").toLocalDateTime(),
+                    rs.getString("nombreConsola"),
+                    rs.getInt("idEstadoReserva")
+                );
+                lista.add(reserva); // agregar objeto a la lista
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // manejo de errores
+        }
+
+        return lista; // retornar lista con info extendida
+    }
+    
 
     // método para insertar una nueva reserva en la base de datos
     public boolean post(Reserva reserva) {
