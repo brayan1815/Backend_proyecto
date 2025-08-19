@@ -1,6 +1,7 @@
 package CONTROLADOR;
 
 import MODELO.PasswordUtils;
+import MODELO.PermisosDAO;
 import MODELO.Secured;
 import MODELO.TokenUtils;
 import MODELO.Usuario;
@@ -106,15 +107,18 @@ public class UsuariosController {
         //se crea el método que va a responder a las solicitudes POST del endpoint /usuarios/login
         //este método valida las credenciales del usuario para iniciar sesión
         UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
+        PermisosDAO permisosDao=new PermisosDAO();
         UsuariosServices ser = new UsuariosServices();//se instancia un objeto de la clase UsuariosServices
         try {
             if (ser.login(usuario)) {//si el login es exitoso
+                Usuario user=dao.getByCorreo(usuario.getCorreo());
                 String token = TokenUtils.generarToken(usuario.getCorreo());//se genera el token usando el correo del usuario
                 String refreshToken=TokenUtils.generarRefreshToken(usuario.getCorreo());//se genera el toekn de refresco
-                
+                List<String> permisos=permisosDao.getPermisosByRol(user.getId_rol());
                 String json = "{"
                         + "\"token\":\"" + token + "\","
-                        + "\"refreshToken\":\"" + refreshToken + "\""
+                        + "\"refreshToken\":\"" + refreshToken + "\","
+                        + "\"permisos\":\"" + permisos + "\""
                         + "}";
                 
                 return Response.ok(json).build();//se retorna el token en formato JSON

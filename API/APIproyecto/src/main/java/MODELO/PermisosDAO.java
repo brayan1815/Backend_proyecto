@@ -24,7 +24,7 @@ public class PermisosDAO {
             ResultSet rs = stmt.executeQuery(); // se ejecuta la consulta y se obtiene el resultado
 
             while (rs.next()) { // mientras haya registros en el resultado
-                permisos.add(rs.getString("permiso")); // se agrega el permiso a la lista
+                permisos.add(""+rs.getString("permiso")+""); // se agrega el permiso a la lista
             }
 
         } catch (Exception e) {
