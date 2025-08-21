@@ -38,4 +38,16 @@ public class TokenUtils {
     public static void verificarRefreshToken(String refreshToken) throws JWTVerificationException {
         JWT.require(Algorithm.HMAC256(SECRET)).build().verify(refreshToken);
     }
+    
+    //metodo para obtener el correo del token
+    public static String getCorreoFromToken(String token) {
+        try {
+            return JWT.require(Algorithm.HMAC256(SECRET))
+                    .build()
+                    .verify(token.replace("Bearer ", "")) // quitar prefijo si lo trae
+                    .getSubject(); // retorna el correo (subject)
+        } catch (JWTVerificationException e) {
+            return null; // si el token no es válido o ya expiró
+        }
+    }
 }

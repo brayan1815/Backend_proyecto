@@ -2,6 +2,7 @@ package CONTROLADOR;
 
 import MODELO.PasswordUtils;
 import MODELO.PermisosDAO;
+import MODELO.PermisosUtils;
 import MODELO.Secured;
 import MODELO.TokenUtils;
 import MODELO.Usuario;
@@ -18,31 +19,55 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/usuarios")
 public class UsuariosController {
     UsuariosDAO dao = new UsuariosDAO();//se instancia el objeto de la clase UsuariosDAO
+    PermisosUtils permUtils=new PermisosUtils();
     
     @Secured
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Usuario> obtenerUsuarios() {
+    public Response obtenerUsuarios(@Context HttpHeaders headers) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios
         //este método retorna todos los usuarios de la base de datos
-        return dao.get();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios
+        
+        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
+        String correo=TokenUtils.getCorreoFromToken(authHeader);
+        
+        if(permUtils.tienePermiso(correo, "usuarios.index")){
+           return Response.ok(dao.get()).build();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios    
+        }
+        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
+               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
+               .build();
+        
     }
     
     @Secured
     @GET
     @Path("/con-rol")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuariosConCargo() {
+    public Response obtenerUsuariosConCargo(@Context HttpHeaders headers) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/con-rol
+        
+        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
+        String correo=TokenUtils.getCorreoFromToken(authHeader);
+        
         List<UsuarioDTO> usuarios = dao.getConRol();//se declara una lista de tipo UsuarioDTO en la que se almacena el retorno
                                                     //del método getConRol de la clase UsuariosDAO
-        return Response.ok(usuarios).build();//se retorna una respuesta OK con la lista de usuarios
+                                                    
+        if(permUtils.tienePermiso(correo, "usuarios.index")){
+            return Response.ok(usuarios).build();//se retorna una respuesta OK con la lista de usuarios    
+        }
+        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
+               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
+               .build();
+        
     }
     
     @Secured
