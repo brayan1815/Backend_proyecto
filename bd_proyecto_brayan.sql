@@ -66,6 +66,9 @@ INSERT INTO permisos(permiso) VALUES
 -- Permisos Roles
 INSERT INTO permisos(permiso) VALUES
 ('roles.index');
+-- Permisos pagos
+INSERT INTO permisos(permiso) VALUES
+('pagos.index');
 
 select * from permisos;
 
@@ -85,7 +88,10 @@ INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
 (1,18),(1,19),(1,20),
 (1,21),(1,22),(1,23),(1,24),
 (1,25),(1,26),(1,27),(1,28),
-(1,29),(1,30);
+(1,29),(1,30),(1,31);
+
+
+select * from permisos;
 
 
 -- Permisos Usuario
@@ -215,6 +221,8 @@ CREATE TABLE facturas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT UNIQUE,
     minutos INT,
+    subtotal_consumos decimal(7,2),
+    subtotal_consola decimal(7,2),
     total DECIMAL(7,2),
     FOREIGN KEY (id_reserva) REFERENCES reservas(id) ON DELETE SET NULL
 );
@@ -267,7 +275,7 @@ VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
 
     use bd_proyecto_brayan;
-SELECT * FROM usuarios;
+SELECT * FROM permisos;
 
-UPDATE reservas SET hora_inicio = '2025-08-20 16:00:00', hora_finalizacion='2025-08-20 16:30:00' WHERE id=2;
+UPDATE reservas SET hora_inicio = '2025-08-22 17:00:00', hora_finalizacion='2025-08-22 17:10:00' WHERE id=2;
 

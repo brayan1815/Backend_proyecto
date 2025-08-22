@@ -13,7 +13,7 @@ public class CORSFilter implements ContainerResponseFilter {
             throws IOException {
 
         // se permite un origen especifico, en este caso http://localhost:5174
-        responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", "http://localhost:5173");
         //indice que cabeceras personalizadas puede incluir el cleinte en sus solicitufes
         responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
         //Especifica qué métodos HTTP se permiten al cliente cuando hace peticiones CORS
