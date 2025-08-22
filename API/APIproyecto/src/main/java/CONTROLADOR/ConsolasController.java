@@ -4,6 +4,8 @@ package CONTROLADOR;
 import MODELO.Consola;
 import MODELO.ConsolaDTO;
 import MODELO.ConsolasDAO;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 //import MODELO.ConsolasServices;
 import MODELO.ValidadorConsola;
 import java.util.List;
@@ -18,10 +20,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/consolas")
 public class ConsolasController {
     ConsolasDAO dao = new ConsolasDAO();//se crea una instancia de la clase consolasDAO
     
+    @TienePermiso("consolas.index")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerConsolas() {//se crea el metodo que va a responder a la solicitud get del endpoint     
@@ -30,6 +34,7 @@ public class ConsolasController {
         return Response.ok(consolas).build();//se retorna una respuesta ok con la lista de consolas
     }
     
+    @TienePermiso("consolas.index")
     @GET
     @Path("/con-precio")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,6 +44,7 @@ public class ConsolasController {
         return Response.ok(consolas).build();//se retorna una respuesta ok con la lista de las consolas
     }
     
+    @TienePermiso("consolas.index")
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,7 +64,7 @@ public class ConsolasController {
         }
     }
 
-    
+    @TienePermiso("consolas.crear")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,6 +94,7 @@ public class ConsolasController {
         }
     }
     
+    @TienePermiso("consolas.editar")
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -120,6 +127,7 @@ public class ConsolasController {
         }
     }
     
+    @TienePermiso("consolas.eliminar")
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)

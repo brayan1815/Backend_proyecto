@@ -60,6 +60,12 @@ INSERT INTO permisos(permiso) VALUES
 ('usuarios.crear'),
 ('usuarios.editar'),
 ('usuarios.eliminar');
+-- Permisos Historial
+INSERT INTO permisos(permiso) VALUES
+('historial.index');
+-- Permisos Roles
+INSERT INTO permisos(permiso) VALUES
+('roles.index');
 
 select * from permisos;
 
@@ -78,9 +84,9 @@ INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
 (1,13),(1,14),(1,15),(1,16),(1,17),
 (1,18),(1,19),(1,20),
 (1,21),(1,22),(1,23),(1,24),
-(1,25),(1,26),(1,27),(1,28);
+(1,25),(1,26),(1,27),(1,28),
+(1,29),(1,30);
 
-select * from permisos;
 
 -- Permisos Usuario
 INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
@@ -262,4 +268,6 @@ VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 
     use bd_proyecto_brayan;
 SELECT * FROM usuarios;
+
+UPDATE reservas SET hora_inicio = '2025-08-20 16:00:00', hora_finalizacion='2025-08-20 16:30:00' WHERE id=2;
 

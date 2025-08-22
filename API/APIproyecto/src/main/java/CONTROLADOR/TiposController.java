@@ -1,6 +1,8 @@
 package CONTROLADOR;
 
 import MODELO.PermisosUtils;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 import MODELO.Tipo;
 import MODELO.TiposDAO;
 import MODELO.TokenUtils;
@@ -19,48 +21,26 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/tipos") //ruta base para acceder a los tipos
 public class TiposController {
-    
-    PermisosUtils permUtils=new PermisosUtils();
-    
+    @TienePermiso("tipos.index")
     @GET
     @Produces(MediaType.APPLICATION_JSON) //devuelve respuesta en formato JSON
-    public Response obtenerTipos(@Context HttpHeaders headers) {
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String correo=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(correo, "tipos.index")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los tipos de consolas\"}") // mensaje en JSON
-               .build();
-        }
+    public Response obtenerTipos() { 
         //crea una instancia del DAO para acceder a la base de datos
         TiposDAO dao = new TiposDAO();
         //obtiene todos los tipos registrados
         List<Tipo> tipos = dao.getAll();
         
-        
-        
         //retorna la lista de tipos con código 200 OK
         return Response.ok(tipos).build();
     }
-    
+    @TienePermiso("tipos.index")
     @GET
     @Path("/{id}") //recibe el id del tipo por la url
     @Produces(MediaType.APPLICATION_JSON) //devuelve la respuesta en JSON
-    public Response obtenerTipoPorId(@PathParam("id") int id,@Context HttpHeaders headers) {
-        
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr, "tipos.index")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los tipos de consolas\"}") // mensaje en JSON
-               .build();
-        }
+    public Response obtenerTipoPorId(@PathParam("id") int id) {
         
         //crea el DAO para realizar la consulta
         TiposDAO dao = new TiposDAO();
@@ -78,20 +58,11 @@ public class TiposController {
         }
     }
     
+    @TienePermiso("tipos.crear")
     @POST
     @Consumes(MediaType.APPLICATION_JSON) //recibe los datos del tipo en formato JSON
     @Produces(MediaType.APPLICATION_JSON) //responde en formato JSON
-    public Response crearTipo(Tipo tipo,@Context HttpHeaders headers) {
-        
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr,"tipos.crear")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para crear un tipo de consola\"}") // mensaje en JSON
-               .build();
-        }
+    public Response crearTipo(Tipo tipo) {
         
         //valida los datos del tipo antes de guardarlo
         String error = ValidadorTipo.validarTipo(tipo);
@@ -117,22 +88,13 @@ public class TiposController {
         }
     }
     
+    @TienePermiso("tipos.editar")
     @PUT
     @Path("/{id}") //recibe el id por la url
     @Consumes(MediaType.APPLICATION_JSON) //recibe datos en formato JSON
     @Produces(MediaType.APPLICATION_JSON) //responde en formato JSON
-    public Response actualizarTipo(@PathParam("id") int id, Tipo tipo,@Context HttpHeaders headers) {
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr, "tipos.editar")){
-         return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para actualizar tipos de consola\"}") // mensaje en JSON
-               .build();   
-        }
-        
-        
+    public Response actualizarTipo(@PathParam("id") int id, Tipo tipo) {
+     
         //asigna el id recibido por la url al objeto tipo
         tipo.setId(id);
         
@@ -160,6 +122,7 @@ public class TiposController {
         }
     }
     
+    @TienePermiso("tipos.eliminar")
     @DELETE
     @Path("/{id}") //recibe el id por la url
     @Produces(MediaType.APPLICATION_JSON) //responde en formato JSON

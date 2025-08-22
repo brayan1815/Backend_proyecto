@@ -5,6 +5,8 @@ import MODELO.Pago;
 import MODELO.PagosDAO;
 import MODELO.PagosServices;
 import MODELO.ReservaDTO;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/pagos")//se define la ruta base para todos los endpoints de esta clase
 public class PagosController {
     
@@ -21,6 +24,7 @@ public class PagosController {
     PagosServices pagosService = new PagosServices();
     FacturasDAO facDao = new FacturasDAO();
 
+    @TienePermiso("pagos.index")
     @GET
     @Path("/metodo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,6 +43,7 @@ public class PagosController {
         return Response.ok(lista).build();
     }
     
+    @TienePermiso("pagos.index")
     @GET
     @Path("/metodo/{id}/total")
     @Produces(MediaType.APPLICATION_JSON)
@@ -50,6 +55,7 @@ public class PagosController {
         return Response.ok("{\"total_pagado\":" + total + "}").build();
     }
     
+    @TienePermiso("pagos.index")
     @GET
     @Path("/metodo/{id}/reservas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +67,7 @@ public class PagosController {
         return Response.ok(reservas).build();
     }
     
+    @TienePermiso("pagos.index")
     @GET
     @Path("/total")
     @Produces(MediaType.APPLICATION_JSON)

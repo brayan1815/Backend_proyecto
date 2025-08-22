@@ -4,6 +4,8 @@ import MODELO.Consumo;
 import MODELO.ConsumoDTO;
 import MODELO.ConsumosDAO;
 import MODELO.ConsumosServices;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -16,12 +18,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/consumos")//se define la ruta base para los endpoints de esta clase
 public class ConsumosController {
     
     ConsumosServices service = new ConsumosServices();//se crea una instancia de la clase ConsumosServices
     ConsumosDAO dao = new ConsumosDAO();//se crea una instancia de la clase ConsumosDAO
     
+    @TienePermiso("consumos.crear")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +45,7 @@ public class ConsumosController {
         }
     }
     
+    @TienePermiso("consumos.index")
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,6 +65,7 @@ public class ConsumosController {
         }
     }
     
+    @TienePermiso("consumos.index")
     @GET
     @Path("/dto/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -85,6 +91,7 @@ public class ConsumosController {
         }
     }
     
+    @TienePermiso("consumos.index")
     @GET
     @Path("/reserva/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,6 +105,7 @@ public class ConsumosController {
         return Response.ok(lista).build();//se retorna una respuesta OK con la lista obtenida
     }
     
+    @TienePermiso("consumos.editar")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -123,6 +131,7 @@ public class ConsumosController {
         }
     }
     
+    @TienePermiso("Consumos.eliminar")
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)

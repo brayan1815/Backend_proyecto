@@ -4,6 +4,8 @@ import MODELO.Reserva;
 import MODELO.ReservaDTO;
 import MODELO.ReservasDAO;
 import MODELO.ReservasServices;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 import MODELO.ValidadorReserva;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -17,11 +19,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/reservas") //ruta base del endpoint reservas
 public class ReservasController {
     
     private ReservasServices reservaService = new ReservasServices();//se crea una instancia de la clase ReservasServices
     
+    @TienePermiso("reservas.index")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerReservas() {
@@ -33,6 +37,7 @@ public class ReservasController {
         return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista de reservas
     }
     
+    @TienePermiso("reservas.index")
     @GET
     @Path("/detalle")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +50,7 @@ public class ReservasController {
         return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista de reservas
     }
     
+    @TienePermiso("reservas.index")
     @GET
     @Path("/detalle/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +63,7 @@ public class ReservasController {
         return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista de reservas
     }
     
+    @TienePermiso("reservas.index")
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,7 +83,8 @@ public class ReservasController {
                            .build();
         }
     }
-
+    
+    @TienePermiso("reservas.crear")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -116,6 +124,7 @@ public class ReservasController {
         }
     }
     
+    @TienePermiso("reservas.index")
     @GET
     @Path("/consola/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -127,13 +136,15 @@ public class ReservasController {
         List<Reserva> reservas = dao.getByIdConsola(idConsola);//se crea una lista de tipo Reserva en la cual se almacenará
                                                                //el retorno del método getByIdConsola de la clase ReservasDAO
 
-        if (reservas != null && !reservas.isEmpty()) {//si la lista reservas no es null y no está vacía
-            return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista
-        } else {//en caso contrario
-            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
-                           .entity("{\"mensaje\": \"No se encontraron reservas para esta consola\"}")//y se retorna un mensaje
-                           .build();
-        }
+                                                               
+        return Response.ok(reservas).build();//se retorna una respuesta OK junto con la lista                                                      
+//        if (reservas != null && !reservas.isEmpty()) {//si la lista reservas no es null y no está vacía
+//            
+//        } else {//en caso contrario
+//            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
+//                           .entity("{\"error\": \"No se encontraron reservas para esta consola\"}")//y se retorna un mensaje
+//                           .build();
+//        }
     }
     
     @GET
@@ -148,6 +159,7 @@ public class ReservasController {
                                                                                  //de la clase ReservasServices
         return Response.ok(actualizadas).build();//se retorna una respuesta OK junto con la lista de reservas actualizadas
     }
+    
     
     @PUT
     @Path("/{id}")
@@ -173,6 +185,7 @@ public class ReservasController {
         }
     }
     
+    @TienePermiso("reservas.index")
     @GET
     @Path("/usuario/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -194,6 +207,7 @@ public class ReservasController {
         }
     }
     
+    @TienePermiso("reservas.eliminar")
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

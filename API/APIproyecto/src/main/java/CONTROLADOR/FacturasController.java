@@ -2,6 +2,8 @@ package CONTROLADOR;
 
 import MODELO.Factura;
 import MODELO.FacturasServices;
+import MODELO.Secured;
+import MODELO.TienePermiso;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -9,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Secured
 @Path("/facturas") // Define la ruta base para este controlador REST
 public class FacturasController {
 
@@ -33,6 +36,7 @@ public class FacturasController {
     }
 
     // Método POST para registrar el pago de una factura usando un método de pago
+    @TienePermiso("pagos.crear")
     @POST
     @Path("/pago/{idFactura}/{idMetodo}") // Ruta que recibe id de factura y método de pago por URL
     @Produces(MediaType.APPLICATION_JSON) // Respuesta en formato JSON

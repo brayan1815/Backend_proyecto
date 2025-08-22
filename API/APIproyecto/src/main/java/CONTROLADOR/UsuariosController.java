@@ -34,129 +34,85 @@ public class UsuariosController {
     @TienePermiso("usuarios.index")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuarios(@Context HttpHeaders headers) {
-        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios
-        //este método retorna todos los usuarios de la base de datos
-        
-//        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-//        String correo=TokenUtils.getCorreoFromToken(authHeader);
-        
+    public Response obtenerUsuarios() {
          return Response.ok(dao.get()).build();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios
-//        if(permUtils.tienePermiso(correo, "usuarios.index")){
-//              
-//        }
-//        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-//               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-//               .build();
-        
     }
     
     @Secured
+    @TienePermiso("usuarios.index")
     @GET
     @Path("/con-rol")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuariosConCargo(@Context HttpHeaders headers) {
-        //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/con-rol
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String correo=TokenUtils.getCorreoFromToken(authHeader);
+    public Response obtenerUsuariosConCargo() {
+        //se crea el método que va a responder text HttpHeaders headersa las solicitudes GET del endpoint /usuarios/con-rol
         
         List<UsuarioDTO> usuarios = dao.getConRol();//se declara una lista de tipo UsuarioDTO en la que se almacena el retorno
                                                     //del método getConRol de la clase UsuariosDAO
-                                                    
-        if(permUtils.tienePermiso(correo, "usuarios.index")){
-            return Response.ok(usuarios).build();//se retorna una respuesta OK con la lista de usuarios    
-        }
-        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-               .build();
+        
+        return Response.ok(usuarios).build();//se retorna una respuesta OK con la lista de usuarios                                            
         
     }
     
     @Secured
+    @TienePermiso("usuarios.index")
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuarioPorId(@PathParam("id") int id,@Context HttpHeaders headers) {
+    public Response obtenerUsuarioPorId(@PathParam("id") int id) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/{id}
         //este método recibe como parámetro en la URL el id del usuario a buscar
         Usuario usuario = dao.getById(id);//se declara la variable usuario en la que se almacena el retorno del método getById
                                           //de la clase UsuariosDAO
-                                          
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String correo=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(permUtils.tienePermiso(correo,"usuarios.index")){
-            if (usuario != null) {//si el usuario existe
+                                             
+        if (usuario != null) {//si el usuario existe
                 return Response.ok(usuario).build();//se retorna una respuesta OK junto con el usuario
             } else {//si el usuario no existe
                 return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
                                .entity("Usuario no encontrado")//con un mensaje de error
                                .build();
-            }
         }
-        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-               .build();
     }
     
     @Secured
+//    @TienePermiso("usuarios.index")
     @GET
     @Path("/correo/{correo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuarioPorCorreo(@PathParam("correo") String correo,@Context HttpHeaders headers) {
+    public Response obtenerUsuarioPorCorreo(@PathParam("correo") String correo) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/correo/{correo}
         UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
         Usuario usuario = dao.getByCorreo(correo);//se declara la variable usuario en la que se almacena el retorno
                                                   //del método getByCorreo de la clase UsuariosDAO
-                                                  
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        
-        if(permUtils.tienePermiso(corr, "usuarios.index")){
-            if (usuario != null) {//si el usuario existe
+  
+        if (usuario != null) {//si el usuario existe
 
                 return Response.ok(usuario).build();//se retorna una respuesta OK con el usuario
             } else {//si el usuario no existe
                 return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
                                .entity("{\"error\":\"Usuario no encontrado\"}")//con un mensaje de error en formato JSON
                                .build();
-            }
         }
-        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-               .build();
     }
     
     @Secured
+    @TienePermiso("usuarios.index")
     @GET
     @Path("/documento/{documento}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerUsuarioPorDocumento(@PathParam("documento") long documento,@Context HttpHeaders headers) {
+    public Response obtenerUsuarioPorDocumento(@PathParam("documento") long documento) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios/documento/{documento}
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
         
         UsuariosDAO dao = new UsuariosDAO();//se instancia un objeto de la clase UsuariosDAO
         Usuario usuario = dao.getByDocumento(documento);//se declara la variable usuario en la que se almacena el retorno
                                                         //del método getByDocumento de la clase UsuariosDAO
                                                         
-        if(permUtils.tienePermiso(corr,"usuarios.index")){
-            if (usuario != null) {//si el usuario existe
+        if (usuario != null) {//si el usuario existe
                 return Response.ok(usuario).build();//se retorna una respuesta OK con el usuario
             } else {//si el usuario no existe
                 return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
                                .entity("{\"error\":\"Usuario no encontrado\"}")//con un mensaje de error en formato JSON
                                .build();
-            }
         }
-        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-               .build();
     }
     
     @POST
@@ -205,18 +161,10 @@ public class UsuariosController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearUsuario(Usuario usuario,@Context HttpHeaders headers){
+    public Response crearUsuario(Usuario usuario){
         //se crea el método que va a responder a las solicitudes POST del endpoint /usuarios
         //este método crea un nuevo usuario en la base de datos
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr, "usuarios.crear")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para crear usuarios\"}") // mensaje en JSON
-               .build();
-        }
+ 
         String error = ValidadorUsuario.validarUsuario(usuario, dao, false);//se valida el usuario antes de crearlo
         if (error != null) {//si hay errores en la validación
             return Response.status(Response.Status.BAD_REQUEST)//se retorna un estado BAD_REQUEST
@@ -238,23 +186,15 @@ public class UsuariosController {
     }
     
     @Secured
+    @TienePermiso("usuarios.editar")
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response actualizarUsuario(@PathParam("id") int id, Usuario usuario,@Context HttpHeaders headers) {
+    public Response actualizarUsuario(@PathParam("id") int id, Usuario usuario) {
         //se crea el método que va a responder a las solicitudes PUT del endpoint /usuarios/{id}
         //este método actualiza los datos de un usuario en la base de datos
         
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr, "usuarios.editar")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para actualizar usuarios\"}") // mensaje en JSON
-               .build();
-        }
         
         usuario.setId(id);//se asigna el id recibido por parámetro al objeto usuario
         String error = ValidadorUsuario.validarUsuario(usuario, dao, true);//se valida el usuario antes de actualizarlo
@@ -276,22 +216,14 @@ public class UsuariosController {
     }
     
     @Secured
+    @TienePermiso("usuarios.eliminar")
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response eliminarUsuario(@PathParam("id") int id,@Context HttpHeaders headers) {
+    public Response eliminarUsuario(@PathParam("id") int id) {
         //se crea el método que va a responder a las solicitudes DELETE del endpoint /usuarios/{id}
         //este método elimina un usuario de la base de datos
-        
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String corr=TokenUtils.getCorreoFromToken(authHeader);
-        
-        if(!permUtils.tienePermiso(corr, "usuarios.eliminar")){
-            return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para eliminar usuarios\"}") // mensaje en JSON
-               .build();
-        }
-        
+               
         Usuario usuario = dao.getById(id);//se busca el usuario por su id
         if (usuario == null) {//si el usuario no existe
             return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
