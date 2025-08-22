@@ -4,6 +4,7 @@ import MODELO.PasswordUtils;
 import MODELO.PermisosDAO;
 import MODELO.PermisosUtils;
 import MODELO.Secured;
+import MODELO.TienePermiso;
 import MODELO.TokenUtils;
 import MODELO.Usuario;
 import MODELO.UsuarioDTO;
@@ -30,21 +31,23 @@ public class UsuariosController {
     PermisosUtils permUtils=new PermisosUtils();
     
     @Secured
+    @TienePermiso("usuarios.index")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuarios(@Context HttpHeaders headers) {
         //se crea el método que va a responder a las solicitudes GET del endpoint /usuarios
         //este método retorna todos los usuarios de la base de datos
         
-        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
-        String correo=TokenUtils.getCorreoFromToken(authHeader);
+//        String authHeader = headers.getHeaderString("Authorization");//se obtienen los headers
+//        String correo=TokenUtils.getCorreoFromToken(authHeader);
         
-        if(permUtils.tienePermiso(correo, "usuarios.index")){
-           return Response.ok(dao.get()).build();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios    
-        }
-        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
-               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
-               .build();
+         return Response.ok(dao.get()).build();//se llama al método get de la clase UsuariosDAO para obtener la lista de usuarios
+//        if(permUtils.tienePermiso(correo, "usuarios.index")){
+//              
+//        }
+//        return Response.status(Response.Status.FORBIDDEN) // 403 - No tiene permiso
+//               .entity("{\"error\":\"No tiene permiso para listar los usuarios\"}") // mensaje en JSON
+//               .build();
         
     }
     

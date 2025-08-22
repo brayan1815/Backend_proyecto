@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class TokenUtils {
     //clave secreta para verificar y firmar los tokens
-    private static final String SECRET = "clave123";
+    public static final String SECRET = "clave123";
     
     //metodo para generar el token con base en el correo
     public static String generarToken(String correo) {
