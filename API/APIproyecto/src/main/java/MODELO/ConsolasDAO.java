@@ -116,6 +116,38 @@ public class ConsolasDAO {
         return consola;//se retorna la consola o null si no se encontró
     }
     
+    public List<Consola> getByIdTipo(int idTipo) {
+        // se crea el método getByIdTipo, retorna una lista de consolas según el id_tipo
+        List<Consola> consolas = new ArrayList<>();
+
+        try (Connection conn = ConexionBD.getConnection()) { // se abre la conexión a la base de datos
+            String sql = "SELECT * FROM consolas WHERE id_tipo = ?"; // consulta SQL con parámetro
+            PreparedStatement stmt = conn.prepareStatement(sql); // se prepara la consulta
+            stmt.setInt(1, idTipo); // se reemplaza el parámetro con el valor de idTipo
+
+            ResultSet rs = stmt.executeQuery(); // se ejecuta la consulta
+
+            while (rs.next()) { // mientras haya registros
+                Consola consola = new Consola(); // se crea un objeto consola
+                consola.setId(rs.getInt("id"));
+                consola.setNumero_serie(rs.getString("numero_serie"));
+                consola.setNombre(rs.getString("nombre"));
+                consola.setDescripcion(rs.getString("descripcion"));
+                consola.setId_tipo(rs.getInt("id_tipo"));
+                consola.setId_estado(rs.getInt("id_estado"));
+                consola.setId_imagen(rs.getInt("id_imagen"));
+
+                consolas.add(consola); // se agrega la consola a la lista
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // si ocurre un error se imprime
+        }
+
+        return consolas; // se retorna la lista de consolas
+    }
+
+    
     public Consola getByNumeroSerie(String numero) {
         //se crea el metodo getByNumeroSerie, este retorna una consola específica según su número de serie
         Consola consola = null;//se inicializa como null, en caso de no encontrar coincidencias

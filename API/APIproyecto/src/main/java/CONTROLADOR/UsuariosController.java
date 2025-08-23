@@ -28,7 +28,6 @@ import javax.ws.rs.core.Response;
 @Path("/usuarios")
 public class UsuariosController {
     UsuariosDAO dao = new UsuariosDAO();//se instancia el objeto de la clase UsuariosDAO
-    PermisosUtils permUtils=new PermisosUtils();
     
     @Secured
     @TienePermiso("usuarios.index")
@@ -223,6 +222,13 @@ public class UsuariosController {
     public Response eliminarUsuario(@PathParam("id") int id) {
         //se crea el método que va a responder a las solicitudes DELETE del endpoint /usuarios/{id}
         //este método elimina un usuario de la base de datos
+        
+        String error = ValidadorUsuario.validarEliminacionUsuario(id);//se valida que se pueda eliminar el usuario
+        if (error != null) {//si hay errores en la validación
+            return Response.status(Response.Status.CONFLICT)//se retorna un estado BAD_REQUEST
+                           .entity("{\"error\": \"" + error + "\"}")//con el mensaje de error
+                           .build();
+        }
                
         Usuario usuario = dao.getById(id);//se busca el usuario por su id
         if (usuario == null) {//si el usuario no existe

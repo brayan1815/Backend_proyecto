@@ -1,5 +1,7 @@
 package MODELO;
 
+import java.util.List;
+
 public class ValidadorTipo {
     
     // Método para validar los datos de un objeto Tipo
@@ -33,6 +35,15 @@ public class ValidadorTipo {
         }
 
         // Si pasa todas las validaciones, retornar null (sin error)
+        return null;
+    }
+    
+    public static String validarEliminacionTipo(int idTipo){
+        ConsolasDAO consDao=new ConsolasDAO();
+
+        List<Consola> consolas=consDao.getByIdTipo(idTipo);
+        
+        if(consolas.size()>0)return "No se puede eliminar el tipo porque tiene consolas asociadas";
         return null;
     }
 }

@@ -93,6 +93,36 @@ public class ConsumosDAO {
         return consumo; //se retorna el objeto consumo, o null si no se encontró
     }
     
+    public List<Consumo> getByIdProducto(int idProducto) {
+        List<Consumo> lista = new ArrayList<>(); // se crea una lista para almacenar los consumos obtenidos
+
+        try (Connection conn = ConexionBD.getConnection()) { // se abre la conexión a la base de datos
+            String sql = "SELECT id, id_reserva, id_producto, cantidad, subtotal FROM consumos WHERE id_producto = ?"; // se define la consulta SQL
+            PreparedStatement stmt = conn.prepareStatement(sql); // se prepara la consulta SQL
+            stmt.setInt(1, idProducto); // se reemplaza el parámetro idProducto en la consulta
+            ResultSet rs = stmt.executeQuery(); // se ejecuta la consulta SQL y se obtiene el resultado
+
+            // se recorre el conjunto de resultados
+            while (rs.next()) {
+                // por cada fila se crea un objeto Consumo con los datos obtenidos
+                Consumo consumo = new Consumo(
+                    rs.getInt("id"),
+                    rs.getInt("id_reserva"),
+                    rs.getInt("id_producto"),
+                    rs.getInt("cantidad"),
+                    rs.getDouble("subtotal")
+                );
+                lista.add(consumo); // se agrega el objeto consumo a la lista
+            }
+
+        } catch (SQLException e) { // manejo de errores
+            e.printStackTrace();
+        }
+
+        return lista; // se retorna la lista de consumos
+    }
+
+    
     //método para actualizar los datos de un consumo existente
     public boolean actualizarConsumo(Consumo consumo) {
         boolean actualizado = false; //se declara la variable actualizado y se inicializa como false

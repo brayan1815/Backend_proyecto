@@ -78,14 +78,7 @@ public class ProductosController {
         ProductosDAO dao = new ProductosDAO();//se crea una instancia de la clase ProductosDAO
         Producto producto = dao.getById(id);//se declara la variable producto de tipo Producto, en esta se almacenará
                                             //el retorno del método getById de la clase ProductosDAO
-
-        if (producto != null) {//si la variable producto es diferente de null
-            return Response.ok(producto).build();//se retorna una respuesta OK junto con el producto
-        } else {//en caso de que la variable producto sea null
-            return Response.status(Response.Status.NOT_FOUND)//se retorna un estado NOT_FOUND
-                           .entity("{\"error\":\"Producto no encontrado\"}")//y se retorna un mensaje de error
-                           .build();
-        }
+        return Response.ok(producto).build();//se retorna una respuesta OK junto con el producto
     }
     
     @TienePermiso("productos.editar")
@@ -136,6 +129,14 @@ public class ProductosController {
     public Response eliminarProducto(@PathParam("id") int id) {
         //se crea el método que va a responder a la solicitud DELETE del endpoint productos/{id},
         //este método recibe como parámetro en la URL el ID del producto que se desea eliminar
+        
+        String error=ValidadorProducto.validarEliminacionProducto(id);
+        
+        if(error!=null){
+            return Response.status(Response.Status.CONFLICT)//se retorna un estado CONFLICT
+                           .entity(error)//se retorna el mensaje de error
+                           .build();
+        }
         
         ProductosDAO dao = new ProductosDAO();//se crea una instancia de la clase ProductosDAO
         Producto producto = dao.getById(id);//se declara el objeto producto, en esta se almacenará el retorno del método

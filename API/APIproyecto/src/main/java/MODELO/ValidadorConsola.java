@@ -1,11 +1,16 @@
 package MODELO;
 
+import java.util.List;
+
 
 public class ValidadorConsola {
     
+    public static ConsolasDAO dao = new ConsolasDAO(); // Instancia DAO para consultar en base de datos
+    public static ReservasDAO resDao=new ReservasDAO();
+    
     // Método estático para validar los datos de un objeto Consola
     public static String validarConsola(Consola consola) {
-        ConsolasDAO dao = new ConsolasDAO(); // Instancia DAO para consultar en base de datos
+        
 
         // Validar que el nombre no sea nulo ni vacío (quitando espacios en blanco)
         if (consola.getNombre() == null || consola.getNombre().trim().isEmpty()) {
@@ -53,5 +58,15 @@ public class ValidadorConsola {
         // Si pasa todas las validaciones, se retorna null (sin errores)
         return null;
     }
+    
+    public static String validarEliminacionConsola(int idConsola) {
+        List<Reserva> reservas=resDao.getByIdConsola(idConsola);
+        
+        if(reservas.size()>0){
+            return "{\"error\": \"No se puede eliminar la consola porque tiene reservas asociadas.\"}";
+        }
+        return null;
+    }
+    
 
 }

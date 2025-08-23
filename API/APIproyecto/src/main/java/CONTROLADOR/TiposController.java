@@ -127,6 +127,16 @@ public class TiposController {
     @Path("/{id}") //recibe el id por la url
     @Produces(MediaType.APPLICATION_JSON) //responde en formato JSON
     public Response eliminarTipo(@PathParam("id") int id) {
+        
+        String error = ValidadorTipo.validarEliminacionTipo(id);
+        if (error != null) {
+            //si hay error en la validación, retorna 400 con el mensaje
+            return Response.status(Response.Status.CONFLICT)
+                           .entity("{\"error\": \"" + error + "\"}")
+                           .build();
+        }
+        
+        
         //crea el DAO para acceder al tipo
         TiposDAO dao = new TiposDAO();
         

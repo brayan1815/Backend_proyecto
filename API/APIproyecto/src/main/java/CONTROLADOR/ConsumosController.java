@@ -131,7 +131,7 @@ public class ConsumosController {
         }
     }
     
-    @TienePermiso("Consumos.eliminar")
+    @TienePermiso("consumos.eliminar")
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)

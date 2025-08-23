@@ -1,5 +1,6 @@
 package MODELO;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class ValidadorUsuario {
@@ -53,5 +54,17 @@ public class ValidadorUsuario {
 
         // Si pasa todas las validaciones, retornar null (sin errores)
         return null;
+    }
+    
+    public static String validarEliminacionUsuario(int idUsuario){
+        ReservasDAO resDao=new ReservasDAO();
+        
+        List<Reserva> reservas=resDao.getByIdUsuario(idUsuario);
+        
+        if(reservas.size()>0){
+            return "No se puede eliminar el usuario porque tiene reservas asociadas";
+        }
+        return null;
+        
     }
 }

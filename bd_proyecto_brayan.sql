@@ -99,9 +99,9 @@ INSERT INTO permisos_roles(id_rol,id_permiso) VALUES
 (2,1),
 (2,5),
 (2,14),
-(2,18),(2,19),(2,20);
+(2,18),(2,19),(2,20),(2,21);
 
-select * from permisos_roles;
+select * from permisos;
 
 CREATE TABLE estados_usuarios(
 	id int auto_increment primary key,

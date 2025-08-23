@@ -135,6 +135,14 @@ public class ConsolasController {
         //Se crea el metodo que va a responder a las solicitudes DELETE del endpoint consolas/{id},
         //este metodo recibe como parametro en la URL el id de la consola que se desea eliminar
         
+        String error=ValidadorConsola.validarEliminacionConsola(id);
+        
+        if(error!=null){
+            return Response.status(Response.Status.CONFLICT)//se responde con un estado CONFLICT y re envia el error
+                           .entity(error)//ze envia el error
+                           .build();
+        }
+        
         Consola consola=dao.getById(id);//se declara el objeto Consola, en esta se almacenara el retorno de la funcion
                                         //getByID de la clase consolasDAO
         consola.setId_estado(2);//se le envia en objeto consola el id de estado 2

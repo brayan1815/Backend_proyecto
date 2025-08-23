@@ -1,5 +1,7 @@
 package MODELO;
 
+import java.util.List;
+
 public class ValidadorProducto {
     
     // Método estático para validar los datos de un objeto Producto
@@ -49,5 +51,16 @@ public class ValidadorProducto {
 
         // Si pasa todas las validaciones, se retorna null (sin errores)
         return null;
+    }
+    
+    public static String validarEliminacionProducto(int id){
+        ConsumosDAO consDao = new ConsumosDAO();
+        
+        List<Consumo> consumos=consDao.getByIdProducto(id);
+        
+        if(consumos.size()>0){
+            return "{\"error\": \"No se puede eliminar el producto porque tiene consumos asociados\"}";
+        }
+        else return null;
     }
 }
