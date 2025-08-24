@@ -165,7 +165,7 @@ CREATE TABLE consolas (
     descripcion TEXT,
     id_tipo INT,
     id_estado INT,
-    id_imagen INT,
+    id_imagen INT UNIQUE,
     FOREIGN KEY (id_tipo) REFERENCES tipos(id) ON DELETE SET NULL,
     FOREIGN KEY (id_estado) REFERENCES estados_consolas(id) ON DELETE SET NULL,
     FOREIGN KEY (id_imagen) REFERENCES imagenes(id) ON DELETE SET NULL
@@ -189,7 +189,7 @@ CREATE TABLE productos (
     precio DECIMAL(7,2),
     cantidades_disponibles INT,
     id_estado_producto INT,
-    id_imagen INT,
+    id_imagen INT UNIQUE,
     FOREIGN KEY (id_imagen) REFERENCES imagenes(id) ON DELETE SET NULL,
     FOREIGN KEY (id_estado_producto) REFERENCES estados_productos(id) ON DELETE SET NULL
 );
@@ -216,7 +216,7 @@ CREATE TABLE reservas (
     FOREIGN KEY (id_estado_reserva) REFERENCES estados_reservas(id) ON DELETE SET NULL
 );
 
--- FACTURAS (modificada)
+-- FACTURAS
 CREATE TABLE facturas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_reserva INT UNIQUE,
@@ -249,7 +249,7 @@ INSERT INTO metodos_pago(metodo_pago) VALUES ('Tranferencia'), ('Nequi'), ('Efec
 -- PAGOS
 CREATE TABLE pagos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_factura INT,
+    id_factura INT UNIQUE,
     id_metodo INT,
     FOREIGN KEY (id_factura) REFERENCES facturas(id) ON DELETE SET NULL,
     FOREIGN KEY (id_metodo) REFERENCES metodos_pago(id) ON DELETE SET NULL
@@ -275,7 +275,7 @@ VALUES (1,1,1,NOW(), DATE_ADD(NOW(), INTERVAL 30 MINUTE));
 -- VALUES (1,1,1, DATE_SUB(NOW(), INTERVAL 30 MINUTE), DATE_SUB(NOW(), INTERVAL 5 MINUTE));
 
     use bd_proyecto_brayan;
-SELECT * FROM permisos;
+SELECT * FROM productos;
 
-UPDATE reservas SET hora_inicio = '2025-08-22 17:00:00', hora_finalizacion='2025-08-22 17:10:00' WHERE id=2;
+UPDATE reservas SET hora_inicio = '2025-08-24 11:20:00', hora_finalizacion='2025-08-24 12:10:00' WHERE id=2;
 
